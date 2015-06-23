@@ -1,0 +1,43 @@
+e_magic:              5A4D ("MZ")
+e_lfanew:             000000E8
+
+Magic:                00004550 ("PE")
+Machine:              014C (Intel 386以降およびその互換プロセッサ)
+NumberOfSections:     0005
+SizeOfOptionalHeader: 00E0
+
+SizeOfCode:           00000A00
+AddressOfEntryPoint:  00001332
+BaseOfCode:           00001000
+ImageBase:            00400000
+
+[.text]
+VirtualAddress:       00001000
+SizeOfRawData:        00000A00
+PointerToRawData:     00000400
+Characteristics:      60000020
+
+[.rdata]
+VirtualAddress:       00002000
+SizeOfRawData:        00000800
+PointerToRawData:     00000E00
+Characteristics:      40000040
+
+[.data]
+VirtualAddress:       00003000
+SizeOfRawData:        00000200
+PointerToRawData:     00001600
+Characteristics:      C0000040
+
+[.rsrc]
+VirtualAddress:       00004000
+SizeOfRawData:        00000200
+PointerToRawData:     00001800
+Characteristics:      40000040
+
+[.reloc]
+VirtualAddress:       00005000
+SizeOfRawData:        00000200
+PointerToRawData:     00001A00
+Characteristics:      42000040
+
