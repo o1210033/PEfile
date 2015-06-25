@@ -12,30 +12,35 @@ BaseOfCode:           00001000
 ImageBase:            00400000
 
 [.text]
+VirtualSize:          00000884
 VirtualAddress:       00001000
 SizeOfRawData:        00000A00
 PointerToRawData:     00000400
 Characteristics:      60000020
 
 [.rdata]
+VirtualSize:          000006B8
 VirtualAddress:       00002000
 SizeOfRawData:        00000800
 PointerToRawData:     00000E00
 Characteristics:      40000040
 
 [.data]
+VirtualSize:          00000384
 VirtualAddress:       00003000
 SizeOfRawData:        00000200
 PointerToRawData:     00001600
 Characteristics:      C0000040
 
 [.rsrc]
+VirtualSize:          000001B4
 VirtualAddress:       00004000
 SizeOfRawData:        00000200
 PointerToRawData:     00001800
 Characteristics:      40000040
 
 [.reloc]
+VirtualSize:          000001A4
 VirtualAddress:       00005000
 SizeOfRawData:        00000200
 PointerToRawData:     00001A00

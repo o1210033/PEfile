@@ -4,16 +4,9 @@
 #include <windows.h>
 
 #include "disasm.h"
+#include "PEfile.h"
 
-/* Headerを解析して得た情報用の構造体 */
-typedef struct Header{
-	char htname[256];
-	unsigned long BaseOfCode;
-	unsigned long ImageBase;
-	unsigned long VirtualAddress;
-	unsigned long SizeOfRawData;
-	unsigned long PointerToRawData;
-}t_header;
+
 
 char *Get_filename(void);
 int Read_header(FILE *bfp, t_header *th);
@@ -29,24 +22,23 @@ char *print_b4(unsigned long b4);
 int main(void){
 	int i, n;
 
-	unsigned char b1 = 0xff;
-	char str[10];
-	strcpy(str, print_b1(b1));
-	printf("%s", str);
-	exit(1);
-
 	FILE *bfp, *tfp;
 	t_header th;
 	char szFile[256], fname[256], tname[256];
 
 	/* 必要なファイル名を取得、設定 */
-	//strcpy(szFile, "notepad(32bit)");
 	strcpy(szFile, Get_filename(szFile));
-	sprintf(fname, "%s.exe", szFile);
+	/*printf("読み込むPEファイルのパスを入力してください\n");
+	scanf("%s", szFile);*/
+	strcpy(fname, szFile);
+	for (i = 0; i < 256; i++){
+		if (szFile[i] == '.')
+			szFile[i] = '\0';
+	}
 	sprintf(tname, "%s_Disasm.txt", szFile);
 	sprintf(th.htname, "%s_Header.txt", szFile);
+	sprintf(th.itname, "%s_Imports.txt", szFile);
 
-	printf("%s\n%s\n%s\n%s\n", szFile, fname, tname, th.htname);
 
 	/* ファイルのオープン処理 */
 	if ((bfp = fopen(fname, "rb")) == NULL){
@@ -272,7 +264,7 @@ int main(void){
 						}
 						break;
 					case 1:
-						fprintf(tfp, "%s[%s%s]", data, reg_name[da.modrm.rm], print_b1(da.disp8));
+						fprintf(tfp, "%s[%s+%02X]", data, reg_name[da.modrm.rm], da.disp8);
 						break;
 					case 2:
 						fprintf(tfp, "%s[%s+%08X]", data, reg_name[da.modrm.rm], da.disp32);
@@ -312,15 +304,19 @@ int main(void){
 		fputc('\n', tfp);	//改行
 	}
 
+	/* .idataセクションの読み込み */
+	t_idata ti[32];
+	Read_idata(bfp, &th, ti);
+
 	fclose(bfp);
 	fclose(tfp);
 
 	//出力結果ファイルをメモ帳で開く
 	char cmdbuf[300];
-	sprintf(cmdbuf, "notepad %s", th.htname);
-	system(cmdbuf);
-	sprintf(cmdbuf, "notepad %s", tname);
-	system(cmdbuf);
+	//sprintf(cmdbuf, "notepad %s", th.htname);
+	//system(cmdbuf);
+	//sprintf(cmdbuf, "notepad %s", tname);
+	//system(cmdbuf);
 
 	return 0;
 }
@@ -341,16 +337,12 @@ char *Get_filename(void){
 
 	GetOpenFileName(&ofn);
 
-	for (i = 0; i < 256; i++){
-		if (szFile[i] == '.')
-			szFile[i] = '\0';
-	}
-
 	return szFile;
 }
 
 /* ヘッダから逆アセンブルに必要な情報を取得し、テキストファイルに出力する関数 */
 int Read_header(FILE *bfp, t_header *th){
+	int i;
 	unsigned long addr = 0;
 	unsigned char c1;
 	union{
@@ -450,9 +442,25 @@ int Read_header(FILE *bfp, t_header *th){
 	fprintf(htfp, "ImageBase:            %08X\n\n", code.b4);
 	th->ImageBase = code.b4;
 
+
+	while (addr < ohead + 104){
+		fread(&c1, 1, 1, bfp);
+		addr++;
+	}
+	fread(code.b1, 1, 4, bfp);
+	addr += 4;
+	printf("IT-RVA:  %08X\n", code.b4);
+	unsigned long ITrva = code.b4;
+	fread(code.b1, 1, 4, bfp);
+	addr += 4;
+	printf("IT-Size: %08X\n\n", code.b4);
+
+
 	//IMAGE_SECTION_HEADER
+	int ptr = 0;
 	int flag_text;
 	th->PointerToRawData = 0;
+	th->no.idata = -1;
 	while (NumberOfSections){
 		flag_text = 0;
 
@@ -464,16 +472,19 @@ int Read_header(FILE *bfp, t_header *th){
 		addr += 8;
 		code.b1[8] = '\0';
 		fprintf(htfp, "[%s]\n", code.b1);
-		if (!strcmp(code.b1, ".text")){ flag_text = 1; }
+		if (!strcmp(code.b1, ".text")){ flag_text = 1; th->no.text = ptr; }
+		else if (!strcmp(code.b1, ".idata")){ th->no.idata = ptr; }
 
-		while (addr < shead + 12){
-			fread(&c1, 1, 1, bfp);
-			addr++;
-		}
+		fread(code.b1, 1, 4, bfp);
+		addr += 4;
+		fprintf(htfp, "VirtualSize:          %08X\n", code.b4);
+		th->ts[ptr].VirtualSize = code.b4;
+
 		fread(code.b1, 1, 4, bfp);
 		addr += 4;
 		fprintf(htfp, "VirtualAddress:       %08X\n", code.b4);
 		if (flag_text){ th->VirtualAddress = code.b4; }
+		th->ts[ptr].VirtualAddress = code.b4;
 
 		while (addr < shead + 16){
 			fread(&c1, 1, 1, bfp);
@@ -483,11 +494,13 @@ int Read_header(FILE *bfp, t_header *th){
 		addr += 4;
 		fprintf(htfp, "SizeOfRawData:        %08X\n", code.b4);
 		if (flag_text){ th->SizeOfRawData = code.b4; }
+		th->ts[ptr].SizeOfRawData = code.b4;
 
 		fread(code.b1, 1, 4, bfp);
 		addr += 4;
 		fprintf(htfp, "PointerToRawData:     %08X\n", code.b4);
 		if (flag_text){ th->PointerToRawData = code.b4; }
+		th->ts[ptr].PointerToRawData = code.b4;
 
 		while (addr < shead + 36){
 			fread(&c1, 1, 1, bfp);
@@ -497,16 +510,29 @@ int Read_header(FILE *bfp, t_header *th){
 		addr += 4;
 		fprintf(htfp, "Characteristics:      %08X\n\n", code.b4);
 	
+		ptr++;
 		shead = addr;
 		NumberOfSections--;
 	}
-	if (flag_text){ return 1; }
-	
-	//.textセクションの開始位置まで読み込み
-	while (addr < th->PointerToRawData){
-		fread(&c1, 1, 1, bfp);
-		addr++;
+	if (th->PointerToRawData == 0){ return 1; }
+
+	if (th->no.idata < 0){
+		th->no.idata = ptr;
+		th->ts[ptr].VirtualAddress = ITrva;
+		for (i = 0; i < ptr; i++){
+			if (th->ts[i].VirtualAddress <= ITrva && ITrva <= th->ts[i].VirtualAddress + th->ts[i].VirtualSize){
+				th->ts[ptr].PointerToRawData = ITrva - th->ts[i].VirtualAddress + th->ts[i].PointerToRawData;
+			}
+		}
 	}
+	
+
+	//.textセクションの開始位置まで読み込み
+	//while (addr < th->PointerToRawData){
+	//	fread(&c1, 1, 1, bfp);
+	//	addr++;
+	//}
+	fseek(bfp, th->PointerToRawData, SEEK_SET);
 
 	fclose(htfp);
 

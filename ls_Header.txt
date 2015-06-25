@@ -1,0 +1,76 @@
+e_magic:              5A4D ("MZ")
+e_lfanew:             00000080
+
+Magic:                00004550 ("PE")
+Machine:              014C (Intel 386以降およびその互換プロセッサ)
+NumberOfSections:     0009
+SizeOfOptionalHeader: 00E0
+
+SizeOfCode:           00012600
+AddressOfEntryPoint:  00001000
+BaseOfCode:           00001000
+ImageBase:            00400000
+
+[.text]
+VirtualSize:          000124B4
+VirtualAddress:       00001000
+SizeOfRawData:        00012600
+PointerToRawData:     00000400
+Characteristics:      60500060
+
+[.data]
+VirtualSize:          000001C4
+VirtualAddress:       00014000
+SizeOfRawData:        00000200
+PointerToRawData:     00012A00
+Characteristics:      C0600040
+
+[.rdata]
+VirtualSize:          00005F98
+VirtualAddress:       00015000
+SizeOfRawData:        00006000
+PointerToRawData:     00012C00
+Characteristics:      40600040
+
+[/4]
+VirtualSize:          00000035
+VirtualAddress:       0001B000
+SizeOfRawData:        00000200
+PointerToRawData:     00018C00
+Characteristics:      40300040
+
+[/14]
+VirtualSize:          00003694
+VirtualAddress:       0001C000
+SizeOfRawData:        00003800
+PointerToRawData:     00018E00
+Characteristics:      40300040
+
+[.bss]
+VirtualSize:          00000D54
+VirtualAddress:       00020000
+SizeOfRawData:        00000000
+PointerToRawData:     00000000
+Characteristics:      C0600080
+
+[.idata]
+VirtualSize:          00000D04
+VirtualAddress:       00021000
+SizeOfRawData:        00000E00
+PointerToRawData:     0001C600
+Characteristics:      C0300040
+
+[.rsrc]
+VirtualSize:          00000460
+VirtualAddress:       00022000
+SizeOfRawData:        00000600
+PointerToRawData:     0001D400
+Characteristics:      C0300040
+
+[/24]
+VirtualSize:          00000010
+VirtualAddress:       00023000
+SizeOfRawData:        00000200
+PointerToRawData:     0001DA00
+Characteristics:      42300040
+
