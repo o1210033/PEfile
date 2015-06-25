@@ -26,8 +26,9 @@ typedef struct Idata{
 	unsigned long Name;
 	unsigned long FirstThunk;
 
-	unsigned long ILT[256];
-	int size_ILT;
+	unsigned long IAT_rva[256];
+	unsigned long IAT[256];
+	int size_IAT;
 
 	char dll[64];
 	unsigned short Hint[256];

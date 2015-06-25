@@ -41,16 +41,19 @@ int Read_idata(FILE *bfp, t_header *th, t_idata ti[]){
 	printf("\n");
 
 	for (i = 0; i < num_dll; i++){
-		fseek(bfp, ptrd + ti[i].OriginalFirstThunk - rva, SEEK_SET);
+		unsigned long addr = ti[i].FirstThunk;
+		fseek(bfp, ptrd + ti[i].FirstThunk - rva, SEEK_SET);
 
-		ti[i].size_ILT = 0;
+		ti[i].size_IAT = 0;
 		for (j = 0; !0; j++){
 			fread(&b4, 1, 4, bfp);
 			if (b4 == 0){ break; }
-			ti[i].ILT[j] = b4;
-			printf("%08X\n", ti[i].ILT[j]);
+			ti[i].IAT[j] = b4;
+			printf("%08X\n", ti[i].IAT[j]);
 
-			ti[i].size_ILT++;
+			ti[i].IAT_rva[j] = addr;
+			addr += 4;
+			ti[i].size_IAT++;
 		}
 		printf("\n");
 	}
@@ -60,12 +63,12 @@ int Read_idata(FILE *bfp, t_header *th, t_idata ti[]){
 		fscanf(bfp, "%s", ti[i].dll);
 		printf("DLL: %s\n", ti[i].dll);
 		
-		for (j = 0; j < ti[i].size_ILT; j++){
-			fseek(bfp, ptrd + ti[i].ILT[j] - rva, SEEK_SET);
+		for (j = 0; j < ti[i].size_IAT; j++){
+			fseek(bfp, ptrd + ti[i].IAT[j] - rva, SEEK_SET);
 			fread(&b2, 1, 2, bfp);
 			ti[i].Hint[j] = b2;
 			fscanf(bfp, "%s", ti[i].function[j]);
-			printf("rva: %08X, hint: %04X, function: %s\n", ti[i].ILT[j], ti[i].Hint[j], ti[i].function[j]);
+			printf("rva: %08X, hint: %04X, function: %s\n", ti[i].IAT_rva[j], ti[i].Hint[j], ti[i].function[j]);
 		}
 		printf("\n");
 	}
@@ -80,8 +83,8 @@ int Read_idata(FILE *bfp, t_header *th, t_idata ti[]){
 	fprintf(itfp, "[IMPORTS]\n\n");
 	for (i = 0; i < num_dll; i++){
 		fprintf(itfp, "DLL: %s\n", ti[i].dll);
-		for (j = 0; j < ti[i].size_ILT; j++){
-			fprintf(itfp, " rva: %08X, hint: %04X, name: %s\n", ti[i].ILT[j], ti[i].Hint[j], ti[i].function[j]);
+		for (j = 0; j < ti[i].size_IAT; j++){
+			fprintf(itfp, " rva: %08X, hint: %04X, name: %s\n", ti[i].IAT_rva[j], ti[i].Hint[j], ti[i].function[j]);
 		}
 		fprintf(itfp, "\n");
 	}

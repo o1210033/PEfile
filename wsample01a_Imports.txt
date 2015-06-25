@@ -1,51 +1,51 @@
 [IMPORTS]
 
 DLL: KERNEL32.dll
- rva: 000023AC, hint: 0542, name: lstrcmpW
- rva: 00002688, hint: 01C1, name: GetCurrentProcessId
- rva: 00002672, hint: 01C5, name: GetCurrentThreadId
- rva: 00002662, hint: 0293, name: GetTickCount
- rva: 00002648, hint: 03A7, name: QueryPerformanceCounter
- rva: 00002638, hint: 00CA, name: DecodePointer
- rva: 00002624, hint: 0300, name: IsDebuggerPresent
- rva: 00002606, hint: 04A5, name: SetUnhandledExceptionFilter
- rva: 000025EA, hint: 04D3, name: UnhandledExceptionFilter
- rva: 000025D6, hint: 01C0, name: GetCurrentProcess
- rva: 000025C2, hint: 04C0, name: TerminateProcess
- rva: 000025B2, hint: 00EA, name: EncodePointer
- rva: 000025A0, hint: 0263, name: GetStartupInfoW
- rva: 0000258A, hint: 02D3, name: HeapSetInformation
- rva: 0000256C, hint: 02E9, name: InterlockedCompareExchange
- rva: 00002564, hint: 04B2, name: Sleep
- rva: 0000254E, hint: 02EC, name: InterlockedExchange
- rva: 0000269E, hint: 0279, name: GetSystemTimeAsFileTime
+ rva: 00002000, hint: 0542, name: lstrcmpW
+ rva: 00002004, hint: 01C1, name: GetCurrentProcessId
+ rva: 00002008, hint: 01C5, name: GetCurrentThreadId
+ rva: 0000200C, hint: 0293, name: GetTickCount
+ rva: 00002010, hint: 03A7, name: QueryPerformanceCounter
+ rva: 00002014, hint: 00CA, name: DecodePointer
+ rva: 00002018, hint: 0300, name: IsDebuggerPresent
+ rva: 0000201C, hint: 04A5, name: SetUnhandledExceptionFilter
+ rva: 00002020, hint: 04D3, name: UnhandledExceptionFilter
+ rva: 00002024, hint: 01C0, name: GetCurrentProcess
+ rva: 00002028, hint: 04C0, name: TerminateProcess
+ rva: 0000202C, hint: 00EA, name: EncodePointer
+ rva: 00002030, hint: 0263, name: GetStartupInfoW
+ rva: 00002034, hint: 02D3, name: HeapSetInformation
+ rva: 00002038, hint: 02E9, name: InterlockedCompareExchange
+ rva: 0000203C, hint: 04B2, name: Sleep
+ rva: 00002040, hint: 02EC, name: InterlockedExchange
+ rva: 00002044, hint: 0279, name: GetSystemTimeAsFileTime
 
 DLL: USER32.dll
- rva: 000023C6, hint: 0215, name: MessageBoxW
- rva: 000023D4, hint: 0100, name: GetActiveWindow
+ rva: 000020AC, hint: 0215, name: MessageBoxW
+ rva: 000020B0, hint: 0100, name: GetActiveWindow
 
 DLL: MSVCR100.dll
- rva: 000024B0, hint: 01FB, name: _crt_debugger_hook
- rva: 000024C6, hint: 0102, name: ?terminate@@YAXXZ
- rva: 000024E8, hint: 048D, name: _unlock
- rva: 000024F2, hint: 015B, name: __dllonexit
- rva: 0000249E, hint: 019F, name: __set_app_type
- rva: 00002508, hint: 03C9, name: _onexit
- rva: 00002512, hint: 0221, name: _except_handler4_common
- rva: 0000252C, hint: 02B8, name: _invoke_watson
- rva: 0000253E, hint: 01EF, name: _controlfp_s
- rva: 00002494, hint: 0245, name: _fmode
- rva: 00002488, hint: 01EB, name: _commode
- rva: 00002474, hint: 01A2, name: __setusermatherr
- rva: 0000245E, hint: 01EC, name: _configthreadlocale
- rva: 00002450, hint: 02B1, name: _initterm_e
- rva: 00002444, hint: 02B0, name: _initterm
- rva: 0000243A, hint: 04D1, name: _wcmdln
- rva: 00002432, hint: 0573, name: exit
- rva: 00002424, hint: 012D, name: _XcptFilter
- rva: 0000241C, hint: 022A, name: _exit
- rva: 00002412, hint: 01DC, name: _cexit
- rva: 00002400, hint: 01B6, name: __wgetmainargs
- rva: 000023F2, hint: 01C5, name: _amsg_exit
- rva: 00002500, hint: 0323, name: _lock
+ rva: 0000204C, hint: 01FB, name: _crt_debugger_hook
+ rva: 00002050, hint: 0102, name: ?terminate@@YAXXZ
+ rva: 00002054, hint: 048D, name: _unlock
+ rva: 00002058, hint: 015B, name: __dllonexit
+ rva: 0000205C, hint: 019F, name: __set_app_type
+ rva: 00002060, hint: 03C9, name: _onexit
+ rva: 00002064, hint: 0221, name: _except_handler4_common
+ rva: 00002068, hint: 02B8, name: _invoke_watson
+ rva: 0000206C, hint: 01EF, name: _controlfp_s
+ rva: 00002070, hint: 0245, name: _fmode
+ rva: 00002074, hint: 01EB, name: _commode
+ rva: 00002078, hint: 01A2, name: __setusermatherr
+ rva: 0000207C, hint: 01EC, name: _configthreadlocale
+ rva: 00002080, hint: 02B1, name: _initterm_e
+ rva: 00002084, hint: 02B0, name: _initterm
+ rva: 00002088, hint: 04D1, name: _wcmdln
+ rva: 0000208C, hint: 0573, name: exit
+ rva: 00002090, hint: 012D, name: _XcptFilter
+ rva: 00002094, hint: 022A, name: _exit
+ rva: 00002098, hint: 01DC, name: _cexit
+ rva: 0000209C, hint: 01B6, name: __wgetmainargs
+ rva: 000020A0, hint: 01C5, name: _amsg_exit
+ rva: 000020A4, hint: 0323, name: _lock
 
