@@ -20,7 +20,7 @@ int Read_idata(FILE *bfp, t_header *th, t_idata ti[]){
 	printf("ptrd: %08X\n", ptrd);
 
 	offs = ptrd;
-	for (i = 0; !0; i++){
+	for (i = 0; ; i++){
 		fseek(bfp, offs, SEEK_SET);
 		fread(&b4, 1, 4, bfp);
 		ti[i].OriginalFirstThunk = b4;
@@ -45,7 +45,7 @@ int Read_idata(FILE *bfp, t_header *th, t_idata ti[]){
 		fseek(bfp, ptrd + ti[i].FirstThunk - rva, SEEK_SET);
 
 		ti[i].size_IAT = 0;
-		for (j = 0; !0; j++){
+		for (j = 0; ; j++){
 			fread(&b4, 1, 4, bfp);
 			if (b4 == 0){ break; }
 			ti[i].IAT[j] = b4;
