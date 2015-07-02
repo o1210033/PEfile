@@ -1,12 +1,21 @@
-#define IMM		1
-#define REG		2
-#define RO		3
-#define RM		4
-#define REL		5
-#define MOFFS	6
-#define DEF		7
-
-#define SREG	-2
+#define IMM8    1
+#define IMM16   2
+#define IMM32   3
+#define R8      4
+#define R16     5
+#define R32     6
+#define SREG    7
+#define EAX     8
+#define RM8     9
+#define RM16    10
+#define RM32    11
+#define REL8    12
+#define REL16   13
+#define REL32   14
+#define MOFFS8  15
+#define MOFFS16 16
+#define MOFFS32 17
+#define DEF1    18
 
 /* 逆アセンブルに必要な情報用の構造体 */
 typedef struct Disasm{
@@ -37,3 +46,6 @@ void Check_pref(t_disasm *da, unsigned char hex);
 void Set_opc(t_disasm *da, unsigned char hex);
 void Set_modrm(t_disasm *da, unsigned char hex);
 void Set_sib(t_disasm *da, unsigned char hex);
+
+void Set_opc1(t_disasm *da);
+void Set_opc2(t_disasm *da);

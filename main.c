@@ -7,9 +7,7 @@
 #include "PEfile.h"
 
 
-
 char *Get_filename(void);
-int Read_header(FILE *bfp, t_header *th);
 void change_reg(char reg_name[8][5], char reg[8][5]);
 void Set_regname(char reg_name[8][5], int size_reg);
 char *print_b1(unsigned char b1);
@@ -27,9 +25,8 @@ int main(void){
 	char szFile[256], fname[256], tname[256];
 
 	/* 必要なファイル名を取得、設定 */
-	strcpy(szFile, Get_filename(szFile));
-	/*printf("読み込むPEファイルのパスを入力してください\n");
-	scanf("%s", szFile);*/
+	//strcpy(szFile, Get_filename(szFile));
+	strcpy(szFile, "wsample01a.exe");
 	strcpy(fname, szFile);
 	for (i = 0; i < 256; i++){
 		if (szFile[i] == '.')
@@ -50,11 +47,15 @@ int main(void){
 		exit(1);
 	}
 
-	/* ヘッダーから逆アセンブルに必要な情報を取得 */
+	/* ヘッダ情報を取得 */
 	if (Read_header(bfp, &th) == 1){
 		printf("\aFailed Read_header\n");
 		exit(1);
 	}
+
+	/* .idataセクションの読み込み */
+	t_idata ti[32];
+	Read_idata(bfp, &th, ti);
 
 	/*逆アセンブル処理*/
 	t_disasm da;
@@ -74,6 +75,7 @@ int main(void){
 		unsigned char b1[4];
 	}bit32;
 
+	fseek(bfp, th.PointerToRawData, SEEK_SET);
 	while (((n = fread(&hex, 1, 1, bfp)) > 0) && offs < th.SizeOfRawData){
 		//アドレスを出力
 		fprintf(tfp, "%08X|   ", addr_code + offs);
@@ -180,37 +182,39 @@ int main(void){
 		}
 
 		//x86命令の引数を出力
-		Set_regname(reg_name, 32);
+		Set_regname(reg_name, R32);
 		strcpy(data, "\0");
 		for (i = 0; i < 3; i++){
+			if (!da.arg[i]){ break; }
+
 			if (i != 0 && da.arg[i] != -1){		//引数間の区切りを出力
 				fputc(',', tfp);
 			}
 
 			switch (da.arg[i])
 			{
-			case IMM:	//即値
-				switch (da.size_imm)
-				{
-				case 8:
-					fprintf(tfp, "%02X", da.imm8);
-					break;
-				case 16:
-					fprintf(tfp, "%04X", da.imm16);
-					break;
-				case 32:
-					fprintf(tfp, "%08X", da.imm32);
-					break;
-				}
+			case IMM8:
+				fprintf(tfp, "%02X", da.imm8);
 				break;
-			case REG:	//レジスタ
-				fprintf(tfp, "%s", reg_name[da.reg_no]);
+			case IMM16:
+				fprintf(tfp, "%04X", da.imm16);
 				break;
-			case RO:	//ModR/Mのr/oフィールド
-				Set_regname(reg_name, da.size_ro);
+			case IMM32:
+				fprintf(tfp, "%08X", da.imm32);
+				break;
+			case R8:
+			case R16:
+			case R32:
+			case SREG:
+				Set_regname(reg_name, da.arg[i]);
 				fprintf(tfp, "%s", reg_name[da.modrm.ro]);
 				break;
-			case RM:	//ModR/Mのr/mフィールド
+			case EAX:
+				fprintf(tfp, "EAX");
+				break;
+			case RM8:
+			case RM16:
+			case RM32:
 				if (da.flag_sib){	//SIB アリ
 					fprintf(tfp, "%s", data);
 					switch (da.modrm.mod)
@@ -252,7 +256,6 @@ int main(void){
 					}
 				}
 				else{	//SIB ナシ
-					Set_regname(reg_name, da.size_rm);
 					switch (da.modrm.mod)
 					{
 					case 0:
@@ -270,27 +273,28 @@ int main(void){
 						fprintf(tfp, "%s[%s+%08X]", data, reg_name[da.modrm.rm], da.disp32);
 						break;
 					case 3:
+						Set_regname(reg_name, da.arg[i]);
 						fprintf(tfp, "%s", reg_name[da.modrm.rm]);
 						break;
 					}
 				}
 				break;
-			case REL:	//relative offset
-				switch (da.size_imm)
-				{
-				case 8:
-					fprintf(tfp, "%08X", addr_code + offs + (char)da.imm8);
-					break;
-				case 32:
-					fprintf(tfp, "%08X", addr_code + offs + (long)da.imm32);
-					break;
-				}
+			case REL8:
+				fprintf(tfp, "%08X", addr_code + offs + (char)da.imm8);
 				break;
-			case MOFFS:		//moffs
+			case REL16:
+				break;
+			case REL32:
+				fprintf(tfp, "%08X", addr_code + offs + (long)da.imm32);
+				break;
+			case MOFFS8:
+			case MOFFS16:
+				break;
+			case MOFFS32:
 				fprintf(tfp, "%s[%08X]", data, da.imm32);
 				break;
-			case DEF:
-				fprintf(tfp, "%d", da.def);
+			case DEF1:
+				fprintf(tfp, "1");
 				break;
 			}
 		}
@@ -303,10 +307,6 @@ int main(void){
 
 		fputc('\n', tfp);	//改行
 	}
-
-	/* .idataセクションの読み込み */
-	t_idata ti[32];
-	Read_idata(bfp, &th, ti);
 
 	fclose(bfp);
 	fclose(tfp);
@@ -340,205 +340,6 @@ char *Get_filename(void){
 	return szFile;
 }
 
-/* ヘッダから逆アセンブルに必要な情報を取得し、テキストファイルに出力する関数 */
-int Read_header(FILE *bfp, t_header *th){
-	int i;
-	unsigned long addr = 0;
-	unsigned char c1;
-	union{
-		unsigned short b2;
-		unsigned long b4;
-		unsigned char b1[16];
-	}code;
-
-	FILE *htfp;
-	if ((htfp = fopen(th->htname, "w")) == NULL){
-		printf("\aファイルをオープンできません。\n");
-		return 1;
-	}
-
-	/*逆アセンブルに必要な情報を取得*/
-	//IMAGE_DOS_HEADER
-	fread(code.b1, 1, 2, bfp);
-	addr += 2;
-	fprintf(htfp, "e_magic:              %04X (\"%c%c\")\n", code.b2, code.b1[0], code.b1[1]);
-	if (code.b2 != 0x5a4d){ exit(1); }
-
-	while (addr < 0x3c){
-		fread(&c1, 1, 1, bfp);
-		addr++;
-	}
-	fread(code.b1, 1, 4, bfp);
-	addr += 4;
-	fprintf(htfp, "e_lfanew:             %08X\n\n", code.b4);
-	unsigned long e_lfanew = code.b4;	//PE signatureへのファイルオフセット
-
-	//PE signature
-	while (addr < e_lfanew){
-		fread(&c1, 1, 1, bfp);
-		addr++;
-	}
-	fread(code.b1, 1, 4, bfp);
-	addr += 4;
-	fprintf(htfp, "Magic:                %08X (\"%s\")\n", code.b4, code.b1);
-	if (code.b4 != 0x00004550){ return 1; }
-	unsigned long fhead = addr;		//IMAGE_FILE_HEADERへのファイルオフセット
-
-	//IMAGE_FILE_HEADER
-	fread(code.b1, 1, 2, bfp);
-	addr += 2;
-	fprintf(htfp, "Machine:              %04X", code.b2);
-	if (code.b2 != 0x014c){ return 1; }
-	else{ fprintf(htfp, " (Intel 386以降およびその互換プロセッサ)\n"); }
-
-	fread(code.b1, 1, 2, bfp);
-	addr += 2;
-	fprintf(htfp, "NumberOfSections:     %04X\n", code.b2);
-	unsigned long NumberOfSections = code.b2;	//セクションの数
-
-	while (addr < fhead + 16){
-		fread(&c1, 1, 1, bfp);
-		addr++;
-	}
-	fread(code.b1, 1, 2, bfp);
-	addr += 2;
-	fprintf(htfp, "SizeOfOptionalHeader: %04X\n\n", code.b4);
-	unsigned long ohead = addr + 2;		//IMAGE_OPTINAL_HEADERへのファイルオフセット
-	unsigned long shead = ohead + code.b4;		//IMAGE_SECTION_HEADERへのファイルオフセット
-
-	//IMAGE_OPTINAL_HEADER
-	while (addr < ohead + 4){
-		fread(&c1, 1, 1, bfp);
-		addr++;
-	}
-	fread(code.b1, 1, 4, bfp);
-	addr += 4;
-	fprintf(htfp, "SizeOfCode:           %08X\n", code.b4);
-	unsigned long SizeOfCode = code.b4;
-
-	while (addr < ohead + 16){
-		fread(&c1, 1, 1, bfp);
-		addr++;
-	}
-	fread(code.b1, 1, 4, bfp);
-	addr += 4;
-	fprintf(htfp, "AddressOfEntryPoint:  %08X\n", code.b4);
-
-	while (addr < ohead + 20){
-		fread(&c1, 1, 1, bfp);
-		addr++;
-	}
-	fread(code.b1, 1, 4, bfp);
-	addr += 4;
-	fprintf(htfp, "BaseOfCode:           %08X\n", code.b4);
-	th->BaseOfCode = code.b4;
-
-	while (addr < ohead + 28){
-		fread(&c1, 1, 1, bfp);
-		addr++;
-	}
-	fread(code.b1, 1, 4, bfp);
-	addr += 4;
-	fprintf(htfp, "ImageBase:            %08X\n\n", code.b4);
-	th->ImageBase = code.b4;
-
-
-	while (addr < ohead + 104){
-		fread(&c1, 1, 1, bfp);
-		addr++;
-	}
-	fread(code.b1, 1, 4, bfp);
-	addr += 4;
-	printf("IT-RVA:  %08X\n", code.b4);
-	unsigned long ITrva = code.b4;
-	fread(code.b1, 1, 4, bfp);
-	addr += 4;
-	printf("IT-Size: %08X\n\n", code.b4);
-
-
-	//IMAGE_SECTION_HEADER
-	int ptr = 0;
-	int flag_text;
-	th->PointerToRawData = 0;
-	th->no.idata = -1;
-	while (NumberOfSections){
-		flag_text = 0;
-
-		while (addr < shead){
-			fread(&c1, 1, 1, bfp);
-			addr++;
-		}
-		fread(code.b1, 1, 8, bfp);
-		addr += 8;
-		code.b1[8] = '\0';
-		fprintf(htfp, "[%s]\n", code.b1);
-		if (!strcmp(code.b1, ".text")){ flag_text = 1; th->no.text = ptr; }
-		else if (!strcmp(code.b1, ".idata")){ th->no.idata = ptr; }
-
-		fread(code.b1, 1, 4, bfp);
-		addr += 4;
-		fprintf(htfp, "VirtualSize:          %08X\n", code.b4);
-		th->ts[ptr].VirtualSize = code.b4;
-
-		fread(code.b1, 1, 4, bfp);
-		addr += 4;
-		fprintf(htfp, "VirtualAddress:       %08X\n", code.b4);
-		if (flag_text){ th->VirtualAddress = code.b4; }
-		th->ts[ptr].VirtualAddress = code.b4;
-
-		while (addr < shead + 16){
-			fread(&c1, 1, 1, bfp);
-			addr++;
-		}
-		fread(code.b1, 1, 4, bfp);
-		addr += 4;
-		fprintf(htfp, "SizeOfRawData:        %08X\n", code.b4);
-		if (flag_text){ th->SizeOfRawData = code.b4; }
-		th->ts[ptr].SizeOfRawData = code.b4;
-
-		fread(code.b1, 1, 4, bfp);
-		addr += 4;
-		fprintf(htfp, "PointerToRawData:     %08X\n", code.b4);
-		if (flag_text){ th->PointerToRawData = code.b4; }
-		th->ts[ptr].PointerToRawData = code.b4;
-
-		while (addr < shead + 36){
-			fread(&c1, 1, 1, bfp);
-			addr++;
-		}
-		fread(code.b1, 1, 4, bfp);
-		addr += 4;
-		fprintf(htfp, "Characteristics:      %08X\n\n", code.b4);
-	
-		ptr++;
-		shead = addr;
-		NumberOfSections--;
-	}
-	if (th->PointerToRawData == 0){ return 1; }
-
-	if (th->no.idata < 0){
-		th->no.idata = ptr;
-		th->ts[ptr].VirtualAddress = ITrva;
-		for (i = 0; i < ptr; i++){
-			if (th->ts[i].VirtualAddress <= ITrva && ITrva <= th->ts[i].VirtualAddress + th->ts[i].VirtualSize){
-				th->ts[ptr].PointerToRawData = ITrva - th->ts[i].VirtualAddress + th->ts[i].PointerToRawData;
-			}
-		}
-	}
-	
-
-	//.textセクションの開始位置まで読み込み
-	//while (addr < th->PointerToRawData){
-	//	fread(&c1, 1, 1, bfp);
-	//	addr++;
-	//}
-	fseek(bfp, th->PointerToRawData, SEEK_SET);
-
-	fclose(htfp);
-
-	return 0;
-}
-
 /* Set_regname関数に用いる関数 */
 void change_reg(char reg_name[8][5], char reg[8][5]){
 	int i;
@@ -565,13 +366,16 @@ void Set_regname(char reg_name[8][5], int size_reg){
 
 	switch (size_reg)
 	{
-	case 8:
+	case R8:
+	case RM8:
 		change_reg(reg_name, reg8);
 		break;
-	case 16:
+	case R16:
+	case RM16:
 		change_reg(reg_name, reg16);
 		break;
-	case 32:
+	case R32:
+	case RM32:
 		change_reg(reg_name, reg32);
 		break;
 	case SREG:
@@ -580,24 +384,4 @@ void Set_regname(char reg_name[8][5], int size_reg){
 	default:
 		break;
 	}
-}
-
-/* 数値を符号付で出力 */
-char *print_b1(unsigned char b1){
-	char str[10];
-
-	if ((char)b1 < 0){
-		b1 = ~b1 + 1;
-		sprintf(str, "-%02X", b1);
-	}
-	else{
-		sprintf(str, "+%02X", b1);
-	}
-	return str;
-}
-char *print_b2(unsigned short b2){
-
-}
-char *print_b4(unsigned long b4){
-
 }
