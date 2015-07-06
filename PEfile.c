@@ -3,7 +3,10 @@
 #include "PEfile.h"
 
 
-/* ヘッダ情報を取得し、テキストファイルに出力する関数 */
+/*
+ヘッダ情報を取得し、テキストファイルに出力する関数
+成功時は0を、失敗時は1を返す
+*/
 int Read_header(FILE *bfp, t_header *th){
 	int i;
 	unsigned long addr = 0;
@@ -200,11 +203,11 @@ int Read_idata(FILE *bfp, t_header *th, t_idata ti[]){
 	unsigned long b4;
 	unsigned long offs;
 	unsigned long ptrd = th->ts[th->no.idata].PointerToRawData;
-	unsigned long rva = th->ts[th->no.idata].VirtualAddress;
+	unsigned long va = th->ts[th->no.idata].VirtualAddress;
 
 
 	offs = ptrd;
-	for (i = 0; ; i++){
+	for (i = 0;; i++){
 		//ILTのRVA取得
 		fseek(bfp, offs, SEEK_SET);
 		fread(&b4, 1, 4, bfp);
@@ -217,8 +220,8 @@ int Read_idata(FILE *bfp, t_header *th, t_idata ti[]){
 
 		//IATのRVA取得
 		fread(&b4, 1, 4, bfp);
-		if (b4 == 0){ break; }
 		ti[i].FirstThunk = b4;
+		if (b4 == 0){ break; }
 
 		num_dll++;
 		offs += 20;
@@ -226,17 +229,17 @@ int Read_idata(FILE *bfp, t_header *th, t_idata ti[]){
 
 	//IATの情報取得
 	for (i = 0; i < num_dll; i++){
-		unsigned long addr = ti[i].FirstThunk;
-		fseek(bfp, ptrd + ti[i].FirstThunk - rva, SEEK_SET);
+		unsigned long rva = ti[i].FirstThunk;
+		fseek(bfp, ptrd + ti[i].FirstThunk - va, SEEK_SET);
 
 		ti[i].size_IAT = 0;
-		for (j = 0; ; j++){
+		for (j = 0;; j++){
 			fread(&b4, 1, 4, bfp);
-			if (b4 == 0){ break; }
 			ti[i].IAT[j] = b4;
+			if (b4 == 0){ break; }
 
-			ti[i].IAT_rva[j] = addr;
-			addr += 4;
+			ti[i].IAT_rva[j] = rva;
+			rva += 4;
 			ti[i].size_IAT++;
 		}
 	}
@@ -244,11 +247,11 @@ int Read_idata(FILE *bfp, t_header *th, t_idata ti[]){
 	//DLL名とインポート関数のヒントと名前を取得
 	for (i = 0; i < num_dll; i++){
 		//DLL名取得
-		fseek(bfp, ptrd + ti[i].Name - rva, SEEK_SET);
+		fseek(bfp, ptrd + ti[i].Name - va, SEEK_SET);
 		fscanf(bfp, "%s", ti[i].dll);
 		//インポート関数のヒントと名前取得
 		for (j = 0; j < ti[i].size_IAT; j++){
-			fseek(bfp, ptrd + ti[i].IAT[j] - rva, SEEK_SET);
+			fseek(bfp, ptrd + ti[i].IAT[j] - va, SEEK_SET);
 			fread(&b2, 1, 2, bfp);
 			ti[i].Hint[j] = b2;
 			fscanf(bfp, "%s", ti[i].function[j]);

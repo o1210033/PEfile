@@ -10,10 +10,7 @@
 char *Get_filename(void);
 void change_reg(char reg_name[8][5], char reg[8][5]);
 void Set_regname(char reg_name[8][5], int size_reg);
-char *print_b1(unsigned char b1);
-char *print_b2(unsigned short b2);
-char *print_b4(unsigned long b4);
-
+void Print_function(FILE *tfp, t_idata ti[], unsigned long rva);
 
 
 /* main関数 */
@@ -77,7 +74,7 @@ int main(void){
 
 	fseek(bfp, th.PointerToRawData, SEEK_SET);
 	while (((n = fread(&hex, 1, 1, bfp)) > 0) && offs < th.SizeOfRawData){
-		//アドレスを出力
+		//メモリアドレスを出力
 		fprintf(tfp, "%08X|   ", addr_code + offs);
 		offs++;
 
@@ -85,93 +82,95 @@ int main(void){
 		fprintf(tfp, "%02X", hex);
 		size_code = 2;
 		Init_disasm(&da);
+
+		//prefixの有無を確認
 		Check_pref(&da, hex);
-		if (da.flag_pref){	//prefix アリ
+		if (da.flag_pref){	//prefix アリの場合、ネイティブコード解析を中止
 			fputc(':', tfp);
 			size_code++;
 		}
-		else{	//prefix ナシ
+		else{	//prefix ナシの場合、ネイティブコード解析を続行
 			fputc(' ', tfp);
 			size_code++;
-			Set_opc(&da, hex);
-			for (da.ptr_opc = 1; da.ptr_opc < da.size_opc; da.ptr_opc++){
+			da.size_opc = 1;
+			while (Set_opc(&da, hex)){   //opcodeの解析
 				fread(&hex, 1, 1, bfp);
 				offs++;
 				fprintf(tfp, "%02X ", hex);
 				size_code += 3;
-				Set_opc(&da, hex);
+			}
+			if (da.flag_modrm){		//ModR/M アリ
+				fread(&hex, 1, 1, bfp);
+				offs++;
+				fprintf(tfp, "%02X ", hex);
+				size_code += 3;
+				Set_modrm(&da, hex);
+			}
+			if (da.flag_sib){		//SIB アリ
+				fread(&hex, 1, 1, bfp);
+				offs++;
+				fprintf(tfp, "%02X ", hex);
+				size_code += 3;
+				Set_sib(&da, hex);
+			}
+			switch (da.size_disp)	//ディスプレースメント アリ
+			{
+			case 8:
+				fread(&hex, 1, 1, bfp);
+				offs++;
+				fprintf(tfp, "%02X ", hex);
+				size_code += 3;
+				da.disp8 = hex;
+				break;
+			case 32:
+				fread(&bit32.b1, 1, 4, bfp);
+				offs += 4;
+				for (i = 0; i < 4; i++){
+					fprintf(tfp, "%02X", bit32.b1[i]);
+				}
+				fputc(' ', tfp);
+				size_code += 9;
+				da.disp32 = bit32.b4;
+				break;
+			}
+			switch (da.size_imm)	//即値 アリ
+			{
+			case 8:
+				fread(&hex, 1, 1, bfp);
+				offs++;
+				fprintf(tfp, "%02X ", hex);
+				size_code += 3;
+				da.imm8 = hex;
+				break;
+			case 16:
+				fread(&bit16.b1, 1, 2, bfp);
+				offs += 2;
+				for (i = 0; i < 2; i++){
+					fprintf(tfp, "%02X", bit16.b1[i]);
+				}
+				fputc(' ', tfp);
+				size_code += 5;
+				da.imm16 = bit16.b2;
+				break;
+			case 32:
+				fread(&bit32.b1, 1, 4, bfp);
+				offs += 4;
+				for (i = 0; i < 4; i++){
+					fprintf(tfp, "%02X", bit32.b1[i]);
+				}
+				fputc(' ', tfp);
+				size_code += 9;
+				da.imm32 = bit32.b4;
+				break;
 			}
 		}
-		if (da.flag_modrm){		//ModR/M アリ
-			fread(&hex, 1, 1, bfp);
-			offs++;
-			fprintf(tfp, "%02X ", hex);
-			size_code += 3;
-			Set_modrm(&da, hex);
-		}
-		if (da.flag_sib){		//SIB アリ
-			fread(&hex, 1, 1, bfp);
-			offs++;
-			fprintf(tfp, "%02X ", hex);
-			size_code += 3;
-			Set_sib(&da, hex);
-		}
-		switch (da.size_disp)	//ディスプレースメント アリ
-		{
-		case 8:
-			fread(&hex, 1, 1, bfp);
-			offs++;
-			fprintf(tfp, "%02X ", hex);
-			size_code += 3;
-			da.disp8 = hex;
-			break;
-		case 32:
-			fread(&bit32.b1, 1, 4, bfp);
-			offs += 4;
-			for (i = 0; i < 4; i++){
-				fprintf(tfp, "%02X", bit32.b1[i]);
-			}
-			fputc(' ', tfp);
-			size_code += 9;
-			da.disp32 = bit32.b4;
-			break;
-		}
-		switch (da.size_imm)	//即値 アリ
-		{
-		case 8:
-			fread(&hex, 1, 1, bfp);
-			offs++;
-			fprintf(tfp, "%02X ", hex);
-			size_code += 3;
-			da.imm8 = hex;
-			break;
-		case 16:
-			fread(&bit16.b1, 1, 2, bfp);
-			offs += 2;
-			for (i = 0; i < 2; i++){
-				fprintf(tfp, "%02X", bit16.b1[i]);
-			}
-			fputc(' ', tfp);
-			size_code += 5;
-			da.imm16 = bit16.b2;
-			break;
-		case 32:
-			fread(&bit32.b1, 1, 4, bfp);
-			offs += 4;
-			for (i = 0; i < 4; i++){
-				fprintf(tfp, "%02X", bit32.b1[i]);
-			}
-			fputc(' ', tfp);
-			size_code += 9;
-			da.imm32 = bit32.b4;
-			break;
-		}
-		for (; size_code < 25; size_code++){	//空白部分の調節
+
+		for (; size_code < 30; size_code++){	//空白部分の調節
 			fputc(' ', tfp);
 		}
 
 		//prefix or x86命令を出力
-		if (da.flag_pref){		//prefix アリ
+		if (da.flag_pref){		//prefix アリの場合、prefixを出力
 			fprintf(tfp, "| PREFIX %s:", da.asm);
 		}
 		else{	//prefix ナシの場合、x86命令を出力
@@ -179,133 +178,138 @@ int main(void){
 			for (i = strlen(da.asm); i < 10; i++){	//空白部分の調節
 				fputc(' ', tfp);
 			}
-		}
+			//x86命令の引数を出力
+			Set_regname(reg_name, R32);
+			strcpy(data, "\0");
+			for (i = 0; i < 3; i++){
+				if (!da.arg[i]){ break; }
 
-		//x86命令の引数を出力
-		Set_regname(reg_name, R32);
-		strcpy(data, "\0");
-		for (i = 0; i < 3; i++){
-			if (!da.arg[i]){ break; }
+				if (i != 0 && da.arg[i] != -1){		//引数間の区切りを出力
+					fputc(',', tfp);
+				}
 
-			if (i != 0 && da.arg[i] != -1){		//引数間の区切りを出力
-				fputc(',', tfp);
-			}
-
-			switch (da.arg[i])
-			{
-			case IMM8:
-				fprintf(tfp, "%02X", da.imm8);
-				break;
-			case IMM16:
-				fprintf(tfp, "%04X", da.imm16);
-				break;
-			case IMM32:
-				fprintf(tfp, "%08X", da.imm32);
-				break;
-			case R8:
-			case R16:
-			case R32:
-			case SREG:
-				Set_regname(reg_name, da.arg[i]);
-				fprintf(tfp, "%s", reg_name[da.modrm.ro]);
-				break;
-			case EAX:
-				fprintf(tfp, "EAX");
-				break;
-			case RM8:
-			case RM16:
-			case RM32:
-				if (da.flag_sib){	//SIB アリ
-					fprintf(tfp, "%s", data);
-					switch (da.modrm.mod)
-					{
-					case 0:
-						if (da.sib.base == 5){
-							if (da.sib.index == 4){
-								fprintf(tfp, "[%08X]", da.disp32);
+				switch (da.arg[i])
+				{
+				case IMM8:
+					fprintf(tfp, "%02X", da.imm8);
+					break;
+				case IMM16:
+					fprintf(tfp, "%04X", da.imm16);
+					break;
+				case IMM32:
+					fprintf(tfp, "%08X", da.imm32);
+					break;
+				case R8:
+				case R16:
+				case R32:
+				case SREG:
+					Set_regname(reg_name, da.arg[i]);
+					fprintf(tfp, "%s", reg_name[da.modrm.ro]);
+					break;
+				case EAX:
+					fprintf(tfp, "EAX");
+					break;
+				case RM8:
+				case RM16:
+				case RM32:
+					if (da.flag_sib){	//SIB アリ
+						fprintf(tfp, "%s", data);
+						switch (da.modrm.mod)
+						{
+						case 0:
+							if (da.sib.base == 5){
+								if (da.sib.index == 4){
+									fprintf(tfp, "[%08X]", da.disp32);
+								}
+								else{
+									fprintf(tfp, "[%s*%d+%08X]", reg_name[da.sib.index], scale[da.sib.scale], da.disp32);
+								}
 							}
 							else{
-								fprintf(tfp, "[%s*%d+%08X]", reg_name[da.sib.index], scale[da.sib.scale], da.disp32);
+								if (da.sib.index == 4){
+									fprintf(tfp, "[%s]", reg_name[da.sib.base]);
+								}
+								else{
+									fprintf(tfp, "[%s+%s*%d]", reg_name[da.sib.base], reg_name[da.sib.index], scale[da.sib.scale]);
+								}
 							}
-						}
-						else{
+							break;
+						case 1:
 							if (da.sib.index == 4){
-								fprintf(tfp, "[%s]", reg_name[da.sib.base]);
+								fprintf(tfp, "[%s+%02X]", reg_name[da.sib.base], da.disp8);
 							}
 							else{
-								fprintf(tfp, "[%s+%s*%d]", reg_name[da.sib.base], reg_name[da.sib.index], scale[da.sib.scale]);
+								fprintf(tfp, "[%s+%s*%d+%02X]", reg_name[da.sib.base], reg_name[da.sib.index], scale[da.sib.scale], da.disp8);
 							}
+							break;
+						case 2:
+							if (da.sib.index == 4){
+								fprintf(tfp, "[%s+%08X]", reg_name[da.sib.base], da.disp32);
+							}
+							else{
+								fprintf(tfp, "[%s+%s*%d+%08X]", reg_name[da.sib.base], reg_name[da.sib.index], scale[da.sib.scale], da.disp32);
+							}
+							break;
 						}
-						break;
-					case 1:
-						if (da.sib.index == 4){
-							fprintf(tfp, "[%s+%02X]", reg_name[da.sib.base], da.disp8);
-						}
-						else{
-							fprintf(tfp, "[%s+%s*%d+%02X]", reg_name[da.sib.base], reg_name[da.sib.index], scale[da.sib.scale], da.disp8);
-						}
-						break;
-					case 2:
-						if (da.sib.index == 4){
-							fprintf(tfp, "[%s+%08X]", reg_name[da.sib.base], da.disp32);
-						}
-						else{
-							fprintf(tfp, "[%s+%s*%d+%08X]", reg_name[da.sib.base], reg_name[da.sib.index], scale[da.sib.scale], da.disp32);
-						}
-						break;
 					}
-				}
-				else{	//SIB ナシ
-					switch (da.modrm.mod)
-					{
-					case 0:
-						if (da.modrm.rm == 5){
-							fprintf(tfp, "%s[%08X]", data, da.disp32);
+					else{	//SIB ナシ
+						switch (da.modrm.mod)
+						{
+						case 0:
+							if (da.modrm.rm == 5){
+								fprintf(tfp, "%s[%08X]", data, da.disp32);
+							}
+							else{
+								fprintf(tfp, "%s[%s]", data, reg_name[da.modrm.rm]);
+							}
+							break;
+						case 1:
+							fprintf(tfp, "%s[%s+%02X]", data, reg_name[da.modrm.rm], da.disp8);
+							break;
+						case 2:
+							fprintf(tfp, "%s[%s+%08X]", data, reg_name[da.modrm.rm], da.disp32);
+							break;
+						case 3:
+							Set_regname(reg_name, da.arg[i]);
+							fprintf(tfp, "%s", reg_name[da.modrm.rm]);
+							break;
 						}
-						else{
-							fprintf(tfp, "%s[%s]", data, reg_name[da.modrm.rm]);
-						}
-						break;
-					case 1:
-						fprintf(tfp, "%s[%s+%02X]", data, reg_name[da.modrm.rm], da.disp8);
-						break;
-					case 2:
-						fprintf(tfp, "%s[%s+%08X]", data, reg_name[da.modrm.rm], da.disp32);
-						break;
-					case 3:
-						Set_regname(reg_name, da.arg[i]);
-						fprintf(tfp, "%s", reg_name[da.modrm.rm]);
-						break;
 					}
+					break;
+				case REL8:
+					fprintf(tfp, "%08X", addr_code + offs + (char)da.imm8);
+					break;
+				case REL16:
+					break;
+				case REL32:
+					fprintf(tfp, "%08X", addr_code + offs + (long)da.imm32);
+					break;
+				case MOFFS8:
+				case MOFFS16:
+					break;
+				case MOFFS32:
+					fprintf(tfp, "%s[%08X]", data, da.imm32);
+					break;
+				case DEF1:
+					fprintf(tfp, "1");
+					break;
 				}
-				break;
-			case REL8:
-				fprintf(tfp, "%08X", addr_code + offs + (char)da.imm8);
-				break;
-			case REL16:
-				break;
-			case REL32:
-				fprintf(tfp, "%08X", addr_code + offs + (long)da.imm32);
-				break;
-			case MOFFS8:
-			case MOFFS16:
-				break;
-			case MOFFS32:
-				fprintf(tfp, "%s[%08X]", data, da.imm32);
-				break;
-			case DEF1:
-				fprintf(tfp, "1");
-				break;
 			}
-		}
 
-		//flag_prefのリセット
-		if (!da.flag_pref){
-			for (i = 0; i < 5; i++)
-				da.pref[i] = -1;
+			//必要に応じて注釈を出力
+			if (da.size_disp == 32){
+				Print_function(tfp, ti, da.disp32 - th.ImageBase);
+			}
 		}
 
 		fputc('\n', tfp);	//改行
+
+		//flag_prefのリセット
+		if (!da.flag_pref){
+			for (i = 0; i < 5; i++){ 
+				da.pref[i] = -1; 
+			}	
+		}
 	}
 
 	fclose(bfp);
@@ -383,5 +387,20 @@ void Set_regname(char reg_name[8][5], int size_reg){
 		break;
 	default:
 		break;
+	}
+}
+
+/* RVAからDLL名とインポート関数をファイル出力する関数 */
+void Print_function(FILE *tfp, t_idata ti[], unsigned long rva){
+	int i, j;
+
+	for (i = 0;; i++){
+		if (ti[i].FirstThunk == 0){ break; }
+		for (j = 0;; j++){
+			if (ti[i].IAT[j] == 0){ break; }
+			if (ti[i].IAT_rva[j] == rva){
+				fprintf(tfp, "   | %s %s", ti[i].dll, ti[i].function[j]);
+			}
+		}
 	}
 }

@@ -3,25 +3,15 @@
 
 #include "disasm.h"
 
-/* 引数da構造体の要素を初期化する関数 */
+/* 引数da構造体の要素を必要なだけ初期化する関数 */
 void Init_disasm(t_disasm *da){
-	int i;
-
-	da->asm[0] = '\0';
-
 	da->flag_modrm = da->flag_sib = 0;
-
-	for (i = 0; i < 3; i++)
-		da->arg[i] = -1;
-
 	da->size_disp = da->size_imm = 0;
-	da->size_rm = da->size_ro = 32;
 }
 
 /* 引数hexがprefixであるかどうかを判定する関数 */
 void Check_pref(t_disasm *da, unsigned char hex){
 	da->flag_pref = 1;
-	da->size_opc = -1;
 	switch (hex)
 	{
 	//group1
@@ -50,24 +40,26 @@ void Check_pref(t_disasm *da, unsigned char hex){
 	//Not Prefix
 	default:
 		da->flag_pref = 0;
-		da->ptr_opc = 0;
-		da->size_opc = 1;
 		break;
 	}
 
 	sprintf(da->asm, "%02X", hex);
 }
 
-/* 引数hex（オペコード）を判定し、逆アセンブルに必要な情報を設定する関数 */
-void Set_opc(t_disasm *da, unsigned char hex){
+/*
+引数hex（オペコード）を判定し、逆アセンブルに必要な情報を設定する関数 
+オペコードフィールド終了時は0を、そうでない場合は1を返す
+*/
+int Set_opc(t_disasm *da, unsigned char hex){
 	int i;
 	int size[3] = { 8, 16, 32 };
 
-	da->opc[da->ptr_opc] = hex;
+	da->opc[da->size_opc - 1] = hex;
 
 	if (da->size_opc == 1){		//1 byte opcode
 		if (hex == 0x0f){
 			da->size_opc = 2;
+			return 1;
 		}
 		else{
 			Set_opc1(da);
@@ -106,6 +98,8 @@ void Set_opc(t_disasm *da, unsigned char hex){
 			break;
 		}
 	}
+
+	return 0;
 }
 
 /* 引数hexをModR/Mとして設定する関数 */
