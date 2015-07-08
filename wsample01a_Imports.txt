@@ -1,51 +1,51 @@
 [IMPORTS]
 
 DLL: KERNEL32.dll
- rva: 00002000, hint: 0542, name: lstrcmpW
- rva: 00002004, hint: 01C1, name: GetCurrentProcessId
- rva: 00002008, hint: 01C5, name: GetCurrentThreadId
- rva: 0000200C, hint: 0293, name: GetTickCount
- rva: 00002010, hint: 03A7, name: QueryPerformanceCounter
- rva: 00002014, hint: 00CA, name: DecodePointer
- rva: 00002018, hint: 0300, name: IsDebuggerPresent
- rva: 0000201C, hint: 04A5, name: SetUnhandledExceptionFilter
- rva: 00002020, hint: 04D3, name: UnhandledExceptionFilter
- rva: 00002024, hint: 01C0, name: GetCurrentProcess
- rva: 00002028, hint: 04C0, name: TerminateProcess
- rva: 0000202C, hint: 00EA, name: EncodePointer
- rva: 00002030, hint: 0263, name: GetStartupInfoW
- rva: 00002034, hint: 02D3, name: HeapSetInformation
- rva: 00002038, hint: 02E9, name: InterlockedCompareExchange
- rva: 0000203C, hint: 04B2, name: Sleep
- rva: 00002040, hint: 02EC, name: InterlockedExchange
- rva: 00002044, hint: 0279, name: GetSystemTimeAsFileTime
+ RVA: 00002000, Hint: 1346(0542), Name: lstrcmpW
+ RVA: 00002004, Hint:  449(01C1), Name: GetCurrentProcessId
+ RVA: 00002008, Hint:  453(01C5), Name: GetCurrentThreadId
+ RVA: 0000200C, Hint:  659(0293), Name: GetTickCount
+ RVA: 00002010, Hint:  935(03A7), Name: QueryPerformanceCounter
+ RVA: 00002014, Hint:  202(00CA), Name: DecodePointer
+ RVA: 00002018, Hint:  768(0300), Name: IsDebuggerPresent
+ RVA: 0000201C, Hint: 1189(04A5), Name: SetUnhandledExceptionFilter
+ RVA: 00002020, Hint: 1235(04D3), Name: UnhandledExceptionFilter
+ RVA: 00002024, Hint:  448(01C0), Name: GetCurrentProcess
+ RVA: 00002028, Hint: 1216(04C0), Name: TerminateProcess
+ RVA: 0000202C, Hint:  234(00EA), Name: EncodePointer
+ RVA: 00002030, Hint:  611(0263), Name: GetStartupInfoW
+ RVA: 00002034, Hint:  723(02D3), Name: HeapSetInformation
+ RVA: 00002038, Hint:  745(02E9), Name: InterlockedCompareExchange
+ RVA: 0000203C, Hint: 1202(04B2), Name: Sleep
+ RVA: 00002040, Hint:  748(02EC), Name: InterlockedExchange
+ RVA: 00002044, Hint:  633(0279), Name: GetSystemTimeAsFileTime
 
 DLL: USER32.dll
- rva: 000020AC, hint: 0215, name: MessageBoxW
- rva: 000020B0, hint: 0100, name: GetActiveWindow
+ RVA: 000020AC, Hint:  533(0215), Name: MessageBoxW
+ RVA: 000020B0, Hint:  256(0100), Name: GetActiveWindow
 
 DLL: MSVCR100.dll
- rva: 0000204C, hint: 01FB, name: _crt_debugger_hook
- rva: 00002050, hint: 0102, name: ?terminate@@YAXXZ
- rva: 00002054, hint: 048D, name: _unlock
- rva: 00002058, hint: 015B, name: __dllonexit
- rva: 0000205C, hint: 019F, name: __set_app_type
- rva: 00002060, hint: 03C9, name: _onexit
- rva: 00002064, hint: 0221, name: _except_handler4_common
- rva: 00002068, hint: 02B8, name: _invoke_watson
- rva: 0000206C, hint: 01EF, name: _controlfp_s
- rva: 00002070, hint: 0245, name: _fmode
- rva: 00002074, hint: 01EB, name: _commode
- rva: 00002078, hint: 01A2, name: __setusermatherr
- rva: 0000207C, hint: 01EC, name: _configthreadlocale
- rva: 00002080, hint: 02B1, name: _initterm_e
- rva: 00002084, hint: 02B0, name: _initterm
- rva: 00002088, hint: 04D1, name: _wcmdln
- rva: 0000208C, hint: 0573, name: exit
- rva: 00002090, hint: 012D, name: _XcptFilter
- rva: 00002094, hint: 022A, name: _exit
- rva: 00002098, hint: 01DC, name: _cexit
- rva: 0000209C, hint: 01B6, name: __wgetmainargs
- rva: 000020A0, hint: 01C5, name: _amsg_exit
- rva: 000020A4, hint: 0323, name: _lock
+ RVA: 0000204C, Hint:  507(01FB), Name: _crt_debugger_hook
+ RVA: 00002050, Hint:  258(0102), Name: ?terminate@@YAXXZ
+ RVA: 00002054, Hint: 1165(048D), Name: _unlock
+ RVA: 00002058, Hint:  347(015B), Name: __dllonexit
+ RVA: 0000205C, Hint:  415(019F), Name: __set_app_type
+ RVA: 00002060, Hint:  969(03C9), Name: _onexit
+ RVA: 00002064, Hint:  545(0221), Name: _except_handler4_common
+ RVA: 00002068, Hint:  696(02B8), Name: _invoke_watson
+ RVA: 0000206C, Hint:  495(01EF), Name: _controlfp_s
+ RVA: 00002070, Hint:  581(0245), Name: _fmode
+ RVA: 00002074, Hint:  491(01EB), Name: _commode
+ RVA: 00002078, Hint:  418(01A2), Name: __setusermatherr
+ RVA: 0000207C, Hint:  492(01EC), Name: _configthreadlocale
+ RVA: 00002080, Hint:  689(02B1), Name: _initterm_e
+ RVA: 00002084, Hint:  688(02B0), Name: _initterm
+ RVA: 00002088, Hint: 1233(04D1), Name: _wcmdln
+ RVA: 0000208C, Hint: 1395(0573), Name: exit
+ RVA: 00002090, Hint:  301(012D), Name: _XcptFilter
+ RVA: 00002094, Hint:  554(022A), Name: _exit
+ RVA: 00002098, Hint:  476(01DC), Name: _cexit
+ RVA: 0000209C, Hint:  438(01B6), Name: __wgetmainargs
+ RVA: 000020A0, Hint:  453(01C5), Name: _amsg_exit
+ RVA: 000020A4, Hint:  803(0323), Name: _lock
 

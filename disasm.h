@@ -19,10 +19,11 @@
 
 /* 逆アセンブルに必要な情報用の構造体 */
 typedef struct Disasm{
+	char dtname[256];
+
 	int flag_pref, flag_modrm, flag_sib;
 	int arg[3];
 	int size_opc, size_disp, size_imm;
-
 
 	char asm[20];
 	unsigned char pref[5], opc[3];

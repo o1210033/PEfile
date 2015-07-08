@@ -1,0 +1,59 @@
+e_magic:              5A4D ("MZ")
+e_lfanew:             000000E0
+
+Magic:                00004550 ("PE")
+Machine:              014C (Intel 386以降およびその互換プロセッサ)
+NumberOfSections:     0004
+SizeOfOptionalHeader: 00E0
+
+SizeOfCode:           0000A800
+AddressOfEntryPoint:  00003689
+BaseOfCode:           00001000
+ImageBase:            01000000
+
+[IMAGE_DATA_DIRECTORY]
+Name: Export          | RVA: 00000000, Size: 00000000
+Name: Import          | RVA: 0000A048, Size: 0000012C
+Name: Resource        | RVA: 0000F000, Size: 0001F160
+Name: Exception       | RVA: 00000000, Size: 00000000
+Name: Security        | RVA: 00000000, Size: 00000000
+Name: Relocation      | RVA: 0002F000, Size: 00000E34
+Name: Debug           | RVA: 0000B62C, Size: 00000038
+Name: Copyright       | RVA: 00000000, Size: 00000000
+Name: GlobalPtr       | RVA: 00000000, Size: 00000000
+Name: TLS             | RVA: 00000000, Size: 00000000
+Name: Load Config     | RVA: 00006D58, Size: 00000040
+Name: Bound Import    | RVA: 00000278, Size: 00000128
+Name: IAT             | RVA: 00001000, Size: 00000400
+Name: Delayed Imports | RVA: 00000000, Size: 00000000
+Name: COM Runtime     | RVA: 00000000, Size: 00000000
+Name: Reserved        | RVA: 00000000, Size: 00000000
+
+[.text]
+VirtualSize:          0000A68C
+VirtualAddress:       00001000
+SizeOfRawData:        0000A800
+PointerToRawData:     00000400
+Characteristics:      60000020
+
+[.data]
+VirtualSize:          00002164
+VirtualAddress:       0000C000
+SizeOfRawData:        00001000
+PointerToRawData:     0000AC00
+Characteristics:      C0000040
+
+[.rsrc]
+VirtualSize:          0001F160
+VirtualAddress:       0000F000
+SizeOfRawData:        0001F200
+PointerToRawData:     0000BC00
+Characteristics:      40000040
+
+[.reloc]
+VirtualSize:          00000E34
+VirtualAddress:       0002F000
+SizeOfRawData:        00001000
+PointerToRawData:     0002AE00
+Characteristics:      42000040
+

@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <string.h>
 
 #include "PEfile.h"
 
@@ -9,6 +10,7 @@
 */
 int Read_header(FILE *bfp, t_header *th){
 	int i;
+	FILE *htfp;
 	unsigned long addr = 0;
 	unsigned char c1;
 	union{
@@ -17,7 +19,11 @@ int Read_header(FILE *bfp, t_header *th){
 		unsigned char b1[16];
 	}code;
 
-	FILE *htfp;
+	char name_IDD[16][20] = {
+		"Export", "Import", "Resource", "Exception", "Security", "Relocation", "Debug", "Copyright",
+		"GlobalPtr", "TLS", "Load Config", "Bound Import", "IAT", "Delayed Imports", "COM Runtime", "Reserved"
+	};
+
 	if ((htfp = fopen(th->htname, "w")) == NULL){
 		printf("\aファイルをオープンできません。\n");
 		return 1;
@@ -108,14 +114,18 @@ int Read_header(FILE *bfp, t_header *th){
 	fprintf(htfp, "ImageBase:            %08X\n\n", code.b4);
 	th->ImageBase = code.b4;
 
-	//インポートテーブルのRVA取得
-	while (addr < ohead + 104){
-		fread(&c1, 1, 1, bfp);
-		addr++;
+
+	fprintf(htfp, "[IMAGE_DATA_DIRECTORY]\n");
+	fseek(bfp, ohead + 96, SEEK_SET);
+	for (i = 0; i < 16; i++){
+		strcpy(th->IDD[i].Name, name_IDD[i]);
+		fread(&th->IDD[i].RVA, 1, 4, bfp);
+		fread(&th->IDD[i].Size, 1, 4, bfp);
+		fprintf(htfp, "Name: %-15s | RVA: %08X, Size: %08X\n", th->IDD[i].Name, th->IDD[i].RVA, th->IDD[i].Size);
 	}
-	fread(code.b1, 1, 4, bfp);
-	addr += 4;
-	unsigned long ITrva = code.b4;
+	fputc('\n', htfp);
+	//インポートテーブルのRVA取得
+	unsigned long ITrva = th->IDD[1].RVA;
 
 
 	//IMAGE_SECTION_HEADER
@@ -123,13 +133,11 @@ int Read_header(FILE *bfp, t_header *th){
 	int flag_text;
 	th->PointerToRawData = 0;
 	th->no.idata = -1;
+	addr = shead;
 	while (NumberOfSections){
 		flag_text = 0;
 
-		while (addr < shead){
-			fread(&c1, 1, 1, bfp);
-			addr++;
-		}
+		fseek(bfp, shead, SEEK_SET);
 		fread(code.b1, 1, 8, bfp);
 		addr += 8;
 		code.b1[8] = '\0';
@@ -197,11 +205,9 @@ int Read_header(FILE *bfp, t_header *th){
 /* インポート情報の読み込み＆ファイル出力関数 */
 int Read_idata(FILE *bfp, t_header *th, t_idata ti[]){
 	int i, j;
+	FILE *itfp;
 	int num_dll = 0;
-	char c1;
-	unsigned short b2;
-	unsigned long b4;
-	unsigned long offs;
+	unsigned long offs, rva;
 	unsigned long ptrd = th->ts[th->no.idata].PointerToRawData;
 	unsigned long va = th->ts[th->no.idata].VirtualAddress;
 
@@ -210,35 +216,53 @@ int Read_idata(FILE *bfp, t_header *th, t_idata ti[]){
 	for (i = 0;; i++){
 		//ILTのRVA取得
 		fseek(bfp, offs, SEEK_SET);
-		fread(&b4, 1, 4, bfp);
-		ti[i].OriginalFirstThunk = b4;
+		fread(&ti[i].OriginalFirstThunk, 1, 4, bfp);
 
 		//DLL名のRVA取得
 		fseek(bfp, 8, SEEK_CUR);
-		fread(&b4, 1, 4, bfp);
-		ti[i].Name = b4;
+		fread(&ti[i].Name, 1, 4, bfp);
 
 		//IATのRVA取得
-		fread(&b4, 1, 4, bfp);
-		ti[i].FirstThunk = b4;
-		if (b4 == 0){ break; }
+		fread(&ti[i].FirstThunk, 1, 4, bfp);
 
+		if (ti[i].FirstThunk == 0){ break; }
 		num_dll++;
 		offs += 20;
 	}
 
+	//ILTの情報取得
+	if (ti[0].OriginalFirstThunk != 0){   //ILTが存在する場合のみ
+		for (i = 0; i < num_dll; i++){
+			rva = ti[i].OriginalFirstThunk;
+			fseek(bfp, ptrd + (ti[i].OriginalFirstThunk - va), SEEK_SET);
+
+			ti[i].size_ILT = 0;
+			for (j = 0;; j++){
+				fread(&ti[i].ILT[j], 1, 4, bfp);
+
+				if (ti[i].ILT[j] == 0){ break; }
+				ti[i].ILT_rva[j] = rva;
+				printf("RVA: %08X, ILT: %08X\n", ti[i].ILT_rva[j], ti[i].ILT[j]);
+
+				rva += 4;
+				ti[i].size_ILT++;
+			}
+		}
+	}
+
 	//IATの情報取得
 	for (i = 0; i < num_dll; i++){
-		unsigned long rva = ti[i].FirstThunk;
-		fseek(bfp, ptrd + ti[i].FirstThunk - va, SEEK_SET);
+		rva = ti[i].FirstThunk;
+		fseek(bfp, ptrd + (ti[i].FirstThunk - va), SEEK_SET);
 
 		ti[i].size_IAT = 0;
 		for (j = 0;; j++){
-			fread(&b4, 1, 4, bfp);
-			ti[i].IAT[j] = b4;
-			if (b4 == 0){ break; }
+			fread(&ti[i].IAT[j], 1, 4, bfp);
 
+			if (ti[i].IAT[j] == 0){ break; }
 			ti[i].IAT_rva[j] = rva;
+			printf("RVA: %08X, IAT: %08X\n", ti[i].IAT_rva[j], ti[i].IAT[j]);
+
 			rva += 4;
 			ti[i].size_IAT++;
 		}
@@ -247,30 +271,43 @@ int Read_idata(FILE *bfp, t_header *th, t_idata ti[]){
 	//DLL名とインポート関数のヒントと名前を取得
 	for (i = 0; i < num_dll; i++){
 		//DLL名取得
-		fseek(bfp, ptrd + ti[i].Name - va, SEEK_SET);
+		fseek(bfp, ptrd + (ti[i].Name - va), SEEK_SET);
 		fscanf(bfp, "%s", ti[i].dll);
-		//インポート関数のヒントと名前取得
-		for (j = 0; j < ti[i].size_IAT; j++){
-			fseek(bfp, ptrd + ti[i].IAT[j] - va, SEEK_SET);
-			fread(&b2, 1, 2, bfp);
-			ti[i].Hint[j] = b2;
-			fscanf(bfp, "%s", ti[i].function[j]);
+		//インポート関数の序数もしくはヒントと名前取得
+		if (ti[0].OriginalFirstThunk != 0){   //ILTが存在する場合のみ
+			for (j = 0; j < ti[i].size_ILT; j++){
+				if ((ti[i].ILT[j] & 0x80000000) != 0){   //序数の取得
+					ti[i].OrdinalNumber[j] = ti[i].ILT[j] & 0x7FFFFFFF;
+				}
+				else{   //ヒントと名前取得
+					fseek(bfp, ptrd + (ti[i].ILT[j] - va), SEEK_SET);
+					fread(&ti[i].Hint[j], 1, 2, bfp);
+					fscanf(bfp, "%s", ti[i].function[j]);
+				}
+			}
 		}
+	
 	}
 	
 	//ファイル出力
-	FILE *itfp;
-	if ((itfp = fopen(th->itname, "w")) == NULL){
-		printf("\aファイルをオープンできません。\n");
-		return 1;
-	}
-	fprintf(itfp, "[IMPORTS]\n\n");
-	for (i = 0; i < num_dll; i++){
-		fprintf(itfp, "DLL: %s\n", ti[i].dll);
-		for (j = 0; j < ti[i].size_IAT; j++){
-			fprintf(itfp, " rva: %08X, hint: %04X, name: %s\n", ti[i].IAT_rva[j], ti[i].Hint[j], ti[i].function[j]);
+	if (ti[0].OriginalFirstThunk != 0){   //ILTが存在する場合のみ
+		if ((itfp = fopen(th->itname, "w")) == NULL){
+			printf("\aファイルをオープンできません。\n");
+			return 1;
 		}
-		fprintf(itfp, "\n");
+		fprintf(itfp, "[IMPORTS]\n\n");
+		for (i = 0; i < num_dll; i++){
+			fprintf(itfp, "DLL: %s\n", ti[i].dll);
+			for (j = 0; j < ti[i].size_ILT; j++){
+				if ((ti[i].ILT[j] & 0x80000000) != 0){
+					fprintf(itfp, " RVA: %08X, Ord#: %4d(%04X)\n", ti[i].IAT_rva[j], ti[i].OrdinalNumber[j], ti[i].OrdinalNumber[j]);
+				}
+				else{
+					fprintf(itfp, " RVA: %08X, Hint: %4d(%04X), Name: %s\n", ti[i].IAT_rva[j], ti[i].Hint[j], ti[i].Hint[j], ti[i].function[j]);
+				}
+			}
+			fprintf(itfp, "\n");
+		}
 	}
 
 	return 0;

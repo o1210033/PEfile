@@ -11,6 +11,24 @@ AddressOfEntryPoint:  00001332
 BaseOfCode:           00001000
 ImageBase:            00400000
 
+[IMAGE_DATA_DIRECTORY]
+Name: Export          | RVA: 00000000, Size: 00000000
+Name: Import          | RVA: 000022A4, Size: 00000050
+Name: Resource        | RVA: 00004000, Size: 000001B4
+Name: Exception       | RVA: 00000000, Size: 00000000
+Name: Security        | RVA: 00000000, Size: 00000000
+Name: Relocation      | RVA: 00005000, Size: 00000154
+Name: Debug           | RVA: 000020E0, Size: 0000001C
+Name: Copyright       | RVA: 00000000, Size: 00000000
+Name: GlobalPtr       | RVA: 00000000, Size: 00000000
+Name: TLS             | RVA: 00000000, Size: 00000000
+Name: Load Config     | RVA: 00002158, Size: 00000040
+Name: Bound Import    | RVA: 00000000, Size: 00000000
+Name: IAT             | RVA: 00002000, Size: 000000B8
+Name: Delayed Imports | RVA: 00000000, Size: 00000000
+Name: COM Runtime     | RVA: 00000000, Size: 00000000
+Name: Reserved        | RVA: 00000000, Size: 00000000
+
 [.text]
 VirtualSize:          00000884
 VirtualAddress:       00001000

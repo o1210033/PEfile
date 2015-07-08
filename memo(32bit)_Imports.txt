@@ -1,0 +1,272 @@
+[IMPORTS]
+
+DLL: ADVAPI32.dll
+ RVA: 00001000, Hint:  638(027E), Name: RegSetValueExW
+ RVA: 00001004, Hint:  622(026E), Name: RegQueryValueExW
+ RVA: 00001008, Hint:  560(0230), Name: RegCloseKey
+ RVA: 0000100C, Hint:  572(023C), Name: RegCreateKeyW
+ RVA: 00001010, Hint:  609(0261), Name: RegOpenKeyExW
+ RVA: 00001014, Hint:  384(0180), Name: IsTextUnicode
+ RVA: 00001018, Hint:   87(0057), Name: CloseServiceHandle
+ RVA: 0000101C, Hint:  548(0224), Name: QueryServiceConfigW
+ RVA: 00001020, Hint:  507(01FB), Name: OpenServiceW
+ RVA: 00001024, Hint:  505(01F9), Name: OpenSCManagerW
+
+DLL: KERNEL32.dll
+ RVA: 0000102C, Hint:  320(0140), Name: FindNLSString
+ RVA: 00001030, Hint:  691(02B3), Name: GlobalAlloc
+ RVA: 00001034, Hint:  709(02C5), Name: GlobalUnlock
+ RVA: 00001038, Hint:  702(02BE), Name: GlobalLock
+ RVA: 0000103C, Hint:  663(0297), Name: GetTimeFormatW
+ RVA: 00001040, Hint:  456(01C8), Name: GetDateFormatW
+ RVA: 00001044, Hint:  515(0203), Name: GetLocalTime
+ RVA: 00001048, Hint:  670(029E), Name: GetUserDefaultUILanguage
+ RVA: 0000104C, Hint:  719(02CF), Name: HeapFree
+ RVA: 00001050, Hint:  715(02CB), Name: HeapAlloc
+ RVA: 00001054, Hint:  586(024A), Name: GetProcessHeap
+ RVA: 00001058, Hint:  492(01EC), Name: GetFileInformationByHandle
+ RVA: 0000105C, Hint:  748(02EC), Name: InterlockedExchange
+ RVA: 00001060, Hint:  355(0163), Name: FreeLibraryAndExitThread
+ RVA: 00001064, Hint:  490(01EA), Name: GetFileAttributesW
+ RVA: 00001068, Hint: 1303(0517), Name: Wow64RevertWow64FsRedirection
+ RVA: 0000106C, Hint: 1299(0513), Name: Wow64DisableWow64FsRedirection
+ RVA: 00001070, Hint:  782(030E), Name: IsWow64Process
+ RVA: 00001074, Hint:  448(01C0), Name: GetCurrentProcess
+ RVA: 00001078, Hint:  181(00B5), Name: CreateThread
+ RVA: 0000107C, Hint:  831(033F), Name: LoadLibraryW
+ RVA: 00001080, Hint:  532(0214), Name: GetModuleFileNameW
+ RVA: 00001084, Hint:  140(008C), Name: CreateFileMappingW
+ RVA: 00001088, Hint:  350(015E), Name: FormatMessageW
+ RVA: 0000108C, Hint:  855(0357), Name: MapViewOfFile
+ RVA: 00001090, Hint:  871(0367), Name: MultiByteToWideChar
+ RVA: 00001094, Hint: 1238(04D6), Name: UnmapViewOfFile
+ RVA: 00001098, Hint:  843(034B), Name: LocalReAlloc
+ RVA: 0000109C, Hint:  360(0168), Name: GetACP
+ RVA: 000010A0, Hint:  214(00D6), Name: DeleteFileW
+ RVA: 000010A4, Hint: 1107(0453), Name: SetEndOfFile
+ RVA: 000010A8, Hint: 1297(0511), Name: WideCharToMultiByte
+ RVA: 000010AC, Hint: 1139(0473), Name: SetLastError
+ RVA: 000010B0, Hint: 1317(0525), Name: WriteFile
+ RVA: 000010B4, Hint:  514(0202), Name: GetLastError
+ RVA: 000010B8, Hint:  845(034D), Name: LocalSize
+ RVA: 000010BC, Hint:  507(01FB), Name: GetFullPathNameW
+ RVA: 000010C0, Hint:  870(0366), Name: MulDiv
+ RVA: 000010C4, Hint:  391(0187), Name: GetCommandLineW
+ RVA: 000010C8, Hint:  449(01C1), Name: GetCurrentProcessId
+ RVA: 000010CC, Hint:  348(015C), Name: FoldStringW
+ RVA: 000010D0, Hint: 1346(0542), Name: lstrcmpW
+ RVA: 000010D4, Hint:  313(0139), Name: FindFirstFileW
+ RVA: 000010D8, Hint:  302(012E), Name: FindClose
+ RVA: 000010DC, Hint:  723(02D3), Name: HeapSetInformation
+ RVA: 000010E0, Hint: 1216(04C0), Name: TerminateProcess
+ RVA: 000010E4, Hint:  633(0279), Name: GetSystemTimeAsFileTime
+ RVA: 000010E8, Hint:  453(01C5), Name: GetCurrentThreadId
+ RVA: 000010EC, Hint:  659(0293), Name: GetTickCount
+ RVA: 000010F0, Hint:  935(03A7), Name: QueryPerformanceCounter
+ RVA: 000010F4, Hint:  533(0215), Name: GetModuleHandleA
+ RVA: 000010F8, Hint: 1189(04A5), Name: SetUnhandledExceptionFilter
+ RVA: 000010FC, Hint:  610(0262), Name: GetStartupInfoA
+ RVA: 00001100, Hint:  745(02E9), Name: InterlockedCompareExchange
+ RVA: 00001104, Hint: 1202(04B2), Name: Sleep
+ RVA: 00001108, Hint:  842(034A), Name: LocalLock
+ RVA: 0000110C, Hint:  846(034E), Name: LocalUnlock
+ RVA: 00001110, Hint: 1358(054E), Name: lstrlenW
+ RVA: 00001114, Hint:  518(0206), Name: GetLocaleInfoW
+ RVA: 00001118, Hint:  698(02BA), Name: GlobalFree
+ RVA: 0000111C, Hint: 1349(0545), Name: lstrcmpiW
+ RVA: 00001120, Hint: 1112(0458), Name: SetErrorMode
+ RVA: 00001124, Hint:  143(008F), Name: CreateFileW
+ RVA: 00001128, Hint:  960(03C0), Name: ReadFile
+ RVA: 0000112C, Hint:   82(0052), Name: CloseHandle
+ RVA: 00001130, Hint:  836(0344), Name: LocalAlloc
+ RVA: 00001134, Hint:  747(02EB), Name: InterlockedDecrement
+ RVA: 00001138, Hint:  840(0348), Name: LocalFree
+ RVA: 0000113C, Hint:  751(02EF), Name: InterlockedIncrement
+ RVA: 00001140, Hint:  676(02A4), Name: GetVersionExW
+ RVA: 00001144, Hint: 1235(04D3), Name: UnhandledExceptionFilter
+
+DLL: GDI32.dll
+ RVA: 0000114C, Hint:   64(0040), Name: CreateFontIndirectW
+ RVA: 00001150, Hint:  660(0294), Name: SetMapMode
+ RVA: 00001154, Hint:  680(02A8), Name: SetViewportExtEx
+ RVA: 00001158, Hint:  684(02AC), Name: SetWindowExtEx
+ RVA: 0000115C, Hint:  564(0234), Name: LPtoDP
+ RVA: 00001160, Hint:  639(027F), Name: SetBkMode
+ RVA: 00001164, Hint:  550(0226), Name: GetTextMetricsW
+ RVA: 00001168, Hint:  633(0279), Name: SetAbortProc
+ RVA: 0000116C, Hint:  688(02B0), Name: StartDocW
+ RVA: 00001170, Hint:  690(02B2), Name: StartPage
+ RVA: 00001174, Hint:  242(00F2), Name: EndPage
+ RVA: 00001178, Hint:    0(0000), Name: AbortDoc
+ RVA: 0000117C, Hint:  239(00EF), Name: EndDoc
+ RVA: 00001180, Hint:  227(00E3), Name: DeleteDC
+ RVA: 00001184, Hint:  697(02B9), Name: TextOutW
+ RVA: 00001188, Hint:  542(021E), Name: GetTextExtentPoint32W
+ RVA: 0000118C, Hint:   50(0032), Name: CreateDCW
+ RVA: 00001190, Hint:  631(0277), Name: SelectObject
+ RVA: 00001194, Hint:  548(0224), Name: GetTextFaceW
+ RVA: 00001198, Hint:  296(0128), Name: EnumFontsW
+ RVA: 0000119C, Hint:  459(01CB), Name: GetDeviceCaps
+ RVA: 000011A0, Hint:  230(00E6), Name: DeleteObject
+
+DLL: USER32.dll
+ RVA: 000011A8, Hint:  639(027F), Name: SetActiveWindow
+ RVA: 000011AC, Hint:  318(013E), Name: GetKeyboardLayout
+ RVA: 000011B0, Hint:  567(0237), Name: PostQuitMessage
+ RVA: 000011B4, Hint:  156(009C), Name: DefWindowProcW
+ RVA: 000011B8, Hint:  301(012D), Name: GetForegroundWindow
+ RVA: 000011BC, Hint:  465(01D1), Name: IsIconic
+ RVA: 000011C0, Hint:  166(00A6), Name: DestroyWindow
+ RVA: 000011C4, Hint:  525(020D), Name: MessageBeep
+ RVA: 000011C8, Hint:  411(019B), Name: GetWindowPlacement
+ RVA: 000011CC, Hint:   60(003C), Name: CharUpperW
+ RVA: 000011D0, Hint:  589(024D), Name: RegisterClassExW
+ RVA: 000011D4, Hint:  495(01EF), Name: LoadImageW
+ RVA: 000011D8, Hint:  491(01EB), Name: LoadCursorW
+ RVA: 000011DC, Hint:  708(02C4), Name: SetWindowLongW
+ RVA: 000011E0, Hint:  485(01E5), Name: LoadAcceleratorsW
+ RVA: 000011E4, Hint:  381(017D), Name: GetSystemMenu
+ RVA: 000011E8, Hint:  709(02C5), Name: SetWindowPlacement
+ RVA: 000011EC, Hint:  110(006E), Name: CreateWindowExW
+ RVA: 000011F0, Hint:  611(0263), Name: RegisterWindowMessageW
+ RVA: 000011F4, Hint:  785(0311), Name: UpdateWindow
+ RVA: 000011F8, Hint:  446(01BE), Name: InvalidateRect
+ RVA: 000011FC, Hint:  689(02B1), Name: SetScrollPos
+ RVA: 00001200, Hint:  418(01A2), Name: GetWindowTextLengthW
+ RVA: 00001204, Hint:  406(0196), Name: GetWindowLongW
+ RVA: 00001208, Hint:  563(0233), Name: PeekMessageW
+ RVA: 0000120C, Hint:  216(00D8), Name: EnableWindow
+ RVA: 00001210, Hint:  172(00AC), Name: DialogBoxParamW
+ RVA: 00001214, Hint:   99(0063), Name: CreateDialogParamW
+ RVA: 00001218, Hint:  419(01A3), Name: GetWindowTextW
+ RVA: 0000121C, Hint:  710(02C6), Name: SetWindowPos
+ RVA: 00001220, Hint:  648(0288), Name: SetCursor
+ RVA: 00001224, Hint:  659(0293), Name: SetForegroundWindow
+ RVA: 00001228, Hint:  250(00FA), Name: FindWindowW
+ RVA: 0000122C, Hint:  382(017E), Name: GetSystemMetrics
+ RVA: 00001230, Hint:  539(021B), Name: MoveWindow
+ RVA: 00001234, Hint:  636(027C), Name: SendMessageW
+ RVA: 00001238, Hint:   49(0031), Name: CharNextW
+ RVA: 0000123C, Hint:   63(003F), Name: CheckMenuItem
+ RVA: 00001240, Hint:   73(0049), Name: CloseClipboard
+ RVA: 00001244, Hint:  458(01CA), Name: IsClipboardFormatAvailable
+ RVA: 00001248, Hint:  550(0226), Name: OpenClipboard
+ RVA: 0000124C, Hint:  342(0156), Name: GetMenuState
+ RVA: 00001250, Hint:  214(00D6), Name: EnableMenuItem
+ RVA: 00001254, Hint:  378(017A), Name: GetSubMenu
+ RVA: 00001258, Hint:  276(0114), Name: GetClientRect
+ RVA: 0000125C, Hint:  766(02FE), Name: UnhookWinEvent
+ RVA: 00001260, Hint:  300(012C), Name: GetFocus
+ RVA: 00001264, Hint:  331(014B), Name: GetMenu
+ RVA: 00001268, Hint:  533(0215), Name: MessageBoxW
+ RVA: 0000126C, Hint:  809(0329), Name: WinHelpW
+ RVA: 00001270, Hint:  294(0126), Name: GetDlgCtrlID
+ RVA: 00001274, Hint:   67(0043), Name: ChildWindowFromPoint
+ RVA: 00001278, Hint:  289(0121), Name: GetDC
+ RVA: 0000127C, Hint:  735(02DF), Name: ShowWindow
+ RVA: 00001280, Hint:  207(00CF), Name: DrawTextExW
+ RVA: 00001284, Hint:  613(0265), Name: ReleaseDC
+ RVA: 00001288, Hint:  493(01ED), Name: LoadIconW
+ RVA: 0000128C, Hint:  703(02BF), Name: SetWinEventHook
+ RVA: 00001290, Hint:  349(015D), Name: GetMessageW
+ RVA: 00001294, Hint:  566(0236), Name: PostMessageW
+ RVA: 00001298, Hint:  461(01CD), Name: IsDialogMessageW
+ RVA: 0000129C, Hint:  762(02FA), Name: TranslateAcceleratorW
+ RVA: 000012A0, Hint:  218(00DA), Name: EndDialog
+ RVA: 000012A4, Hint:  298(012A), Name: GetDlgItemTextW
+ RVA: 000012A8, Hint:  656(0290), Name: SetDlgItemTextW
+ RVA: 000012AC, Hint:  658(0292), Name: SetFocus
+ RVA: 000012B0, Hint:  715(02CB), Name: SetWindowTextW
+ RVA: 000012B4, Hint:  356(0164), Name: GetParent
+ RVA: 000012B8, Hint:  506(01FA), Name: LoadStringW
+ RVA: 000012BC, Hint:  627(0273), Name: SendDlgItemMessageW
+ RVA: 000012C0, Hint:  288(0120), Name: GetCursorPos
+ RVA: 000012C4, Hint:  621(026D), Name: ScreenToClient
+ RVA: 000012C8, Hint:  764(02FC), Name: TranslateMessage
+ RVA: 000012CC, Hint:  260(0104), Name: GetAncestor
+ RVA: 000012D0, Hint:  175(00AF), Name: DispatchMessageW
+
+DLL: msvcrt.dll
+ RVA: 000012D8, Hint:  295(0127), Name: _controlfp
+ RVA: 000012DC, Hint:  974(03CE), Name: _vsnwprintf
+ RVA: 000012E0, Hint: 1262(04EE), Name: memset
+ RVA: 000012E4, Hint: 1133(046D), Name: _wtol
+ RVA: 000012E8, Hint: 1258(04EA), Name: memcpy
+ RVA: 000012EC, Hint: 1228(04CC), Name: iswctype
+ RVA: 000012F0, Hint: 1371(055B), Name: wcsncmp
+ RVA: 000012F4, Hint: 1376(0560), Name: wcsrchr
+ RVA: 000012F8, Hint:  345(0159), Name: _except_handler4_common
+ RVA: 000012FC, Hint:  190(00BE), Name: __p__fmode
+ RVA: 00001300, Hint:  185(00B9), Name: __p__commode
+ RVA: 00001304, Hint:  212(00D4), Name: __setusermatherr
+ RVA: 00001308, Hint:  257(0101), Name: _amsg_exit
+ RVA: 0000130C, Hint:  469(01D5), Name: _initterm
+ RVA: 00001310, Hint:  231(00E7), Name: _acmdln
+ RVA: 00001314, Hint: 1167(048F), Name: exit
+ RVA: 00001318, Hint:  500(01F4), Name: _ismbblead
+ RVA: 0000131C, Hint:  106(006A), Name: _XcptFilter
+ RVA: 00001320, Hint:  145(0091), Name: __getmainargs
+ RVA: 00001324, Hint:  276(0114), Name: _cexit
+ RVA: 00001328, Hint:  354(0162), Name: _exit
+ RVA: 0000132C, Hint:   55(0037), Name: ?terminate@@YAXXZ
+ RVA: 00001330, Hint:  210(00D2), Name: __set_app_type
+
+DLL: COMDLG32.dll
+ RVA: 00001338, Hint:   23(0017), Name: ReplaceTextW
+ RVA: 0000133C, Hint:   17(0011), Name: PageSetupDlgW
+ RVA: 00001340, Hint:   20(0014), Name: PrintDlgExW
+ RVA: 00001344, Hint:    8(0008), Name: FindTextW
+ RVA: 00001348, Hint:    3(0003), Name: ChooseFontW
+ RVA: 0000134C, Hint:   14(000E), Name: GetSaveFileNameW
+ RVA: 00001350, Hint:    4(0004), Name: CommDlgExtendedError
+ RVA: 00001354, Hint:   12(000C), Name: GetOpenFileNameW
+ RVA: 00001358, Hint:   10(000A), Name: GetFileTitleW
+
+DLL: SHELL32.dll
+ RVA: 00001360, Hint:   26(001A), Name: DragAcceptFiles
+ RVA: 00001364, Hint:  112(0070), Name: SHAddToRecentDocs
+ RVA: 00001368, Hint:  195(00C3), Name: SHGetFolderPathW
+ RVA: 0000136C, Hint:  144(0090), Name: SHCreateItemFromParsingName
+ RVA: 00001370, Hint:  289(0121), Name: ShellExecuteExW
+ RVA: 00001374, Hint:   31(001F), Name: DragQueryFileW
+ RVA: 00001378, Hint:   27(001B), Name: DragFinish
+ RVA: 0000137C, Hint:  282(011A), Name: ShellAboutW
+
+DLL: WINSPOOL.DRV
+ RVA: 00001384, Hint:  144(0090), Name: OpenPrinterW
+ RVA: 00001388, Hint:   29(001D), Name: ClosePrinter
+ RVA: 0000138C, Hint:  134(0086), Name: GetPrinterDriverW
+
+DLL: ole32.dll
+ RVA: 00001394, Hint:   63(003F), Name: CoInitializeEx
+ RVA: 00001398, Hint:  108(006C), Name: CoUninitialize
+ RVA: 0000139C, Hint:  103(0067), Name: CoTaskMemAlloc
+ RVA: 000013A0, Hint:   16(0010), Name: CoCreateInstance
+ RVA: 000013A4, Hint:  104(0068), Name: CoTaskMemFree
+ RVA: 000013A8, Hint:   62(003E), Name: CoInitialize
+
+DLL: SHLWAPI.dll
+ RVA: 000013B0, Hint:   93(005D), Name: PathIsFileSpecW
+ RVA: 000013B4, Hint:  255(00FF), Name: SHStrDupW
+
+DLL: COMCTL32.dll
+ RVA: 000013BC, Hint:    9(0009), Name: CreatePropertySheetPageW
+ RVA: 000013C0, Hint:  133(0085), Name: PropertySheetW
+ RVA: 000013C4, Hint:   12(000C), Name: CreateStatusWindowW
+ RVA: 000013C8, Ord#:  345(0159)
+
+DLL: OLEAUT32.dll
+ RVA: 000013D0, Ord#:    6(0006)
+ RVA: 000013D4, Ord#:    2(0002)
+
+DLL: ntdll.dll
+ RVA: 000013DC, Hint: 1387(056B), Name: WinSqmIncrementDWORD
+ RVA: 000013E0, Hint:  923(039B), Name: RtlInitUnicodeString
+ RVA: 000013E4, Hint:  409(0199), Name: NtQueryLicenseValue
+ RVA: 000013E8, Hint: 1371(055B), Name: WinSqmAddToStream
+
+DLL: VERSION.dll
+ RVA: 000013F0, Hint:    2(0002), Name: GetFileVersionInfoExW
+ RVA: 000013F4, Hint:    4(0004), Name: GetFileVersionInfoSizeExW
+ RVA: 000013F8, Hint:   14(000E), Name: VerQueryValueW
+

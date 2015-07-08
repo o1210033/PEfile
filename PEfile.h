@@ -1,3 +1,10 @@
+/* IMAGE_DATA_DIRECTORY構造体用 */
+typedef struct IDD{
+	char Name[20];
+	unsigned long RVA;
+	unsigned long Size;
+}t_IDD;
+
 /* セクション情報用の構造体 */
 typedef struct Section{
 	unsigned long VirtualSize;
@@ -12,6 +19,7 @@ typedef struct Header{
 	char itname[256];
 	unsigned long BaseOfCode;
 	unsigned long ImageBase;
+	t_IDD IDD[16];
 	t_section ts[10];
 	unsigned long VirtualAddress;
 	unsigned long SizeOfRawData;
@@ -27,12 +35,17 @@ typedef struct Idata{
 	unsigned long Name;
 	unsigned long FirstThunk;
 
+	unsigned long ILT_rva[256];   //ILT自身のRVA
+	unsigned long ILT[256];   //ILTが保持しているRVA
+	int size_ILT;   //ILTの数
+
 	unsigned long IAT_rva[256];   //IAT自身のRVA
 	unsigned long IAT[256];   //IATが保持しているRVA
 	int size_IAT;   //IATの数
 
 	char dll[64];   //DLL名
-	unsigned short Hint[256];
+	long OrdinalNumber[256];
+	short Hint[256];
 	char function[256][64];   //インポート関数名
 }t_idata;
 
