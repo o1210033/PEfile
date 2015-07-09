@@ -130,20 +130,13 @@ int Read_header(FILE *bfp, t_header *th){
 
 	//IMAGE_SECTION_HEADER
 	int ptr = 0;
-	int flag_text;
-	th->PointerToRawData = 0;
-	th->no.idata = -1;
 	addr = shead;
 	while (NumberOfSections){
-		flag_text = 0;
-
 		fseek(bfp, shead, SEEK_SET);
 		fread(code.b1, 1, 8, bfp);
 		addr += 8;
 		code.b1[8] = '\0';
 		fprintf(htfp, "[%s]\n", code.b1);
-		if (!strcmp(code.b1, ".text")){ flag_text = 1; th->no.text = ptr; }
-		else if (!strcmp(code.b1, ".idata")){ th->no.idata = ptr; }
 
 		fread(code.b1, 1, 4, bfp);
 		addr += 4;
@@ -153,7 +146,6 @@ int Read_header(FILE *bfp, t_header *th){
 		fread(code.b1, 1, 4, bfp);
 		addr += 4;
 		fprintf(htfp, "VirtualAddress:       %08X\n", code.b4);
-		if (flag_text){ th->VirtualAddress = code.b4; }
 		th->ts[ptr].VirtualAddress = code.b4;
 
 		while (addr < shead + 16){
@@ -163,13 +155,11 @@ int Read_header(FILE *bfp, t_header *th){
 		fread(code.b1, 1, 4, bfp);
 		addr += 4;
 		fprintf(htfp, "SizeOfRawData:        %08X\n", code.b4);
-		if (flag_text){ th->SizeOfRawData = code.b4; }
 		th->ts[ptr].SizeOfRawData = code.b4;
 
 		fread(code.b1, 1, 4, bfp);
 		addr += 4;
 		fprintf(htfp, "PointerToRawData:     %08X\n", code.b4);
-		if (flag_text){ th->PointerToRawData = code.b4; }
 		th->ts[ptr].PointerToRawData = code.b4;
 
 		while (addr < shead + 36){
@@ -179,21 +169,22 @@ int Read_header(FILE *bfp, t_header *th){
 		fread(code.b1, 1, 4, bfp);
 		addr += 4;
 		fprintf(htfp, "Characteristics:      %08X\n\n", code.b4);
+		if ((code.b4 & 0x00000020) && (code.b4 & 0x20000000) && (code.b4 & 0x40000000)){   //.textセクションの特定
+			th->no.text = ptr;
+		}
 
 		ptr++;
 		shead = addr;
 		NumberOfSections--;
 	}
-	if (th->PointerToRawData == 0){ return 1; }
+	if (th->ts[th->no.text].PointerToRawData == 0){ return 1; }
 
 	//インポート情報のファイル位置をRVAから特定
-	if (th->no.idata < 0){
-		th->no.idata = ptr;
-		th->ts[ptr].VirtualAddress = ITrva;
-		for (i = 0; i < ptr; i++){
-			if (th->ts[i].VirtualAddress <= ITrva && ITrva <= th->ts[i].VirtualAddress + th->ts[i].VirtualSize){
-				th->ts[ptr].PointerToRawData = ITrva - th->ts[i].VirtualAddress + th->ts[i].PointerToRawData;
-			}
+	th->no.idata = ptr;
+	th->ts[ptr].VirtualAddress = ITrva;
+	for (i = 0; i < ptr; i++){
+		if (th->ts[i].VirtualAddress <= ITrva && ITrva <= th->ts[i].VirtualAddress + th->ts[i].VirtualSize){
+			th->ts[ptr].PointerToRawData = ITrva - th->ts[i].VirtualAddress + th->ts[i].PointerToRawData;
 		}
 	}
 

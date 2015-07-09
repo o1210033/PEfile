@@ -21,9 +21,6 @@ typedef struct Header{
 	unsigned long ImageBase;
 	t_IDD IDD[16];
 	t_section ts[10];
-	unsigned long VirtualAddress;
-	unsigned long SizeOfRawData;
-	unsigned long PointerToRawData;
 	struct NO{
 		int text, idata;
 	}no;
