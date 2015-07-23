@@ -1,6 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
+#include <wchar.h>
+#include <wctype.h>
+#include <locale.h>
 #include <windows.h>
 
 #include "disasm.h"
@@ -11,7 +15,8 @@ int Disasm(FILE *bfp, t_disasm *da, t_header *th, t_idata ti[]);
 char *Get_filename(void);
 void change_reg(char reg_name[8][5], char reg[8][5]);
 void Set_regname(char reg_name[8][5], int size_reg);
-void Print_function(FILE *tfp, t_idata ti[], unsigned long rva);
+int Print_function(FILE *dtfp, unsigned long rva, t_idata ti[]);
+int Print_string(FILE *dtfp, unsigned long rva, FILE *bfp, t_header *th);
 
 
 /* main関数 */
@@ -77,7 +82,8 @@ int Disasm(FILE *bfp, t_disasm *da, t_header *th, t_idata ti[]){
 	unsigned long rva;
 	int size_code;
 	int scale[4] = { 1, 2, 4, 8 };
-	char data[20];
+	char *ref;
+	char data[64];
 	char reg_name[8][5];
 	unsigned char hex, opc, modrm;
 	union{
@@ -97,7 +103,7 @@ int Disasm(FILE *bfp, t_disasm *da, t_header *th, t_idata ti[]){
 	/* .textセクションの読み込み＆逆アセンブル処理＆ファイル出力 */
 	fseek(bfp, th->ts[th->no.text].PointerToRawData, SEEK_SET);   //.textセクションの先頭へシーク
 	while (((n = fread(&hex, 1, 1, bfp)) > 0) && offs < th->ts[th->no.text].SizeOfRawData){   //.textセクションの最後まで読み込み
-		//ネイティブコード以外のデータ部分は省略
+		//ネイティブコード以外のデータ(IMAGE_DATA_DIRECTORY)部分は逆アセンブルしない
 		while (1){
 			rva = th->ts[th->no.text].VirtualAddress + offs;
 			for (i = 0; i < 16; i++){
@@ -336,7 +342,10 @@ int Disasm(FILE *bfp, t_disasm *da, t_header *th, t_idata ti[]){
 
 			//必要に応じて注釈を出力
 			if (da->size_disp == 32){
-				Print_function(dtfp, ti, da->disp32 - th->ImageBase);
+				Print_function(dtfp, da->disp32 - th->ImageBase, ti);
+			}
+			else if (da->size_imm == 32){
+				Print_string(dtfp, da->imm32 - th->ImageBase, bfp, th);
 			}
 		}
 
@@ -419,8 +428,8 @@ void Set_regname(char reg_name[8][5], int size_reg){
 	}
 }
 
-/* RVAからDLL名とインポート関数をファイル出力する関数 */
-void Print_function(FILE *tfp, t_idata ti[], unsigned long rva){
+/* RVAからDLL名とインポート関数名をファイル出力する関数 */
+int Print_function(FILE *dtfp, unsigned long rva, t_idata ti[]){
 	int i, j;
 
 	for (i = 0;; i++){
@@ -428,8 +437,67 @@ void Print_function(FILE *tfp, t_idata ti[], unsigned long rva){
 		for (j = 0;; j++){
 			if (ti[i].ILT[j] == 0 || (ti[i].ILT[j] & 0x80000000) != 0){ break; }
 			else if (ti[i].IAT_rva[j] == rva){
-				fprintf(tfp, "   | %s %s", ti[i].dll, ti[i].function[j]);
+				fprintf(dtfp, "   | %s %s", ti[i].dll, ti[i].function[j]);
+				return 0;
 			}
 		}
 	}
+	return -1;
+}
+
+/* RVAから文字列をファイル出力する関数 */
+int Print_string(FILE *dtfp, unsigned long rva, FILE *bfp, t_header *th){
+	int i;
+	long offs_log, offs_string;
+	char c, str[200];
+	wchar_t wc, wstr[200];
+
+	offs_log = ftell(bfp);   //初期ファイル位置を記憶
+	//RVAからファイル位置を取得
+	for (i = 0; i < th->NumberOfSections; i++){
+		if (th->ts[i].Characteristics == 0x40000040
+			&& th->ts[i].VirtualAddress <= rva && rva <= th->ts[i].VirtualAddress + th->ts[i].VirtualSize){
+			offs_string = rva - th->ts[i].VirtualAddress + th->ts[i].PointerToRawData;
+			break;
+		}
+	}
+	if (i == th->NumberOfSections){ return -1; }
+
+	//IMAGE_DATA_DIRECTORY部分は対象外とする
+	for (i = 0; i < 16; i++){
+		if (th->IDD[i].RVA <= rva && rva < th->IDD[i].RVA + th->IDD[i].Size){
+			return -1;
+		}
+	}
+
+	//ASCII
+	fseek(bfp, offs_string, SEEK_SET);
+	for (i = 0; i < 100; i++){
+		fread(&c, 1, 1, bfp);
+		if (c < 0x20 || 0x7e < c){ break; }
+		str[i] = c;
+	}
+	if (i >= 4 && i != 100){
+		str[i] = '\0';
+		fprintf(dtfp, "   | ASCII \"%s\"", str);
+		fseek(bfp, offs_log, SEEK_SET);
+		return 0;
+	}
+
+	//UNICODE
+	fseek(bfp, offs_string, SEEK_SET);
+	for (i = 0; i < 100; i++){
+		fread(&wc, 1, 2, bfp);
+		if (wc < 0x0020 || 0x007e < wc){ break; }
+		wstr[i] = wc;
+	}
+	if (i >= 4 && i != 100){
+		wstr[i] = L'\0';
+		fwprintf(dtfp, L"   | UNICODE \"%s\"", wstr);
+		fseek(bfp, offs_log, SEEK_SET);
+		return 0;
+	}
+
+	fseek(bfp, offs_log, SEEK_SET);
+	return -1;
 }

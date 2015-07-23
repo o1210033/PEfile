@@ -9,7 +9,7 @@
 成功時は0を、失敗時は1を返す
 */
 int Read_header(FILE *bfp, t_header *th){
-	int i;
+	int i, ptr;
 	FILE *htfp;
 	unsigned long addr = 0;
 	unsigned char c1;
@@ -66,7 +66,7 @@ int Read_header(FILE *bfp, t_header *th){
 	fread(code.b1, 1, 2, bfp);
 	addr += 2;
 	fprintf(htfp, "NumberOfSections:     %04X\n", code.b2);
-	unsigned long NumberOfSections = code.b2;	//セクションの数
+	th->NumberOfSections = code.b2;	//セクションの数
 
 	while (addr < fhead + 16){
 		fread(&c1, 1, 1, bfp);
@@ -129,9 +129,8 @@ int Read_header(FILE *bfp, t_header *th){
 
 
 	//IMAGE_SECTION_HEADER
-	int ptr = 0;
 	addr = shead;
-	while (NumberOfSections){
+	for (ptr = 0; ptr < th->NumberOfSections; ptr++){
 		fseek(bfp, shead, SEEK_SET);
 		fread(code.b1, 1, 8, bfp);
 		addr += 8;
@@ -169,13 +168,12 @@ int Read_header(FILE *bfp, t_header *th){
 		fread(code.b1, 1, 4, bfp);
 		addr += 4;
 		fprintf(htfp, "Characteristics:      %08X\n\n", code.b4);
-		if ((code.b4 & 0x00000020) && (code.b4 & 0x20000000) && (code.b4 & 0x40000000)){   //.textセクションの特定
+		th->ts[ptr].Characteristics = code.b4;
+		if ((code.b4 & 0x20000000) && (code.b4 & 0x00000020)){   //.textセクションの特定
 			th->no.text = ptr;
 		}
 
-		ptr++;
 		shead = addr;
-		NumberOfSections--;
 	}
 	if (th->ts[th->no.text].PointerToRawData == 0){ return 1; }
 

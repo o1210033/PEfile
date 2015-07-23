@@ -1,0 +1,61 @@
+[IMPORTS]
+
+DLL: MSVCR120D.dll
+ RVA: 00019090, Hint: 1343(053F), Name: _unlock
+ RVA: 00019094, Hint:  603(025B), Name: _calloc_dbg
+ RVA: 00019098, Hint:  464(01D0), Name: __dllonexit
+ RVA: 0001909C, Hint: 1139(0473), Name: _onexit
+ RVA: 000190A0, Hint:  843(034B), Name: _invoke_watson
+ RVA: 000190A4, Hint:  626(0272), Name: _controlfp_s
+ RVA: 000190A8, Hint:  971(03CB), Name: _lock
+ RVA: 000190AC, Hint: 1990(07C6), Name: wcscpy_s
+ RVA: 000190B0, Hint: 1501(05DD), Name: _wmakepath_s
+ RVA: 000190B4, Hint: 1535(05FF), Name: _wsplitpath_s
+ RVA: 000190B8, Hint:  642(0282), Name: _crt_debugger_hook
+ RVA: 000190BC, Hint:  462(01CE), Name: __crtUnhandledException
+ RVA: 000190C0, Hint:  461(01CD), Name: __crtTerminateProcess
+ RVA: 000190C4, Hint:  459(01CB), Name: __crtSetUnhandledExceptionFilter
+ RVA: 000190C8, Hint:  311(0137), Name: ?terminate@@YAXXZ
+ RVA: 000190CC, Hint:  622(026E), Name: _commode
+ RVA: 000190D0, Hint:  726(02D6), Name: _fmode
+ RVA: 000190D4, Hint:  473(01D9), Name: __initenv
+ RVA: 000190D8, Hint:  837(0345), Name: _initterm
+ RVA: 000190DC, Hint:  838(0346), Name: _initterm_e
+ RVA: 000190E0, Hint:  537(0219), Name: __setusermatherr
+ RVA: 000190E4, Hint:  623(026F), Name: _configthreadlocale
+ RVA: 000190E8, Hint:  604(025C), Name: _cexit
+ RVA: 000190EC, Hint:  694(02B6), Name: _exit
+ RVA: 000190F0, Hint: 1679(068F), Name: exit
+ RVA: 000190F4, Hint:  366(016E), Name: _CrtSetCheckCount
+ RVA: 000190F8, Hint:  349(015D), Name: _CrtDbgReportW
+ RVA: 000190FC, Hint:  535(0217), Name: __set_app_type
+ RVA: 00019100, Hint:  472(01D8), Name: __getmainargs
+ RVA: 00019104, Hint:  580(0244), Name: _amsg_exit
+ RVA: 00019108, Hint:  397(018D), Name: _XcptFilter
+ RVA: 0001910C, Hint:  343(0157), Name: _CRT_RTC_INITW
+ RVA: 00019110, Hint:  685(02AD), Name: _except_handler4_common
+ RVA: 00019114, Hint: 1854(073E), Name: printf
+
+DLL: KERNEL32.dll
+ RVA: 00019000, Hint:  615(0267), Name: GetModuleHandleW
+ RVA: 00019004, Hint:  611(0263), Name: GetModuleFileNameW
+ RVA: 00019008, Hint:  414(019E), Name: FreeLibrary
+ RVA: 0001900C, Hint: 1441(05A1), Name: VirtualQuery
+ RVA: 00019010, Hint:  674(02A2), Name: GetProcessHeap
+ RVA: 00019014, Hint:  819(0333), Name: HeapFree
+ RVA: 00019018, Hint:  815(032F), Name: HeapAlloc
+ RVA: 0001901C, Hint:  254(00FE), Name: DecodePointer
+ RVA: 00019020, Hint:  726(02D6), Name: GetSystemTimeAsFileTime
+ RVA: 00019024, Hint:  526(020E), Name: GetCurrentThreadId
+ RVA: 00019028, Hint:  522(020A), Name: GetCurrentProcessId
+ RVA: 0001902C, Hint: 1069(042D), Name: QueryPerformanceCounter
+ RVA: 00019030, Hint: 1483(05CB), Name: WideCharToMultiByte
+ RVA: 00019034, Hint:  977(03D1), Name: MultiByteToWideChar
+ RVA: 00019038, Hint:  935(03A7), Name: LoadLibraryExW
+ RVA: 0001903C, Hint:  669(029D), Name: GetProcAddress
+ RVA: 00019040, Hint:  592(0250), Name: GetLastError
+ RVA: 00019044, Hint: 1087(043F), Name: RaiseException
+ RVA: 00019048, Hint:  871(0367), Name: IsDebuggerPresent
+ RVA: 0001904C, Hint:  289(0121), Name: EncodePointer
+ RVA: 00019050, Hint:  877(036D), Name: IsProcessorFeaturePresent
+

@@ -1,21 +1,21 @@
 00401000|   55                            | PUSH      EBP
 00401001|   8B EC                         | MOV       EBP,ESP
 00401003|   8B 45 10                      | MOV       EAX,[EBP+10]
-00401006|   68 04214000                   | PUSH      00402104
+00401006|   68 04214000                   | PUSH      00402104   | UNICODE "2012"
 0040100B|   50                            | PUSH      EAX
 0040100C|   FF 15 00204000                | CALL      [00402000]   | KERNEL32.dll lstrcmpW
 00401012|   6A 00                         | PUSH      00
-00401014|   68 10214000                   | PUSH      00402110
+00401014|   68 10214000                   | PUSH      00402110   | UNICODE "MESSAGE"
 00401019|   85 C0                         | TEST      EAX,EAX
 0040101B|   75 18                         | JNZ       00401035
-0040101D|   68 20214000                   | PUSH      00402120
+0040101D|   68 20214000                   | PUSH      00402120   | UNICODE "Hello! 2012"
 00401022|   FF 15 B0204000                | CALL      [004020B0]   | USER32.dll GetActiveWindow
 00401028|   50                            | PUSH      EAX
 00401029|   FF 15 AC204000                | CALL      [004020AC]   | USER32.dll MessageBoxW
 0040102F|   33 C0                         | XOR       EAX,EAX
 00401031|   5D                            | POP       EBP
 00401032|   C2 1000                       | RETN      0010
-00401035|   68 38214000                   | PUSH      00402138
+00401035|   68 38214000                   | PUSH      00402138   | UNICODE "Hello! Windows"
 0040103A|   FF 15 B0204000                | CALL      [004020B0]   | USER32.dll GetActiveWindow
 00401040|   50                            | PUSH      EAX
 00401041|   FF 15 AC204000                | CALL      [004020AC]   | USER32.dll MessageBoxW

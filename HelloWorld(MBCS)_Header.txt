@@ -1,0 +1,80 @@
+e_magic:              5A4D ("MZ")
+e_lfanew:             000000E8
+
+Magic:                00004550 ("PE")
+Machine:              014C (Intel 386以降およびその互換プロセッサ)
+NumberOfSections:     0007
+SizeOfOptionalHeader: 00E0
+
+SizeOfCode:           00003C00
+AddressOfEntryPoint:  00011109
+BaseOfCode:           00001000
+ImageBase:            00400000
+
+[IMAGE_DATA_DIRECTORY]
+Name: Export          | RVA: 00000000, Size: 00000000
+Name: Import          | RVA: 0001915C, Size: 0000003C
+Name: Resource        | RVA: 0001A000, Size: 0000043C
+Name: Exception       | RVA: 00000000, Size: 00000000
+Name: Security        | RVA: 00000000, Size: 00000000
+Name: Relocation      | RVA: 0001B000, Size: 00000354
+Name: Debug           | RVA: 00015820, Size: 00000038
+Name: Copyright       | RVA: 00000000, Size: 00000000
+Name: GlobalPtr       | RVA: 00000000, Size: 00000000
+Name: TLS             | RVA: 00000000, Size: 00000000
+Name: Load Config     | RVA: 00016598, Size: 00000040
+Name: Bound Import    | RVA: 00000000, Size: 00000000
+Name: IAT             | RVA: 00019000, Size: 0000015C
+Name: Delayed Imports | RVA: 00000000, Size: 00000000
+Name: COM Runtime     | RVA: 00000000, Size: 00000000
+Name: Reserved        | RVA: 00000000, Size: 00000000
+
+[.textbss]
+VirtualSize:          00010000
+VirtualAddress:       00001000
+SizeOfRawData:        00000000
+PointerToRawData:     00000000
+Characteristics:      E00000A0
+
+[.text]
+VirtualSize:          00003B89
+VirtualAddress:       00011000
+SizeOfRawData:        00003C00
+PointerToRawData:     00000400
+Characteristics:      60000020
+
+[.rdata]
+VirtualSize:          000020B1
+VirtualAddress:       00015000
+SizeOfRawData:        00002200
+PointerToRawData:     00004000
+Characteristics:      40000040
+
+[.data]
+VirtualSize:          0000057D
+VirtualAddress:       00018000
+SizeOfRawData:        00000200
+PointerToRawData:     00006200
+Characteristics:      C0000040
+
+[.idata]
+VirtualSize:          00000825
+VirtualAddress:       00019000
+SizeOfRawData:        00000A00
+PointerToRawData:     00006400
+Characteristics:      40000040
+
+[.rsrc]
+VirtualSize:          0000043C
+VirtualAddress:       0001A000
+SizeOfRawData:        00000600
+PointerToRawData:     00006E00
+Characteristics:      40000040
+
+[.reloc]
+VirtualSize:          00000501
+VirtualAddress:       0001B000
+SizeOfRawData:        00000600
+PointerToRawData:     00007400
+Characteristics:      42000040
+
