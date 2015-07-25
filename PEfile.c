@@ -228,11 +228,8 @@ int Read_idata(FILE *bfp, t_header *th, t_idata ti[]){
 			ti[i].size_ILT = 0;
 			for (j = 0;; j++){
 				fread(&ti[i].ILT[j], 1, 4, bfp);
-
 				if (ti[i].ILT[j] == 0){ break; }
 				ti[i].ILT_rva[j] = rva;
-				printf("RVA: %08X, ILT: %08X\n", ti[i].ILT_rva[j], ti[i].ILT[j]);
-
 				rva += 4;
 				ti[i].size_ILT++;
 			}
@@ -247,11 +244,8 @@ int Read_idata(FILE *bfp, t_header *th, t_idata ti[]){
 		ti[i].size_IAT = 0;
 		for (j = 0;; j++){
 			fread(&ti[i].IAT[j], 1, 4, bfp);
-
 			if (ti[i].IAT[j] == 0){ break; }
 			ti[i].IAT_rva[j] = rva;
-			printf("RVA: %08X, IAT: %08X\n", ti[i].IAT_rva[j], ti[i].IAT[j]);
-
 			rva += 4;
 			ti[i].size_IAT++;
 		}

@@ -26,14 +26,14 @@ int main(void){
 	FILE *bfp;
 	t_disasm da;
 	t_header th;
-	t_idata ti[32];
-	char szFile[256], fname[256];
+	t_idata ti[30];
+	char szFile[300], fname[300];
 
 	/* 必要なファイル名を取得、設定 */
 	//strcpy(szFile, Get_filename(szFile));
 	strcpy(szFile, "wsample01a.exe");
 	strcpy(fname, szFile);
-	for (i = 0; i < 256; i++){
+	for (i = 0; i < 300; i++){
 		if (szFile[i] == '.')
 			szFile[i] = '\0';
 	}
@@ -58,6 +58,7 @@ int main(void){
 	Read_idata(bfp, &th, ti);
 
 	/* .textセクションの読み込み＆逆アセンブル処理＆ファイル出力 */
+	da.rtable.num = 0;
 	Disasm(bfp, &da, &th, ti);
 
 	/* PEファイルのクローズ処理 */
@@ -77,13 +78,15 @@ int main(void){
 int Disasm(FILE *bfp, t_disasm *da, t_header *th, t_idata ti[]){
 	int i, n;
 	FILE *dtfp;
-	unsigned long addr_code = th->ImageBase + th->ts[th->no.text].VirtualAddress;
+	unsigned long AddressOfCode = th->ImageBase + th->ts[th->no.text].VirtualAddress;
+	unsigned long EndAddressOfCode = AddressOfCode + th->ts[th->no.text].SizeOfRawData;
+	unsigned long addr_code = AddressOfCode;
 	unsigned long offs = 0;
 	unsigned long rva;
 	int size_code;
 	int scale[4] = { 1, 2, 4, 8 };
 	char *ref;
-	char data[64];
+	char data[50];
 	char reg_name[8][5];
 	unsigned char hex, opc, modrm;
 	union{
@@ -102,16 +105,16 @@ int Disasm(FILE *bfp, t_disasm *da, t_header *th, t_idata ti[]){
 
 	/* .textセクションの読み込み＆逆アセンブル処理＆ファイル出力 */
 	fseek(bfp, th->ts[th->no.text].PointerToRawData, SEEK_SET);   //.textセクションの先頭へシーク
-	while (((n = fread(&hex, 1, 1, bfp)) > 0) && offs < th->ts[th->no.text].SizeOfRawData){   //.textセクションの最後まで読み込み
+	while (addr_code < EndAddressOfCode){   //.textセクションの最後まで読み込み
 		//ネイティブコード以外のデータ(IMAGE_DATA_DIRECTORY)部分は逆アセンブルしない
 		while (1){
-			rva = th->ts[th->no.text].VirtualAddress + offs;
+			rva = addr_code - th->ImageBase;
 			for (i = 0; i < 16; i++){
 				if (th->IDD[i].RVA <= rva && rva < th->IDD[i].RVA + th->IDD[i].Size){
 					fprintf(dtfp, "\n* %s (%08X - %08X)\n\n", th->IDD[i].Name, th->ImageBase + th->IDD[i].RVA, th->ImageBase + th->IDD[i].RVA + th->IDD[i].Size - 1);
-					offs += th->IDD[i].Size - (rva - th->IDD[i].RVA);
-					fseek(bfp, th->ts[th->no.text].PointerToRawData + offs, SEEK_SET);
-					if ((n = fread(&hex, 1, 1, bfp)) == 0 || offs >= th->ts[th->no.text].SizeOfRawData){ 
+					addr_code += th->IDD[i].Size - (rva - th->IDD[i].RVA);
+					fseek(bfp, th->ts[th->no.text].PointerToRawData + (addr_code - AddressOfCode), SEEK_SET);
+					if ((n = fread(&hex, 1, 1, bfp)) == 0 || addr_code >= EndAddressOfCode){ 
 						fclose(dtfp);
 						return 0; 
 					}
@@ -122,12 +125,15 @@ int Disasm(FILE *bfp, t_disasm *da, t_header *th, t_idata ti[]){
 		}
 
 		//メモリアドレスを出力
-		fprintf(dtfp, "%08X|   ", addr_code + offs);
-		offs++;
+		fprintf(dtfp, "%08X|   ", addr_code);
 
 		//ネイティブコードを出力＆解析
+		fread(&hex, 1, 1, bfp);
+		offs = 1;
 		fprintf(dtfp, "%02X", hex);
 		size_code = 2;
+
+		//t_disasm構造体daの初期化処理
 		Init_disasm(da);
 
 		//prefixの有無を確認
@@ -223,31 +229,31 @@ int Disasm(FILE *bfp, t_disasm *da, t_header *th, t_idata ti[]){
 		else{	//prefix ナシの場合、x86命令を出力
 			fprintf(dtfp, "| %-10s", da->asm);
 			//x86命令の引数を出力
-			Set_regname(reg_name, R32);
 			strcpy(data, "\0");
 			for (i = 0; i < 3; i++){
-				if (!da->arg[i]){ break; }
+				if (!da->operand[i]){ break; }
 
-				if (i != 0 && da->arg[i] != -1){		//引数間の区切りを出力
-					fputc(',', dtfp);
+				if (i != 0 && da->operand[i] != -1){		//引数間の区切りを出力
+					fprintf(dtfp, ", ");
 				}
 
-				switch (da->arg[i])
+				Set_regname(reg_name, R32);
+				switch (da->operand[i])
 				{
 				case IMM8:
-					fprintf(dtfp, "%02X", da->imm8);
+					fprintf(dtfp, "%02Xh", da->imm8);
 					break;
 				case IMM16:
-					fprintf(dtfp, "%04X", da->imm16);
+					fprintf(dtfp, "%04Xh", da->imm16);
 					break;
 				case IMM32:
-					fprintf(dtfp, "%08X", da->imm32);
+					fprintf(dtfp, "%08Xh", da->imm32);
 					break;
 				case R8:
 				case R16:
 				case R32:
 				case SREG:
-					Set_regname(reg_name, da->arg[i]);
+					Set_regname(reg_name, da->operand[i]);
 					fprintf(dtfp, "%s", reg_name[da->modrm.ro]);
 					break;
 				case EAX:
@@ -263,10 +269,10 @@ int Disasm(FILE *bfp, t_disasm *da, t_header *th, t_idata ti[]){
 						case 0:
 							if (da->sib.base == 5){
 								if (da->sib.index == 4){
-									fprintf(dtfp, "[%08X]", da->disp32);
+									fprintf(dtfp, "[%08Xh]", da->disp32);
 								}
 								else{
-									fprintf(dtfp, "[%s*%d+%08X]", reg_name[da->sib.index], scale[da->sib.scale], da->disp32);
+									fprintf(dtfp, "[%s*%d+%08Xh]", reg_name[da->sib.index], scale[da->sib.scale], da->disp32);
 								}
 							}
 							else{
@@ -280,18 +286,18 @@ int Disasm(FILE *bfp, t_disasm *da, t_header *th, t_idata ti[]){
 							break;
 						case 1:
 							if (da->sib.index == 4){
-								fprintf(dtfp, "[%s+%02X]", reg_name[da->sib.base], da->disp8);
+								fprintf(dtfp, "[%s+%02Xh]", reg_name[da->sib.base], da->disp8);
 							}
 							else{
-								fprintf(dtfp, "[%s+%s*%d+%02X]", reg_name[da->sib.base], reg_name[da->sib.index], scale[da->sib.scale], da->disp8);
+								fprintf(dtfp, "[%s+%s*%d+%02Xh]", reg_name[da->sib.base], reg_name[da->sib.index], scale[da->sib.scale], da->disp8);
 							}
 							break;
 						case 2:
 							if (da->sib.index == 4){
-								fprintf(dtfp, "[%s+%08X]", reg_name[da->sib.base], da->disp32);
+								fprintf(dtfp, "[%s+%08Xh]", reg_name[da->sib.base], da->disp32);
 							}
 							else{
-								fprintf(dtfp, "[%s+%s*%d+%08X]", reg_name[da->sib.base], reg_name[da->sib.index], scale[da->sib.scale], da->disp32);
+								fprintf(dtfp, "[%s+%s*%d+%08Xh]", reg_name[da->sib.base], reg_name[da->sib.index], scale[da->sib.scale], da->disp32);
 							}
 							break;
 						}
@@ -301,38 +307,38 @@ int Disasm(FILE *bfp, t_disasm *da, t_header *th, t_idata ti[]){
 						{
 						case 0:
 							if (da->modrm.rm == 5){
-								fprintf(dtfp, "%s[%08X]", data, da->disp32);
+								fprintf(dtfp, "%s[%08Xh]", data, da->disp32);
 							}
 							else{
 								fprintf(dtfp, "%s[%s]", data, reg_name[da->modrm.rm]);
 							}
 							break;
 						case 1:
-							fprintf(dtfp, "%s[%s+%02X]", data, reg_name[da->modrm.rm], da->disp8);
+							fprintf(dtfp, "%s[%s+%02Xh]", data, reg_name[da->modrm.rm], da->disp8);
 							break;
 						case 2:
-							fprintf(dtfp, "%s[%s+%08X]", data, reg_name[da->modrm.rm], da->disp32);
+							fprintf(dtfp, "%s[%s+%08Xh]", data, reg_name[da->modrm.rm], da->disp32);
 							break;
 						case 3:
-							Set_regname(reg_name, da->arg[i]);
+							Set_regname(reg_name, da->operand[i]);
 							fprintf(dtfp, "%s", reg_name[da->modrm.rm]);
 							break;
 						}
 					}
 					break;
 				case REL8:
-					fprintf(dtfp, "%08X", addr_code + offs + (char)da->imm8);
+					fprintf(dtfp, "%08Xh", addr_code + offs + (char)da->imm8);
 					break;
 				case REL16:
 					break;
 				case REL32:
-					fprintf(dtfp, "%08X", addr_code + offs + (long)da->imm32);
+					fprintf(dtfp, "%08Xh", addr_code + offs + (long)da->imm32);
 					break;
 				case MOFFS8:
 				case MOFFS16:
 					break;
 				case MOFFS32:
-					fprintf(dtfp, "%s[%08X]", data, da->imm32);
+					fprintf(dtfp, "%s[%08Xh]", data, da->imm32);
 					break;
 				case DEF1:
 					fprintf(dtfp, "1");
@@ -347,6 +353,12 @@ int Disasm(FILE *bfp, t_disasm *da, t_header *th, t_idata ti[]){
 			else if (da->size_imm == 32){
 				Print_string(dtfp, da->imm32 - th->ImageBase, bfp, th);
 			}
+
+			//reference
+			if (da->asm[0] == 'J'){
+	
+				da->rtable.num++;
+			}
 		}
 
 		fputc('\n', dtfp);	//改行
@@ -357,7 +369,13 @@ int Disasm(FILE *bfp, t_disasm *da, t_header *th, t_idata ti[]){
 				da->pref[i] = -1;
 			}
 		}
+
+		//Addressの更新
+		addr_code += offs;
+		offs = 0;
 	}
+
+	printf("ref-num: %d\n", da->rtable.num);
 
 	fclose(dtfp);
 	return 0;
