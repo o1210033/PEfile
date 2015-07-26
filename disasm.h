@@ -1,3 +1,4 @@
+//operand
 #define IMM8    1
 #define IMM16   2
 #define IMM32   3
@@ -21,6 +22,16 @@
 #define R32     52
 #define SREG    53
 #define EAX     54
+
+//FlagOfRtable
+#define UJMP   1
+#define CJMP   2
+#define CALL   3
+
+//flag_ref
+#define COUNT   1
+#define SET     2
+#define PRINT   3
 
 
 /* 逆アセンブルに必要な情報用の構造体 */
@@ -46,15 +57,14 @@ typedef struct Disasm{
 		unsigned long hex;
 	} sib;
 
-	struct ReferenceTable{
-		int num;
-	}rtable;
-
 	//ファイル出力用
-	int flag_IDD[16];
-	int size_code;
+	int flag_print, flag_ref, flag_IDD[16];
 	unsigned long addr_code, offs;
-
+	struct ReferenceTable{
+		unsigned long ptr, num;
+		unsigned long *dst, *src;
+		int *flag;
+	}rtable;
 }t_disasm;
 
 /* disasm.c */

@@ -1095,7 +1095,7 @@
 00401E4E|   8D 0C 1F                      | LEA       ECX, [EDI+EBX*1]
 00401E51|   39 CF                         | CMP       EDI, ECX
 00401E53|   73 23                         | JNB       00401E78h
-00401E55|   A1 64124200                   | MOV       EAX, [00421264h]
+00401E55|   A1 64124200                   | MOV       EAX, [00421264h]   | cygwin1.dll __ctype_ptr__
 00401E5A|   8B 30                         | MOV       ESI, [EAX]
 00401E5C|   89 F8                         | MOV       EAX, EDI
 00401E5E|   0F B6 10                      | MOVZX     EDX, [EAX]
@@ -6770,9 +6770,9 @@
 00406791|   C1 38 CA                      | SAR       [EAX], CAh
 00406794|   75 0A                         | JNZ       004067A0h
 00406796|   8D 58 04                      | LEA       EBX, [EAX+04h]
-00406799|   A1 64134200                   | MOV       EAX, [00421364h]
+00406799|   A1 64134200                   | MOV       EAX, [00421364h]   | cygwin1.dll program_invocation_short_name
 0040679E|   89 18                         | MOV       [EAX], EBX
-004067A0|   A1 60134200                   | MOV       EAX, [00421360h]
+004067A0|   A1 60134200                   | MOV       EAX, [00421360h]   | cygwin1.dll program_invocation_name
 004067A5|   89 1D A0064200                | MOV       [004206A0h], EBX
 004067AB|   89 18                         | MOV       [EAX], EBX
 004067AD|   83 C4 1C                      | ADD       ESP, 1Ch
@@ -8837,7 +8837,7 @@
 004082D7|   C3                            | RETN      
 004082D8|   3B 5C 24 18                   | CMP       EBX, [ESP+18h]
 004082DC|   73 74                         | JNB       00408352h
-004082DE|   A1 64124200                   | MOV       EAX, [00421264h]
+004082DE|   A1 64124200                   | MOV       EAX, [00421264h]   | cygwin1.dll __ctype_ptr__
 004082E3|   8B 74 24 58                   | MOV       ESI, [ESP+58h]
 004082E7|   8B 7C 24 18                   | MOV       EDI, [ESP+18h]
 004082EB|   8B 08                         | MOV       ECX, [EAX]
@@ -17719,7 +17719,7 @@
 0040EB82|   0F B6 55 00                   | MOVZX     EDX, [EBP+00h]
 0040EB86|   0F 44                         | ??        
 0040EB88|   D8                            | ??        
-0040EB89|   A1 64124200                   | MOV       EAX, [00421264h]
+0040EB89|   A1 64124200                   | MOV       EAX, [00421264h]   | cygwin1.dll __ctype_ptr__
 0040EB8E|   8B 38                         | MOV       EDI, [EAX]
 0040EB90|   0F B6 C2                      | MOVZX     EAX, DL
 0040EB93|   F6 44 07 01 08                | TEST      [EDI+EAX*1+01h], 08h
@@ -19226,7 +19226,7 @@
 0040FE22|   0F B6 17                      | MOVZX     EDX, [EDI]
 0040FE25|   0F 44                         | ??        
 0040FE27|   D8                            | ??        
-0040FE28|   A1 64124200                   | MOV       EAX, [00421264h]
+0040FE28|   A1 64124200                   | MOV       EAX, [00421264h]   | cygwin1.dll __ctype_ptr__
 0040FE2D|   8B 28                         | MOV       EBP, [EAX]
 0040FE2F|   0F B6 C2                      | MOVZX     EAX, DL
 0040FE32|   F6 44 05 01 08                | TEST      [EBP+EAX*1+01h], 08h
@@ -20792,7 +20792,7 @@
 004111EB|   0F 85 D0110000                | JNE       004123C1h
 004111F1|   8B 44 24 40                   | MOV       EAX, [ESP+40h]
 004111F5|   A3 D4054200                   | MOV       [004205D4h], EAX
-004111FA|   A1 50134200                   | MOV       EAX, [00421350h]
+004111FA|   A1 50134200                   | MOV       EAX, [00421350h]   | cygwin1.dll optarg
 004111FF|   31 FF                         | XOR       EDI, EDI
 00411201|   C6 44 24 24 00                | MOV       [ESP+24h], 00h
 00411206|   8D 5C 24 3C                   | LEA       EBX, [ESP+3Ch]
@@ -20875,7 +20875,7 @@
 00411374|   0F 86 820E0000                | JBE       004121FCh
 0041137A|   83 3D 30064200 00             | CMP       [00420630h], 00h
 00411381|   0F 84 A6090000                | JE        00411D2Dh
-00411387|   A1 54134200                   | MOV       EAX, [00421354h]
+00411387|   A1 54134200                   | MOV       EAX, [00421354h]   | cygwin1.dll optind
 0041138C|   80 3D 05064200 00             | CMP       [00420605h], 00h
 00411393|   8B 00                         | MOV       EAX, [EAX]
 00411395|   89 44 24 28                   | MOV       [ESP+28h], EAX
@@ -21073,7 +21073,7 @@
 00411754|   C7 44 24 0C 887D4100          | MOV       [ESP+0Ch], 00417D88h
 0041175C|   C7 44 24 08 BC7D4100          | MOV       [ESP+08h], 00417DBCh
 00411764|   89 44 24 14                   | MOV       [ESP+14h], EAX
-00411768|   A1 50134200                   | MOV       EAX, [00421350h]
+00411768|   A1 50134200                   | MOV       EAX, [00421350h]   | cygwin1.dll optarg
 0041176D|   8B 00                         | MOV       EAX, [EAX]
 0041176F|   C7 04 24 12744100             | MOV       [ESP], 00417412h
 00411776|   89 44 24 04                   | MOV       [ESP+04h], EAX
@@ -21087,7 +21087,7 @@
 004117A2|   C7 44 24 0C D47D4100          | MOV       [ESP+0Ch], 00417DD4h
 004117AA|   C7 44 24 08 047E4100          | MOV       [ESP+08h], 00417E04h
 004117B2|   89 44 24 14                   | MOV       [ESP+14h], EAX
-004117B6|   A1 50134200                   | MOV       EAX, [00421350h]
+004117B6|   A1 50134200                   | MOV       EAX, [00421350h]   | cygwin1.dll optarg
 004117BB|   8B 00                         | MOV       EAX, [EAX]
 004117BD|   C7 04 24 0B744100             | MOV       [ESP], 0041740Bh
 004117C4|   89 44 24 04                   | MOV       [ESP+04h], EAX
@@ -21109,7 +21109,7 @@
 00411838|   C7 44 24 0C E0994100          | MOV       [ESP+0Ch], 004199E0h
 00411840|   C7 44 24 08 409A4100          | MOV       [ESP+08h], 00419A40h
 00411848|   89 44 24 14                   | MOV       [ESP+14h], EAX
-0041184C|   A1 50134200                   | MOV       EAX, [00421350h]
+0041184C|   A1 50134200                   | MOV       EAX, [00421350h]   | cygwin1.dll optarg
 00411851|   8B 00                         | MOV       EAX, [EAX]
 00411853|   C7 04 24 3C744100             | MOV       [ESP], 0041743Ch
 0041185A|   89 44 24 04                   | MOV       [ESP+04h], EAX
@@ -21124,7 +21124,7 @@
 0041188C|   C7 44 24 0C 44844100          | MOV       [ESP+0Ch], 00418444h
 00411894|   C7 44 24 08 5C844100          | MOV       [ESP+08h], 0041845Ch
 0041189C|   89 44 24 14                   | MOV       [ESP+14h], EAX
-004118A0|   A1 50134200                   | MOV       EAX, [00421350h]
+004118A0|   A1 50134200                   | MOV       EAX, [00421350h]   | cygwin1.dll optarg
 004118A5|   8B 00                         | MOV       EAX, [EAX]
 004118A7|   C7 04 24 2A744100             | MOV       [ESP], 0041742Ah
 004118AE|   89 44 24 04                   | MOV       [ESP+04h], EAX
@@ -21151,7 +21151,7 @@
 00411921|   C7 44 24 0C 1C7E4100          | MOV       [ESP+0Ch], 00417E1Ch
 00411929|   C7 44 24 08 807E4100          | MOV       [ESP+08h], 00417E80h
 00411931|   89 44 24 14                   | MOV       [ESP+14h], EAX
-00411935|   A1 50134200                   | MOV       EAX, [00421350h]
+00411935|   A1 50134200                   | MOV       EAX, [00421350h]   | cygwin1.dll optarg
 0041193A|   8B 00                         | MOV       EAX, [EAX]
 0041193C|   C7 04 24 19744100             | MOV       [ESP], 00417419h
 00411943|   89 44 24 04                   | MOV       [ESP+04h], EAX
@@ -21163,7 +21163,7 @@
 00411967|   E9 AAF8FFFF                   | JMP       00411216h
 0041196C|   C7 05 F4054200 04000000       | MOV       [004205F4h], 00000004h
 00411976|   E9 9BF8FFFF                   | JMP       00411216h
-0041197B|   A1 50134200                   | MOV       EAX, [00421350h]
+0041197B|   A1 50134200                   | MOV       EAX, [00421350h]   | cygwin1.dll optarg
 00411980|   8B 00                         | MOV       EAX, [EAX]
 00411982|   85 C0                         | TEST      EAX, EAX
 00411984|   0F 84 CE0A0000                | JE        00412458h
@@ -21182,7 +21182,7 @@
 004119CF|   0F 84 6F0A0000                | JE        00412444h
 004119D5|   C6 05 05064200 00             | MOV       [00420605h], 00h
 004119DC|   E9 35F8FFFF                   | JMP       00411216h
-004119E1|   A1 50134200                   | MOV       EAX, [00421350h]
+004119E1|   A1 50134200                   | MOV       EAX, [00421350h]   | cygwin1.dll optarg
 004119E6|   C7 44 24 08 18064200          | MOV       [ESP+08h], 00420618h
 004119EE|   C7 44 24 04 20064200          | MOV       [ESP+04h], 00420620h
 004119F6|   8B 00                         | MOV       EAX, [EAX]
@@ -21280,7 +21280,7 @@
 00411BE8|   E9 29F6FFFF                   | JMP       00411216h
 00411BED|   C7 05 F4054200 05000000       | MOV       [004205F4h], 00000005h
 00411BF7|   E9 1AF6FFFF                   | JMP       00411216h
-00411BFC|   A1 50134200                   | MOV       EAX, [00421350h]
+00411BFC|   A1 50134200                   | MOV       EAX, [00421350h]   | cygwin1.dll optarg
 00411C01|   8B 30                         | MOV       ESI, [EAX]
 00411C03|   C7 04 24 08000000             | MOV       [ESP], 00000008h
 00411C0A|   E8 3163FFFF                   | CALL      00407F40h

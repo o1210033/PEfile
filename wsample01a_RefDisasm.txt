@@ -1,0 +1,1435 @@
+
+* Referenced by (U)nconditional or (C)onditional Jump or (c)all at Address:
+| 004011FA(c)
+|
+00401000|   55                            | PUSH      EBP
+00401001|   8B EC                         | MOV       EBP, ESP
+00401003|   8B 45 10                      | MOV       EAX, [EBP+10h]
+00401006|   68 04214000                   | PUSH      00402104h   | UNICODE "2012"
+0040100B|   50                            | PUSH      EAX
+0040100C|   FF 15 00204000                | CALL      [00402000h]   | KERNEL32.dll lstrcmpW
+00401012|   6A 00                         | PUSH      00h
+00401014|   68 10214000                   | PUSH      00402110h   | UNICODE "MESSAGE"
+00401019|   85 C0                         | TEST      EAX, EAX
+0040101B|   75 18                         | JNZ       00401035h
+0040101D|   68 20214000                   | PUSH      00402120h   | UNICODE "Hello! 2012"
+00401022|   FF 15 B0204000                | CALL      [004020B0h]   | USER32.dll GetActiveWindow
+00401028|   50                            | PUSH      EAX
+00401029|   FF 15 AC204000                | CALL      [004020ACh]   | USER32.dll MessageBoxW
+0040102F|   33 C0                         | XOR       EAX, EAX
+00401031|   5D                            | POP       EBP
+00401032|   C2 1000                       | RETN      0010h
+
+* Referenced by (U)nconditional or (C)onditional Jump or (c)all at Address:
+| 0040101B(C)
+|
+00401035|   68 38214000                   | PUSH      00402138h   | UNICODE "Hello! Windows"
+0040103A|   FF 15 B0204000                | CALL      [004020B0h]   | USER32.dll GetActiveWindow
+00401040|   50                            | PUSH      EAX
+00401041|   FF 15 AC204000                | CALL      [004020ACh]   | USER32.dll MessageBoxW
+00401047|   33 C0                         | XOR       EAX, EAX
+00401049|   5D                            | POP       EBP
+0040104A|   C2 1000                       | RETN      0010h
+0040104D|   3B 0D 00304000                | CMP       ECX, [00403000h]
+00401053|   75 02                         | JNZ       00401057h
+00401055|   F3:                           | PREFIX F3:
+00401056|   C3                            | RETN      
+
+* Referenced by (U)nconditional or (C)onditional Jump or (c)all at Address:
+| 00401053(C)
+|
+00401057|   E9 E0020000                   | JMP       0040133Ch
+0040105C|   68 76154000                   | PUSH      00401576h
+00401061|   E8 D3040000                   | CALL      00401539h
+00401066|   A1 60334000                   | MOV       EAX, [00403360h]
+0040106B|   C7 04 24 2C304000             | MOV       [ESP], 0040302Ch
+00401072|   FF 35 5C334000                | PUSH      [0040335Ch]
+00401078|   A3 2C304000                   | MOV       [0040302Ch], EAX
+0040107D|   68 1C304000                   | PUSH      0040301Ch
+00401082|   68 20304000                   | PUSH      00403020h
+00401087|   68 18304000                   | PUSH      00403018h
+0040108C|   FF 15 9C204000                | CALL      [0040209Ch]   | MSVCR100.dll __wgetmainargs
+00401092|   83 C4 14                      | ADD       ESP, 14h
+00401095|   A3 28304000                   | MOV       [00403028h], EAX
+0040109A|   85 C0                         | TEST      EAX, EAX
+0040109C|   79 08                         | JNS       004010A6h
+0040109E|   6A 08                         | PUSH      08h
+004010A0|   E8 ED030000                   | CALL      00401492h
+004010A5|   59                            | POP       ECX
+
+* Referenced by (U)nconditional or (C)onditional Jump or (c)all at Address:
+| 0040109C(C)
+|
+004010A6|   C3                            | RETN      
+
+* Referenced by (U)nconditional or (C)onditional Jump or (c)all at Address:
+| 00401337(U)
+|
+004010A7|   6A 5C                         | PUSH      5Ch
+004010A9|   68 48224000                   | PUSH      00402248h
+004010AE|   E8 5D060000                   | CALL      00401710h
+004010B3|   33 DB                         | XOR       EBX, EBX
+004010B5|   89 5D E4                      | MOV       [EBP+E4h], EBX
+004010B8|   8D 45 94                      | LEA       EAX, [EBP+94h]
+004010BB|   50                            | PUSH      EAX
+004010BC|   FF 15 30204000                | CALL      [00402030h]   | KERNEL32.dll GetStartupInfoW
+004010C2|   39 1D 7C334000                | CMP       [0040337Ch], EBX
+004010C8|   75 0B                         | JNZ       004010D5h
+004010CA|   53                            | PUSH      EBX
+004010CB|   53                            | PUSH      EBX
+004010CC|   6A 01                         | PUSH      01h
+004010CE|   53                            | PUSH      EBX
+004010CF|   FF 15 34204000                | CALL      [00402034h]   | KERNEL32.dll HeapSetInformation
+
+* Referenced by (U)nconditional or (C)onditional Jump or (c)all at Address:
+| 004010C8(C)
+|
+004010D5|   89 5D FC                      | MOV       [EBP+FCh], EBX
+004010D8|   64:                           | PREFIX 64:
+004010D9|   A1 18000000                   | MOV       EAX, [00000018h]
+004010DE|   8B 70 04                      | MOV       ESI, [EAX+04h]
+004010E1|   89 5D E0                      | MOV       [EBP+E0h], EBX
+004010E4|   BF 70334000                   | MOV       EDI, 00403370h
+
+* Referenced by (U)nconditional or (C)onditional Jump or (c)all at Address:
+| 0040110D(U)
+|
+004010E9|   53                            | PUSH      EBX
+004010EA|   56                            | PUSH      ESI
+004010EB|   57                            | PUSH      EDI
+004010EC|   FF 15 38204000                | CALL      [00402038h]   | KERNEL32.dll InterlockedCompareExchange
+004010F2|   3B C3                         | CMP       EAX, EBX
+004010F4|   74 19                         | JE        0040110Fh
+004010F6|   3B C6                         | CMP       EAX, ESI
+004010F8|   75 08                         | JNZ       00401102h
+004010FA|   33 F6                         | XOR       ESI, ESI
+004010FC|   46                            | INC       ESI
+004010FD|   89 75 E0                      | MOV       [EBP+E0h], ESI
+00401100|   EB 10                         | JMP       00401112h
+
+* Referenced by (U)nconditional or (C)onditional Jump or (c)all at Address:
+| 004010F8(C)
+|
+00401102|   68 E8030000                   | PUSH      000003E8h
+00401107|   FF 15 3C204000                | CALL      [0040203Ch]   | KERNEL32.dll Sleep
+0040110D|   EB DA                         | JMP       004010E9h
+
+* Referenced by (U)nconditional or (C)onditional Jump or (c)all at Address:
+| 004010F4(C)
+|
+0040110F|   33 F6                         | XOR       ESI, ESI
+00401111|   46                            | INC       ESI
+
+* Referenced by (U)nconditional or (C)onditional Jump or (c)all at Address:
+| 00401100(U)
+|
+00401112|   A1 6C334000                   | MOV       EAX, [0040336Ch]
+00401117|   3B C6                         | CMP       EAX, ESI
+00401119|   75 0A                         | JNZ       00401125h
+0040111B|   6A 1F                         | PUSH      1Fh
+0040111D|   E8 70030000                   | CALL      00401492h
+00401122|   59                            | POP       ECX
+00401123|   EB 3B                         | JMP       00401160h
+
+* Referenced by (U)nconditional or (C)onditional Jump or (c)all at Address:
+| 00401119(C)
+|
+00401125|   A1 6C334000                   | MOV       EAX, [0040336Ch]
+0040112A|   85 C0                         | TEST      EAX, EAX
+0040112C|   75 2C                         | JNZ       0040115Ah
+0040112E|   89 35 6C334000                | MOV       [0040336Ch], ESI
+00401134|   68 D0204000                   | PUSH      004020D0h
+00401139|   68 C4204000                   | PUSH      004020C4h
+0040113E|   E8 BF050000                   | CALL      00401702h
+00401143|   59                            | POP       ECX
+00401144|   59                            | POP       ECX
+00401145|   85 C0                         | TEST      EAX, EAX
+00401147|   74 17                         | JE        00401160h
+00401149|   C7 45 FC FEFFFFFF             | MOV       [EBP+FCh], FFFFFFFEh
+00401150|   B8 FF000000                   | MOV       EAX, 000000FFh
+00401155|   E9 18010000                   | JMP       00401272h
+
+* Referenced by (U)nconditional or (C)onditional Jump or (c)all at Address:
+| 0040112C(C)
+|
+0040115A|   89 35 34304000                | MOV       [00403034h], ESI
+
+* Referenced by (U)nconditional or (C)onditional Jump or (c)all at Address:
+| 00401123(U), 00401147(C)
+|
+00401160|   A1 6C334000                   | MOV       EAX, [0040336Ch]
+00401165|   3B C6                         | CMP       EAX, ESI
+00401167|   75 1B                         | JNZ       00401184h
+00401169|   68 C0204000                   | PUSH      004020C0h
+0040116E|   68 B8204000                   | PUSH      004020B8h
+00401173|   E8 84050000                   | CALL      004016FCh
+00401178|   59                            | POP       ECX
+00401179|   59                            | POP       ECX
+0040117A|   C7 05 6C334000 02000000       | MOV       [0040336Ch], 00000002h
+
+* Referenced by (U)nconditional or (C)onditional Jump or (c)all at Address:
+| 00401167(C)
+|
+00401184|   39 5D E0                      | CMP       [EBP+E0h], EBX
+00401187|   75 08                         | JNZ       00401191h
+00401189|   53                            | PUSH      EBX
+0040118A|   57                            | PUSH      EDI
+0040118B|   FF 15 40204000                | CALL      [00402040h]   | KERNEL32.dll InterlockedExchange
+
+* Referenced by (U)nconditional or (C)onditional Jump or (c)all at Address:
+| 00401187(C)
+|
+00401191|   39 1D 80334000                | CMP       [00403380h], EBX
+00401197|   74 19                         | JE        004011B2h
+00401199|   68 80334000                   | PUSH      00403380h
+0040119E|   E8 9D040000                   | CALL      00401640h
+004011A3|   59                            | POP       ECX
+004011A4|   85 C0                         | TEST      EAX, EAX
+004011A6|   74 0A                         | JE        004011B2h
+004011A8|   53                            | PUSH      EBX
+004011A9|   6A 02                         | PUSH      02h
+004011AB|   53                            | PUSH      EBX
+004011AC|   FF 15 80334000                | CALL      [00403380h]
+
+* Referenced by (U)nconditional or (C)onditional Jump or (c)all at Address:
+| 00401197(C), 004011A6(C)
+|
+004011B2|   A1 88204000                   | MOV       EAX, [00402088h]   | MSVCR100.dll _wcmdln
+004011B7|   8B 00                         | MOV       EAX, [EAX]
+
+* Referenced by (U)nconditional or (C)onditional Jump or (c)all at Address:
+| 00401226(U)
+|
+004011B9|   89 45 DC                      | MOV       [EBP+DCh], EAX
+004011BC|   0F B7 08                      | MOVZX     ECX, [EAX]
+004011BF|   83 F9 20                      | CMP       ECX, 20h
+004011C2|   77 4F                         | JA        00401213h
+004011C4|   66:                           | PREFIX 66:
+004011C5|   3B CB                         | CMP       ECX, EBX
+004011C7|   74 05                         | JE        004011CEh
+004011C9|   39 5D E4                      | CMP       [EBP+E4h], EBX
+004011CC|   75 45                         | JNZ       00401213h
+
+* Referenced by (U)nconditional or (C)onditional Jump or (c)all at Address:
+| 004011C7(C), 004011E1(U)
+|
+004011CE|   0F B7 08                      | MOVZX     ECX, [EAX]
+004011D1|   66:                           | PREFIX 66:
+004011D2|   3B CB                         | CMP       ECX, EBX
+004011D4|   74 0D                         | JE        004011E3h
+004011D6|   83 F9 20                      | CMP       ECX, 20h
+004011D9|   77 08                         | JA        004011E3h
+004011DB|   83 C0 02                      | ADD       EAX, 02h
+004011DE|   89 45 DC                      | MOV       [EBP+DCh], EAX
+004011E1|   EB EB                         | JMP       004011CEh
+
+* Referenced by (U)nconditional or (C)onditional Jump or (c)all at Address:
+| 004011D4(C), 004011D9(C)
+|
+004011E3|   F6 45 C0 01                   | TEST      [EBP+C0h], 01h
+004011E7|   74 06                         | JE        004011EFh
+004011E9|   0F B7 4D C4                   | MOVZX     ECX, [EBP+C4h]
+004011ED|   EB 03                         | JMP       004011F2h
+
+* Referenced by (U)nconditional or (C)onditional Jump or (c)all at Address:
+| 004011E7(C)
+|
+004011EF|   6A 0A                         | PUSH      0Ah
+004011F1|   59                            | POP       ECX
+
+* Referenced by (U)nconditional or (C)onditional Jump or (c)all at Address:
+| 004011ED(U)
+|
+004011F2|   51                            | PUSH      ECX
+004011F3|   50                            | PUSH      EAX
+004011F4|   53                            | PUSH      EBX
+004011F5|   68 00004000                   | PUSH      00400000h
+004011FA|   E8 01FEFFFF                   | CALL      00401000h
+004011FF|   A3 30304000                   | MOV       [00403030h], EAX
+00401204|   39 1D 24304000                | CMP       [00403024h], EBX
+0040120A|   75 4C                         | JNZ       00401258h
+0040120C|   50                            | PUSH      EAX
+0040120D|   FF 15 8C204000                | CALL      [0040208Ch]   | MSVCR100.dll exit
+
+* Referenced by (U)nconditional or (C)onditional Jump or (c)all at Address:
+| 004011C2(C), 004011CC(C)
+|
+00401213|   83 F9 22                      | CMP       ECX, 22h
+00401216|   75 0B                         | JNZ       00401223h
+00401218|   33 C9                         | XOR       ECX, ECX
+0040121A|   39 5D E4                      | CMP       [EBP+E4h], EBX
+0040121D|   0F 94 C1                      | SETE      CL
+00401220|   89 4D E4                      | MOV       [EBP+E4h], ECX
+
+* Referenced by (U)nconditional or (C)onditional Jump or (c)all at Address:
+| 00401216(C)
+|
+00401223|   83 C0 02                      | ADD       EAX, 02h
+00401226|   EB 91                         | JMP       004011B9h
+00401228|   8B 45 EC                      | MOV       EAX, [EBP+ECh]
+0040122B|   8B 08                         | MOV       ECX, [EAX]
+0040122D|   8B 09                         | MOV       ECX, [ECX]
+0040122F|   89 4D D8                      | MOV       [EBP+D8h], ECX
+00401232|   50                            | PUSH      EAX
+00401233|   51                            | PUSH      ECX
+00401234|   E8 63030000                   | CALL      0040159Ch
+00401239|   59                            | POP       ECX
+0040123A|   59                            | POP       ECX
+0040123B|   C3                            | RETN      
+0040123C|   8B 65 E8                      | MOV       ESP, [EBP+E8h]
+0040123F|   8B 45 D8                      | MOV       EAX, [EBP+D8h]
+00401242|   A3 30304000                   | MOV       [00403030h], EAX
+00401247|   33 DB                         | XOR       EBX, EBX
+00401249|   39 1D 24304000                | CMP       [00403024h], EBX
+0040124F|   75 07                         | JNZ       00401258h
+00401251|   50                            | PUSH      EAX
+00401252|   FF 15 94204000                | CALL      [00402094h]   | MSVCR100.dll _exit
+
+* Referenced by (U)nconditional or (C)onditional Jump or (c)all at Address:
+| 0040120A(C), 0040124F(C)
+|
+00401258|   39 1D 34304000                | CMP       [00403034h], EBX
+0040125E|   75 06                         | JNZ       00401266h
+00401260|   FF 15 98204000                | CALL      [00402098h]   | MSVCR100.dll _cexit
+
+* Referenced by (U)nconditional or (C)onditional Jump or (c)all at Address:
+| 0040125E(C)
+|
+00401266|   C7 45 FC FEFFFFFF             | MOV       [EBP+FCh], FFFFFFFEh
+0040126D|   A1 30304000                   | MOV       EAX, [00403030h]
+
+* Referenced by (U)nconditional or (C)onditional Jump or (c)all at Address:
+| 00401155(U)
+|
+00401272|   E8 DE040000                   | CALL      00401755h
+00401277|   C3                            | RETN      
+00401278|   B8 4D5A0000                   | MOV       EAX, 00005A4Dh
+0040127D|   66:                           | PREFIX 66:
+0040127E|   39 05 00004000                | CMP       [00400000h], EAX
+00401284|   74 04                         | JE        0040128Ah
+
+* Referenced by (U)nconditional or (C)onditional Jump or (c)all at Address:
+| 00401299(C), 004012A7(C), 004012B0(C)
+|
+00401286|   33 C0                         | XOR       EAX, EAX
+00401288|   EB 35                         | JMP       004012BFh
+
+* Referenced by (U)nconditional or (C)onditional Jump or (c)all at Address:
+| 00401284(C)
+|
+0040128A|   A1 3C004000                   | MOV       EAX, [0040003Ch]
+0040128F|   81 B8 00004000 50450000       | CMP       [EAX+00400000h], 00004550h
+00401299|   75 EB                         | JNZ       00401286h
+0040129B|   B9 0B010000                   | MOV       ECX, 0000010Bh
+004012A0|   66:                           | PREFIX 66:
+004012A1|   39 88 18004000                | CMP       [EAX+00400018h], ECX
+004012A7|   75 DD                         | JNZ       00401286h
+004012A9|   83 B8 74004000 0E             | CMP       [EAX+00400074h], 0Eh
+004012B0|   76 D4                         | JBE       00401286h
+004012B2|   33 C9                         | XOR       ECX, ECX
+004012B4|   39 88 E8004000                | CMP       [EAX+004000E8h], ECX
+004012BA|   0F 95 C1                      | SETNE     CL
+004012BD|   8B C1                         | MOV       EAX, ECX
+
+* Referenced by (U)nconditional or (C)onditional Jump or (c)all at Address:
+| 00401288(U)
+|
+004012BF|   6A 02                         | PUSH      02h
+004012C1|   A3 24304000                   | MOV       [00403024h], EAX
+004012C6|   FF 15 5C204000                | CALL      [0040205Ch]   | MSVCR100.dll __set_app_type
+004012CC|   59                            | POP       ECX
+004012CD|   6A FF                         | PUSH      FFh
+004012CF|   FF 15 2C204000                | CALL      [0040202Ch]   | KERNEL32.dll EncodePointer
+004012D5|   8B 0D 68334000                | MOV       ECX, [00403368h]
+004012DB|   A3 74334000                   | MOV       [00403374h], EAX
+004012E0|   A3 78334000                   | MOV       [00403378h], EAX
+004012E5|   A1 70204000                   | MOV       EAX, [00402070h]   | MSVCR100.dll _fmode
+004012EA|   89 08                         | MOV       [EAX], ECX
+004012EC|   A1 74204000                   | MOV       EAX, [00402074h]   | MSVCR100.dll _commode
+004012F1|   8B 0D 64334000                | MOV       ECX, [00403364h]
+004012F7|   89 08                         | MOV       [EAX], ECX
+004012F9|   E8 52020000                   | CALL      00401550h
+004012FE|   E8 B3040000                   | CALL      004017B6h
+00401303|   83 3D 14304000 00             | CMP       [00403014h], 00h
+0040130A|   75 0C                         | JNZ       00401318h
+0040130C|   68 B6174000                   | PUSH      004017B6h
+00401311|   FF 15 78204000                | CALL      [00402078h]   | MSVCR100.dll __setusermatherr
+00401317|   59                            | POP       ECX
+
+* Referenced by (U)nconditional or (C)onditional Jump or (c)all at Address:
+| 0040130A(C)
+|
+00401318|   E8 71040000                   | CALL      0040178Eh
+0040131D|   83 3D 10304000 FF             | CMP       [00403010h], FFh
+00401324|   75 09                         | JNZ       0040132Fh
+00401326|   6A FF                         | PUSH      FFh
+00401328|   FF 15 7C204000                | CALL      [0040207Ch]   | MSVCR100.dll _configthreadlocale
+0040132E|   59                            | POP       ECX
+
+* Referenced by (U)nconditional or (C)onditional Jump or (c)all at Address:
+| 00401324(C)
+|
+0040132F|   33 C0                         | XOR       EAX, EAX
+00401331|   C3                            | RETN      
+00401332|   E8 82040000                   | CALL      004017B9h
+00401337|   E9 6BFDFFFF                   | JMP       004010A7h
+
+* Referenced by (U)nconditional or (C)onditional Jump or (c)all at Address:
+| 00401057(U)
+|
+0040133C|   8B FF                         | MOV       EDI, EDI
+0040133E|   55                            | PUSH      EBP
+0040133F|   8B EC                         | MOV       EBP, ESP
+00401341|   81 EC 28030000                | SUB       ESP, 00000328h
+00401347|   A3 40314000                   | MOV       [00403140h], EAX
+0040134C|   89 0D 3C314000                | MOV       [0040313Ch], ECX
+00401352|   89 15 38314000                | MOV       [00403138h], EDX
+00401358|   89 1D 34314000                | MOV       [00403134h], EBX
+0040135E|   89 35 30314000                | MOV       [00403130h], ESI
+00401364|   89 3D 2C314000                | MOV       [0040312Ch], EDI
+0040136A|   66:                           | PREFIX 66:
+0040136B|   8C 15 58314000                | MOV       [00403158h], SS
+00401371|   66:                           | PREFIX 66:
+00401372|   8C 0D 4C314000                | MOV       [0040314Ch], CS
+00401378|   66:                           | PREFIX 66:
+00401379|   8C 1D 28314000                | MOV       [00403128h], DS
+0040137F|   66:                           | PREFIX 66:
+00401380|   8C 05 24314000                | MOV       [00403124h], ES
+00401386|   66:                           | PREFIX 66:
+00401387|   8C 25 20314000                | MOV       [00403120h], FS
+0040138D|   66:                           | PREFIX 66:
+0040138E|   8C 2D 1C314000                | MOV       [0040311Ch], GS
+00401394|   9C                            | PUSHFD    
+00401395|   8F 05 50314000                | POP       [00403150h]
+0040139B|   8B 45 00                      | MOV       EAX, [EBP+00h]
+0040139E|   A3 44314000                   | MOV       [00403144h], EAX
+004013A3|   8B 45 04                      | MOV       EAX, [EBP+04h]
+004013A6|   A3 48314000                   | MOV       [00403148h], EAX
+004013AB|   8D 45 08                      | LEA       EAX, [EBP+08h]
+004013AE|   A3 54314000                   | MOV       [00403154h], EAX
+004013B3|   8B 85 E0FCFFFF                | MOV       EAX, [EBP+FFFFFCE0h]
+004013B9|   C7 05 90304000 01000100       | MOV       [00403090h], 00010001h
+004013C3|   A1 48314000                   | MOV       EAX, [00403148h]
+004013C8|   A3 44304000                   | MOV       [00403044h], EAX
+004013CD|   C7 05 38304000 090400C0       | MOV       [00403038h], C0000409h
+004013D7|   C7 05 3C304000 01000000       | MOV       [0040303Ch], 00000001h
+004013E1|   A1 00304000                   | MOV       EAX, [00403000h]
+004013E6|   89 85 D8FCFFFF                | MOV       [EBP+FFFFFCD8h], EAX
+004013EC|   A1 04304000                   | MOV       EAX, [00403004h]
+004013F1|   89 85 DCFCFFFF                | MOV       [EBP+FFFFFCDCh], EAX
+004013F7|   FF 15 18204000                | CALL      [00402018h]   | KERNEL32.dll IsDebuggerPresent
+004013FD|   A3 88304000                   | MOV       [00403088h], EAX
+00401402|   6A 01                         | PUSH      01h
+00401404|   E8 4B040000                   | CALL      00401854h
+00401409|   59                            | POP       ECX
+0040140A|   6A 00                         | PUSH      00h
+0040140C|   FF 15 1C204000                | CALL      [0040201Ch]   | KERNEL32.dll SetUnhandledExceptionFilter
+00401412|   68 FC204000                   | PUSH      004020FCh
+00401417|   FF 15 20204000                | CALL      [00402020h]   | KERNEL32.dll UnhandledExceptionFilter
+0040141D|   83 3D 88304000 00             | CMP       [00403088h], 00h
+00401424|   75 08                         | JNZ       0040142Eh
+00401426|   6A 01                         | PUSH      01h
+00401428|   E8 27040000                   | CALL      00401854h
+0040142D|   59                            | POP       ECX
+
+* Referenced by (U)nconditional or (C)onditional Jump or (c)all at Address:
+| 00401424(C)
+|
+0040142E|   68 090400C0                   | PUSH      C0000409h
+00401433|   FF 15 24204000                | CALL      [00402024h]   | KERNEL32.dll GetCurrentProcess
+00401439|   50                            | PUSH      EAX
+0040143A|   FF 15 28204000                | CALL      [00402028h]   | KERNEL32.dll TerminateProcess
+00401440|   C9                            | LEAVE     
+00401441|   C3                            | RETN      
+00401442|   8B FF                         | MOV       EDI, EDI
+00401444|   55                            | PUSH      EBP
+00401445|   8B EC                         | MOV       EBP, ESP
+00401447|   8B 45 08                      | MOV       EAX, [EBP+08h]
+0040144A|   8B 00                         | MOV       EAX, [EAX]
+0040144C|   81 38 63736DE0                | CMP       [EAX], E06D7363h
+00401452|   75 2A                         | JNZ       0040147Eh
+00401454|   83 78 10 03                   | CMP       [EAX+10h], 03h
+00401458|   75 24                         | JNZ       0040147Eh
+0040145A|   8B 40 14                      | MOV       EAX, [EAX+14h]
+0040145D|   3D 20059319                   | CMP       EAX, 19930520h
+00401462|   74 15                         | JE        00401479h
+00401464|   3D 21059319                   | CMP       EAX, 19930521h
+00401469|   74 0E                         | JE        00401479h
+0040146B|   3D 22059319                   | CMP       EAX, 19930522h
+00401470|   74 07                         | JE        00401479h
+00401472|   3D 00409901                   | CMP       EAX, 01994000h
+00401477|   75 05                         | JNZ       0040147Eh
+
+* Referenced by (U)nconditional or (C)onditional Jump or (c)all at Address:
+| 00401462(C), 00401469(C), 00401470(C)
+|
+00401479|   E8 DC030000                   | CALL      0040185Ah
+
+* Referenced by (U)nconditional or (C)onditional Jump or (c)all at Address:
+| 00401452(C), 00401458(C), 00401477(C)
+|
+0040147E|   33 C0                         | XOR       EAX, EAX
+00401480|   5D                            | POP       EBP
+00401481|   C2 0400                       | RETN      0004h
+00401484|   68 42144000                   | PUSH      00401442h
+00401489|   FF 15 1C204000                | CALL      [0040201Ch]   | KERNEL32.dll SetUnhandledExceptionFilter
+0040148F|   33 C0                         | XOR       EAX, EAX
+00401491|   C3                            | RETN      
+
+* Referenced by (U)nconditional or (C)onditional Jump or (c)all at Address:
+| 004010A0(c), 0040111D(c)
+|
+00401492|   FF 25 A0204000                | JMP       [004020A0h]   | MSVCR100.dll _amsg_exit
+
+* Referenced by (U)nconditional or (C)onditional Jump or (c)all at Address:
+| 00401541(c)
+|
+00401498|   6A 14                         | PUSH      14h
+0040149A|   68 68224000                   | PUSH      00402268h
+0040149F|   E8 6C020000                   | CALL      00401710h
+004014A4|   FF 35 78334000                | PUSH      [00403378h]
+004014AA|   8B 35 14204000                | MOV       ESI, [00402014h]   | KERNEL32.dll DecodePointer
+004014B0|   FF D6                         | CALL      ESI
+004014B2|   89 45 E4                      | MOV       [EBP+E4h], EAX
+004014B5|   83 F8 FF                      | CMP       EAX, FFh
+004014B8|   75 0C                         | JNZ       004014C6h
+004014BA|   FF 75 08                      | PUSH      [EBP+08h]
+004014BD|   FF 15 60204000                | CALL      [00402060h]   | MSVCR100.dll _onexit
+004014C3|   59                            | POP       ECX
+004014C4|   EB 64                         | JMP       0040152Ah
+
+* Referenced by (U)nconditional or (C)onditional Jump or (c)all at Address:
+| 004014B8(C)
+|
+004014C6|   6A 08                         | PUSH      08h
+004014C8|   E8 9F030000                   | CALL      0040186Ch
+004014CD|   59                            | POP       ECX
+004014CE|   83 65 FC 00                   | AND       [EBP+FCh], 00h
+004014D2|   FF 35 78334000                | PUSH      [00403378h]
+004014D8|   FF D6                         | CALL      ESI
+004014DA|   89 45 E4                      | MOV       [EBP+E4h], EAX
+004014DD|   FF 35 74334000                | PUSH      [00403374h]
+004014E3|   FF D6                         | CALL      ESI
+004014E5|   89 45 E0                      | MOV       [EBP+E0h], EAX
+004014E8|   8D 45 E0                      | LEA       EAX, [EBP+E0h]
+004014EB|   50                            | PUSH      EAX
+004014EC|   8D 45 E4                      | LEA       EAX, [EBP+E4h]
+004014EF|   50                            | PUSH      EAX
+004014F0|   FF 75 08                      | PUSH      [EBP+08h]
+004014F3|   8B 35 2C204000                | MOV       ESI, [0040202Ch]   | KERNEL32.dll EncodePointer
+004014F9|   FF D6                         | CALL      ESI
+004014FB|   50                            | PUSH      EAX
+004014FC|   E8 65030000                   | CALL      00401866h
+00401501|   83 C4 0C                      | ADD       ESP, 0Ch
+00401504|   89 45 DC                      | MOV       [EBP+DCh], EAX
+00401507|   FF 75 E4                      | PUSH      [EBP+E4h]
+0040150A|   FF D6                         | CALL      ESI
+0040150C|   A3 78334000                   | MOV       [00403378h], EAX
+00401511|   FF 75 E0                      | PUSH      [EBP+E0h]
+00401514|   FF D6                         | CALL      ESI
+00401516|   A3 74334000                   | MOV       [00403374h], EAX
+0040151B|   C7 45 FC FEFFFFFF             | MOV       [EBP+FCh], FFFFFFFEh
+00401522|   E8 09000000                   | CALL      00401530h
+00401527|   8B 45 DC                      | MOV       EAX, [EBP+DCh]
+
+* Referenced by (U)nconditional or (C)onditional Jump or (c)all at Address:
+| 004014C4(U)
+|
+0040152A|   E8 26020000                   | CALL      00401755h
+0040152F|   C3                            | RETN      
+
+* Referenced by (U)nconditional or (C)onditional Jump or (c)all at Address:
+| 00401522(c)
+|
+00401530|   6A 08                         | PUSH      08h
+00401532|   E8 29030000                   | CALL      00401860h
+00401537|   59                            | POP       ECX
+00401538|   C3                            | RETN      
+
+* Referenced by (U)nconditional or (C)onditional Jump or (c)all at Address:
+| 00401061(c)
+|
+00401539|   8B FF                         | MOV       EDI, EDI
+0040153B|   55                            | PUSH      EBP
+0040153C|   8B EC                         | MOV       EBP, ESP
+0040153E|   FF 75 08                      | PUSH      [EBP+08h]
+00401541|   E8 52FFFFFF                   | CALL      00401498h
+00401546|   F7 D8                         | NEG       EAX
+00401548|   1B C0                         | SBB       EAX, EAX
+0040154A|   F7 D8                         | NEG       EAX
+0040154C|   59                            | POP       ECX
+0040154D|   48                            | DEC       EAX
+0040154E|   5D                            | POP       EBP
+0040154F|   C3                            | RETN      
+
+* Referenced by (U)nconditional or (C)onditional Jump or (c)all at Address:
+| 004012F9(c)
+|
+00401550|   8B FF                         | MOV       EDI, EDI
+00401552|   56                            | PUSH      ESI
+00401553|   B8 38224000                   | MOV       EAX, 00402238h
+00401558|   BE 38224000                   | MOV       ESI, 00402238h
+0040155D|   57                            | PUSH      EDI
+0040155E|   8B F8                         | MOV       EDI, EAX
+00401560|   3B C6                         | CMP       EAX, ESI
+00401562|   73 0F                         | JNB       00401573h
+
+* Referenced by (U)nconditional or (C)onditional Jump or (c)all at Address:
+| 00401571(C)
+|
+00401564|   8B 07                         | MOV       EAX, [EDI]
+00401566|   85 C0                         | TEST      EAX, EAX
+00401568|   74 02                         | JE        0040156Ch
+0040156A|   FF D0                         | CALL      EAX
+
+* Referenced by (U)nconditional or (C)onditional Jump or (c)all at Address:
+| 00401568(C)
+|
+0040156C|   83 C7 04                      | ADD       EDI, 04h
+0040156F|   3B FE                         | CMP       EDI, ESI
+00401571|   72 F1                         | JB        00401564h
+
+* Referenced by (U)nconditional or (C)onditional Jump or (c)all at Address:
+| 00401562(C)
+|
+00401573|   5F                            | POP       EDI
+00401574|   5E                            | POP       ESI
+00401575|   C3                            | RETN      
+00401576|   8B FF                         | MOV       EDI, EDI
+00401578|   56                            | PUSH      ESI
+00401579|   B8 40224000                   | MOV       EAX, 00402240h
+0040157E|   BE 40224000                   | MOV       ESI, 00402240h
+00401583|   57                            | PUSH      EDI
+00401584|   8B F8                         | MOV       EDI, EAX
+00401586|   3B C6                         | CMP       EAX, ESI
+00401588|   73 0F                         | JNB       00401599h
+
+* Referenced by (U)nconditional or (C)onditional Jump or (c)all at Address:
+| 00401597(C)
+|
+0040158A|   8B 07                         | MOV       EAX, [EDI]
+0040158C|   85 C0                         | TEST      EAX, EAX
+0040158E|   74 02                         | JE        00401592h
+00401590|   FF D0                         | CALL      EAX
+
+* Referenced by (U)nconditional or (C)onditional Jump or (c)all at Address:
+| 0040158E(C)
+|
+00401592|   83 C7 04                      | ADD       EDI, 04h
+00401595|   3B FE                         | CMP       EDI, ESI
+00401597|   72 F1                         | JB        0040158Ah
+
+* Referenced by (U)nconditional or (C)onditional Jump or (c)all at Address:
+| 00401588(C)
+|
+00401599|   5F                            | POP       EDI
+0040159A|   5E                            | POP       ESI
+0040159B|   C3                            | RETN      
+
+* Referenced by (U)nconditional or (C)onditional Jump or (c)all at Address:
+| 00401234(c)
+|
+0040159C|   FF 25 90204000                | JMP       [00402090h]   | MSVCR100.dll _XcptFilter
+004015A2|   CC                            | INT3      
+004015A3|   CC                            | INT3      
+004015A4|   CC                            | INT3      
+004015A5|   CC                            | INT3      
+004015A6|   CC                            | INT3      
+004015A7|   CC                            | INT3      
+004015A8|   CC                            | INT3      
+004015A9|   CC                            | INT3      
+004015AA|   CC                            | INT3      
+004015AB|   CC                            | INT3      
+004015AC|   CC                            | INT3      
+004015AD|   CC                            | INT3      
+004015AE|   CC                            | INT3      
+004015AF|   CC                            | INT3      
+
+* Referenced by (U)nconditional or (C)onditional Jump or (c)all at Address:
+| 00401681(c)
+|
+004015B0|   8B FF                         | MOV       EDI, EDI
+004015B2|   55                            | PUSH      EBP
+004015B3|   8B EC                         | MOV       EBP, ESP
+004015B5|   8B 4D 08                      | MOV       ECX, [EBP+08h]
+004015B8|   B8 4D5A0000                   | MOV       EAX, 00005A4Dh
+004015BD|   66:                           | PREFIX 66:
+004015BE|   39 01                         | CMP       [ECX], EAX
+004015C0|   74 04                         | JE        004015C6h
+
+* Referenced by (U)nconditional or (C)onditional Jump or (c)all at Address:
+| 004015D1(C)
+|
+004015C2|   33 C0                         | XOR       EAX, EAX
+004015C4|   5D                            | POP       EBP
+004015C5|   C3                            | RETN      
+
+* Referenced by (U)nconditional or (C)onditional Jump or (c)all at Address:
+| 004015C0(C)
+|
+004015C6|   8B 41 3C                      | MOV       EAX, [ECX+3Ch]
+004015C9|   03 C1                         | ADD       EAX, ECX
+004015CB|   81 38 50450000                | CMP       [EAX], 00004550h
+004015D1|   75 EF                         | JNZ       004015C2h
+004015D3|   33 D2                         | XOR       EDX, EDX
+004015D5|   B9 0B010000                   | MOV       ECX, 0000010Bh
+004015DA|   66:                           | PREFIX 66:
+004015DB|   39 48 18                      | CMP       [EAX+18h], ECX
+004015DE|   0F 94 C2                      | SETE      DL
+004015E1|   8B C2                         | MOV       EAX, EDX
+004015E3|   5D                            | POP       EBP
+004015E4|   C3                            | RETN      
+004015E5|   CC                            | INT3      
+004015E6|   CC                            | INT3      
+004015E7|   CC                            | INT3      
+004015E8|   CC                            | INT3      
+004015E9|   CC                            | INT3      
+004015EA|   CC                            | INT3      
+004015EB|   CC                            | INT3      
+004015EC|   CC                            | INT3      
+004015ED|   CC                            | INT3      
+004015EE|   CC                            | INT3      
+004015EF|   CC                            | INT3      
+
+* Referenced by (U)nconditional or (C)onditional Jump or (c)all at Address:
+| 0040169B(c)
+|
+004015F0|   8B FF                         | MOV       EDI, EDI
+004015F2|   55                            | PUSH      EBP
+004015F3|   8B EC                         | MOV       EBP, ESP
+004015F5|   8B 45 08                      | MOV       EAX, [EBP+08h]
+004015F8|   8B 48 3C                      | MOV       ECX, [EAX+3Ch]
+004015FB|   03 C8                         | ADD       ECX, EAX
+004015FD|   0F B7 41 14                   | MOVZX     EAX, [ECX+14h]
+00401601|   53                            | PUSH      EBX
+00401602|   56                            | PUSH      ESI
+00401603|   0F B7 71 06                   | MOVZX     ESI, [ECX+06h]
+00401607|   33 D2                         | XOR       EDX, EDX
+00401609|   57                            | PUSH      EDI
+0040160A|   8D 44 08 18                   | LEA       EAX, [EAX+ECX*1+18h]
+0040160E|   85 F6                         | TEST      ESI, ESI
+00401610|   74 1B                         | JE        0040162Dh
+00401612|   8B 7D 0C                      | MOV       EDI, [EBP+0Ch]
+
+* Referenced by (U)nconditional or (C)onditional Jump or (c)all at Address:
+| 0040162B(C)
+|
+00401615|   8B 48 0C                      | MOV       ECX, [EAX+0Ch]
+00401618|   3B F9                         | CMP       EDI, ECX
+0040161A|   72 09                         | JB        00401625h
+0040161C|   8B 58 08                      | MOV       EBX, [EAX+08h]
+0040161F|   03 D9                         | ADD       EBX, ECX
+00401621|   3B FB                         | CMP       EDI, EBX
+00401623|   72 0A                         | JB        0040162Fh
+
+* Referenced by (U)nconditional or (C)onditional Jump or (c)all at Address:
+| 0040161A(C)
+|
+00401625|   42                            | INC       EDX
+00401626|   83 C0 28                      | ADD       EAX, 28h
+00401629|   3B D6                         | CMP       EDX, ESI
+0040162B|   72 E8                         | JB        00401615h
+
+* Referenced by (U)nconditional or (C)onditional Jump or (c)all at Address:
+| 00401610(C)
+|
+0040162D|   33 C0                         | XOR       EAX, EAX
+
+* Referenced by (U)nconditional or (C)onditional Jump or (c)all at Address:
+| 00401623(C)
+|
+0040162F|   5F                            | POP       EDI
+00401630|   5E                            | POP       ESI
+00401631|   5B                            | POP       EBX
+00401632|   5D                            | POP       EBP
+00401633|   C3                            | RETN      
+00401634|   CC                            | INT3      
+00401635|   CC                            | INT3      
+00401636|   CC                            | INT3      
+00401637|   CC                            | INT3      
+00401638|   CC                            | INT3      
+00401639|   CC                            | INT3      
+0040163A|   CC                            | INT3      
+0040163B|   CC                            | INT3      
+0040163C|   CC                            | INT3      
+0040163D|   CC                            | INT3      
+0040163E|   CC                            | INT3      
+0040163F|   CC                            | INT3      
+
+* Referenced by (U)nconditional or (C)onditional Jump or (c)all at Address:
+| 0040119E(c)
+|
+00401640|   8B FF                         | MOV       EDI, EDI
+00401642|   55                            | PUSH      EBP
+00401643|   8B EC                         | MOV       EBP, ESP
+00401645|   6A FE                         | PUSH      FEh
+00401647|   68 88224000                   | PUSH      00402288h
+0040164C|   68 69174000                   | PUSH      00401769h
+00401651|   64:                           | PREFIX 64:
+00401652|   A1 00000000                   | MOV       EAX, [00000000h]
+00401657|   50                            | PUSH      EAX
+00401658|   83 EC 08                      | SUB       ESP, 08h
+0040165B|   53                            | PUSH      EBX
+0040165C|   56                            | PUSH      ESI
+0040165D|   57                            | PUSH      EDI
+0040165E|   A1 00304000                   | MOV       EAX, [00403000h]
+00401663|   31 45 F8                      | XOR       [EBP+F8h], EAX
+00401666|   33 C5                         | XOR       EAX, EBP
+00401668|   50                            | PUSH      EAX
+00401669|   8D 45 F0                      | LEA       EAX, [EBP+F0h]
+0040166C|   64:                           | PREFIX 64:
+0040166D|   A3 00000000                   | MOV       [00000000h], EAX
+00401672|   89 65 E8                      | MOV       [EBP+E8h], ESP
+00401675|   C7 45 FC 00000000             | MOV       [EBP+FCh], 00000000h
+0040167C|   68 00004000                   | PUSH      00400000h
+00401681|   E8 2AFFFFFF                   | CALL      004015B0h
+00401686|   83 C4 04                      | ADD       ESP, 04h
+00401689|   85 C0                         | TEST      EAX, EAX
+0040168B|   74 54                         | JE        004016E1h
+0040168D|   8B 45 08                      | MOV       EAX, [EBP+08h]
+00401690|   2D 00004000                   | SUB       EAX, 00400000h
+00401695|   50                            | PUSH      EAX
+00401696|   68 00004000                   | PUSH      00400000h
+0040169B|   E8 50FFFFFF                   | CALL      004015F0h
+004016A0|   83 C4 08                      | ADD       ESP, 08h
+004016A3|   85 C0                         | TEST      EAX, EAX
+004016A5|   74 3A                         | JE        004016E1h
+004016A7|   8B 40 24                      | MOV       EAX, [EAX+24h]
+004016AA|   C1 E8 1F                      | SHR       EAX, 1Fh
+004016AD|   F7 D0                         | NOT       EAX
+004016AF|   83 E0 01                      | AND       EAX, 01h
+004016B2|   C7 45 FC FEFFFFFF             | MOV       [EBP+FCh], FFFFFFFEh
+004016B9|   8B 4D F0                      | MOV       ECX, [EBP+F0h]
+004016BC|   64:                           | PREFIX 64:
+004016BD|   89 0D 00000000                | MOV       [00000000h], ECX
+004016C3|   59                            | POP       ECX
+004016C4|   5F                            | POP       EDI
+004016C5|   5E                            | POP       ESI
+004016C6|   5B                            | POP       EBX
+004016C7|   8B E5                         | MOV       ESP, EBP
+004016C9|   5D                            | POP       EBP
+004016CA|   C3                            | RETN      
+004016CB|   8B 45 EC                      | MOV       EAX, [EBP+ECh]
+004016CE|   8B 08                         | MOV       ECX, [EAX]
+004016D0|   33 D2                         | XOR       EDX, EDX
+004016D2|   81 39 050000C0                | CMP       [ECX], C0000005h
+004016D8|   0F 94 C2                      | SETE      DL
+004016DB|   8B C2                         | MOV       EAX, EDX
+004016DD|   C3                            | RETN      
+004016DE|   8B 65 E8                      | MOV       ESP, [EBP+E8h]
+
+* Referenced by (U)nconditional or (C)onditional Jump or (c)all at Address:
+| 0040168B(C), 004016A5(C)
+|
+004016E1|   C7 45 FC FEFFFFFF             | MOV       [EBP+FCh], FFFFFFFEh
+004016E8|   33 C0                         | XOR       EAX, EAX
+004016EA|   8B 4D F0                      | MOV       ECX, [EBP+F0h]
+004016ED|   64:                           | PREFIX 64:
+004016EE|   89 0D 00000000                | MOV       [00000000h], ECX
+004016F4|   59                            | POP       ECX
+004016F5|   5F                            | POP       EDI
+004016F6|   5E                            | POP       ESI
+004016F7|   5B                            | POP       EBX
+004016F8|   8B E5                         | MOV       ESP, EBP
+004016FA|   5D                            | POP       EBP
+004016FB|   C3                            | RETN      
+
+* Referenced by (U)nconditional or (C)onditional Jump or (c)all at Address:
+| 00401173(c)
+|
+004016FC|   FF 25 84204000                | JMP       [00402084h]   | MSVCR100.dll _initterm
+
+* Referenced by (U)nconditional or (C)onditional Jump or (c)all at Address:
+| 0040113E(c)
+|
+00401702|   FF 25 80204000                | JMP       [00402080h]   | MSVCR100.dll _initterm_e
+00401708|   CC                            | INT3      
+00401709|   CC                            | INT3      
+0040170A|   CC                            | INT3      
+0040170B|   CC                            | INT3      
+0040170C|   CC                            | INT3      
+0040170D|   CC                            | INT3      
+0040170E|   CC                            | INT3      
+0040170F|   CC                            | INT3      
+
+* Referenced by (U)nconditional or (C)onditional Jump or (c)all at Address:
+| 004010AE(c), 0040149F(c)
+|
+00401710|   68 69174000                   | PUSH      00401769h
+00401715|   64:                           | PREFIX 64:
+00401716|   FF 35 00000000                | PUSH      [00000000h]
+0040171C|   8B 44 24 10                   | MOV       EAX, [ESP+10h]
+00401720|   89 6C 24 10                   | MOV       [ESP+10h], EBP
+00401724|   8D 6C 24 10                   | LEA       EBP, [ESP+10h]
+00401728|   2B E0                         | SUB       ESP, EAX
+0040172A|   53                            | PUSH      EBX
+0040172B|   56                            | PUSH      ESI
+0040172C|   57                            | PUSH      EDI
+0040172D|   A1 00304000                   | MOV       EAX, [00403000h]
+00401732|   31 45 FC                      | XOR       [EBP+FCh], EAX
+00401735|   33 C5                         | XOR       EAX, EBP
+00401737|   50                            | PUSH      EAX
+00401738|   89 65 E8                      | MOV       [EBP+E8h], ESP
+0040173B|   FF 75 F8                      | PUSH      [EBP+F8h]
+0040173E|   8B 45 FC                      | MOV       EAX, [EBP+FCh]
+00401741|   C7 45 FC FEFFFFFF             | MOV       [EBP+FCh], FFFFFFFEh
+00401748|   89 45 F8                      | MOV       [EBP+F8h], EAX
+0040174B|   8D 45 F0                      | LEA       EAX, [EBP+F0h]
+0040174E|   64:                           | PREFIX 64:
+0040174F|   A3 00000000                   | MOV       [00000000h], EAX
+00401754|   C3                            | RETN      
+
+* Referenced by (U)nconditional or (C)onditional Jump or (c)all at Address:
+| 00401272(c), 0040152A(c)
+|
+00401755|   8B 4D F0                      | MOV       ECX, [EBP+F0h]
+00401758|   64:                           | PREFIX 64:
+00401759|   89 0D 00000000                | MOV       [00000000h], ECX
+0040175F|   59                            | POP       ECX
+00401760|   5F                            | POP       EDI
+00401761|   5F                            | POP       EDI
+00401762|   5E                            | POP       ESI
+00401763|   5B                            | POP       EBX
+00401764|   8B E5                         | MOV       ESP, EBP
+00401766|   5D                            | POP       EBP
+00401767|   51                            | PUSH      ECX
+00401768|   C3                            | RETN      
+00401769|   8B FF                         | MOV       EDI, EDI
+0040176B|   55                            | PUSH      EBP
+0040176C|   8B EC                         | MOV       EBP, ESP
+0040176E|   FF 75 14                      | PUSH      [EBP+14h]
+00401771|   FF 75 10                      | PUSH      [EBP+10h]
+00401774|   FF 75 0C                      | PUSH      [EBP+0Ch]
+00401777|   FF 75 08                      | PUSH      [EBP+08h]
+0040177A|   68 4D104000                   | PUSH      0040104Dh
+0040177F|   68 00304000                   | PUSH      00403000h
+00401784|   E8 E9000000                   | CALL      00401872h
+00401789|   83 C4 18                      | ADD       ESP, 18h
+0040178C|   5D                            | POP       EBP
+0040178D|   C3                            | RETN      
+
+* Referenced by (U)nconditional or (C)onditional Jump or (c)all at Address:
+| 00401318(c)
+|
+0040178E|   8B FF                         | MOV       EDI, EDI
+00401790|   56                            | PUSH      ESI
+00401791|   68 00000300                   | PUSH      00030000h
+00401796|   68 00000100                   | PUSH      00010000h
+0040179B|   33 F6                         | XOR       ESI, ESI
+0040179D|   56                            | PUSH      ESI
+0040179E|   E8 DB000000                   | CALL      0040187Eh
+004017A3|   83 C4 0C                      | ADD       ESP, 0Ch
+004017A6|   85 C0                         | TEST      EAX, EAX
+004017A8|   74 0A                         | JE        004017B4h
+004017AA|   56                            | PUSH      ESI
+004017AB|   56                            | PUSH      ESI
+004017AC|   56                            | PUSH      ESI
+004017AD|   56                            | PUSH      ESI
+004017AE|   56                            | PUSH      ESI
+004017AF|   E8 C4000000                   | CALL      00401878h
+
+* Referenced by (U)nconditional or (C)onditional Jump or (c)all at Address:
+| 004017A8(C)
+|
+004017B4|   5E                            | POP       ESI
+004017B5|   C3                            | RETN      
+
+* Referenced by (U)nconditional or (C)onditional Jump or (c)all at Address:
+| 004012FE(c)
+|
+004017B6|   33 C0                         | XOR       EAX, EAX
+004017B8|   C3                            | RETN      
+
+* Referenced by (U)nconditional or (C)onditional Jump or (c)all at Address:
+| 00401332(c)
+|
+004017B9|   8B FF                         | MOV       EDI, EDI
+004017BB|   55                            | PUSH      EBP
+004017BC|   8B EC                         | MOV       EBP, ESP
+004017BE|   83 EC 10                      | SUB       ESP, 10h
+004017C1|   A1 00304000                   | MOV       EAX, [00403000h]
+004017C6|   83 65 F8 00                   | AND       [EBP+F8h], 00h
+004017CA|   83 65 FC 00                   | AND       [EBP+FCh], 00h
+004017CE|   53                            | PUSH      EBX
+004017CF|   57                            | PUSH      EDI
+004017D0|   BF 4EE640BB                   | MOV       EDI, BB40E64Eh
+004017D5|   BB 0000FFFF                   | MOV       EBX, FFFF0000h
+004017DA|   3B C7                         | CMP       EAX, EDI
+004017DC|   74 0D                         | JE        004017EBh
+004017DE|   85 C3                         | TEST      EBX, EAX
+004017E0|   74 09                         | JE        004017EBh
+004017E2|   F7 D0                         | NOT       EAX
+004017E4|   A3 04304000                   | MOV       [00403004h], EAX
+004017E9|   EB 65                         | JMP       00401850h
+
+* Referenced by (U)nconditional or (C)onditional Jump or (c)all at Address:
+| 004017DC(C), 004017E0(C)
+|
+004017EB|   56                            | PUSH      ESI
+004017EC|   8D 45 F8                      | LEA       EAX, [EBP+F8h]
+004017EF|   50                            | PUSH      EAX
+004017F0|   FF 15 44204000                | CALL      [00402044h]   | KERNEL32.dll GetSystemTimeAsFileTime
+004017F6|   8B 75 FC                      | MOV       ESI, [EBP+FCh]
+004017F9|   33 75 F8                      | XOR       ESI, [EBP+F8h]
+004017FC|   FF 15 04204000                | CALL      [00402004h]   | KERNEL32.dll GetCurrentProcessId
+00401802|   33 F0                         | XOR       ESI, EAX
+00401804|   FF 15 08204000                | CALL      [00402008h]   | KERNEL32.dll GetCurrentThreadId
+0040180A|   33 F0                         | XOR       ESI, EAX
+0040180C|   FF 15 0C204000                | CALL      [0040200Ch]   | KERNEL32.dll GetTickCount
+00401812|   33 F0                         | XOR       ESI, EAX
+00401814|   8D 45 F0                      | LEA       EAX, [EBP+F0h]
+00401817|   50                            | PUSH      EAX
+00401818|   FF 15 10204000                | CALL      [00402010h]   | KERNEL32.dll QueryPerformanceCounter
+0040181E|   8B 45 F4                      | MOV       EAX, [EBP+F4h]
+00401821|   33 45 F0                      | XOR       EAX, [EBP+F0h]
+00401824|   33 F0                         | XOR       ESI, EAX
+00401826|   3B F7                         | CMP       ESI, EDI
+00401828|   75 07                         | JNZ       00401831h
+0040182A|   BE 4FE640BB                   | MOV       ESI, BB40E64Fh
+0040182F|   EB 10                         | JMP       00401841h
+
+* Referenced by (U)nconditional or (C)onditional Jump or (c)all at Address:
+| 00401828(C)
+|
+00401831|   85 F3                         | TEST      EBX, ESI
+00401833|   75 0C                         | JNZ       00401841h
+00401835|   8B C6                         | MOV       EAX, ESI
+00401837|   0D 11470000                   | OR        EAX, 00004711h
+0040183C|   C1 E0 10                      | SHL       EAX, 10h
+0040183F|   0B F0                         | OR        ESI, EAX
+
+* Referenced by (U)nconditional or (C)onditional Jump or (c)all at Address:
+| 0040182F(U), 00401833(C)
+|
+00401841|   89 35 00304000                | MOV       [00403000h], ESI
+00401847|   F7 D6                         | NOT       ESI
+00401849|   89 35 04304000                | MOV       [00403004h], ESI
+0040184F|   5E                            | POP       ESI
+
+* Referenced by (U)nconditional or (C)onditional Jump or (c)all at Address:
+| 004017E9(U)
+|
+00401850|   5F                            | POP       EDI
+00401851|   5B                            | POP       EBX
+00401852|   C9                            | LEAVE     
+00401853|   C3                            | RETN      
+
+* Referenced by (U)nconditional or (C)onditional Jump or (c)all at Address:
+| 00401404(c), 00401428(c)
+|
+00401854|   FF 25 4C204000                | JMP       [0040204Ch]   | MSVCR100.dll _crt_debugger_hook
+
+* Referenced by (U)nconditional or (C)onditional Jump or (c)all at Address:
+| 00401479(c)
+|
+0040185A|   FF 25 50204000                | JMP       [00402050h]   | MSVCR100.dll ?terminate@@YAXXZ
+
+* Referenced by (U)nconditional or (C)onditional Jump or (c)all at Address:
+| 00401532(c)
+|
+00401860|   FF 25 54204000                | JMP       [00402054h]   | MSVCR100.dll _unlock
+
+* Referenced by (U)nconditional or (C)onditional Jump or (c)all at Address:
+| 004014FC(c)
+|
+00401866|   FF 25 58204000                | JMP       [00402058h]   | MSVCR100.dll __dllonexit
+
+* Referenced by (U)nconditional or (C)onditional Jump or (c)all at Address:
+| 004014C8(c)
+|
+0040186C|   FF 25 A4204000                | JMP       [004020A4h]   | MSVCR100.dll _lock
+
+* Referenced by (U)nconditional or (C)onditional Jump or (c)all at Address:
+| 00401784(c)
+|
+00401872|   FF 25 64204000                | JMP       [00402064h]   | MSVCR100.dll _except_handler4_common
+
+* Referenced by (U)nconditional or (C)onditional Jump or (c)all at Address:
+| 004017AF(c)
+|
+00401878|   FF 25 68204000                | JMP       [00402068h]   | MSVCR100.dll _invoke_watson
+
+* Referenced by (U)nconditional or (C)onditional Jump or (c)all at Address:
+| 0040179E(c)
+|
+0040187E|   FF 25 6C204000                | JMP       [0040206Ch]   | MSVCR100.dll _controlfp_s
+00401884|   00                            | ??        
+00401885|   00                            | ??        
+00401886|   00                            | ??        
+00401887|   00                            | ??        
+00401888|   00                            | ??        
+00401889|   00                            | ??        
+0040188A|   00                            | ??        
+0040188B|   00                            | ??        
+0040188C|   00                            | ??        
+0040188D|   00                            | ??        
+0040188E|   00                            | ??        
+0040188F|   00                            | ??        
+00401890|   00                            | ??        
+00401891|   00                            | ??        
+00401892|   00                            | ??        
+00401893|   00                            | ??        
+00401894|   00                            | ??        
+00401895|   00                            | ??        
+00401896|   00                            | ??        
+00401897|   00                            | ??        
+00401898|   00                            | ??        
+00401899|   00                            | ??        
+0040189A|   00                            | ??        
+0040189B|   00                            | ??        
+0040189C|   00                            | ??        
+0040189D|   00                            | ??        
+0040189E|   00                            | ??        
+0040189F|   00                            | ??        
+004018A0|   00                            | ??        
+004018A1|   00                            | ??        
+004018A2|   00                            | ??        
+004018A3|   00                            | ??        
+004018A4|   00                            | ??        
+004018A5|   00                            | ??        
+004018A6|   00                            | ??        
+004018A7|   00                            | ??        
+004018A8|   00                            | ??        
+004018A9|   00                            | ??        
+004018AA|   00                            | ??        
+004018AB|   00                            | ??        
+004018AC|   00                            | ??        
+004018AD|   00                            | ??        
+004018AE|   00                            | ??        
+004018AF|   00                            | ??        
+004018B0|   00                            | ??        
+004018B1|   00                            | ??        
+004018B2|   00                            | ??        
+004018B3|   00                            | ??        
+004018B4|   00                            | ??        
+004018B5|   00                            | ??        
+004018B6|   00                            | ??        
+004018B7|   00                            | ??        
+004018B8|   00                            | ??        
+004018B9|   00                            | ??        
+004018BA|   00                            | ??        
+004018BB|   00                            | ??        
+004018BC|   00                            | ??        
+004018BD|   00                            | ??        
+004018BE|   00                            | ??        
+004018BF|   00                            | ??        
+004018C0|   00                            | ??        
+004018C1|   00                            | ??        
+004018C2|   00                            | ??        
+004018C3|   00                            | ??        
+004018C4|   00                            | ??        
+004018C5|   00                            | ??        
+004018C6|   00                            | ??        
+004018C7|   00                            | ??        
+004018C8|   00                            | ??        
+004018C9|   00                            | ??        
+004018CA|   00                            | ??        
+004018CB|   00                            | ??        
+004018CC|   00                            | ??        
+004018CD|   00                            | ??        
+004018CE|   00                            | ??        
+004018CF|   00                            | ??        
+004018D0|   00                            | ??        
+004018D1|   00                            | ??        
+004018D2|   00                            | ??        
+004018D3|   00                            | ??        
+004018D4|   00                            | ??        
+004018D5|   00                            | ??        
+004018D6|   00                            | ??        
+004018D7|   00                            | ??        
+004018D8|   00                            | ??        
+004018D9|   00                            | ??        
+004018DA|   00                            | ??        
+004018DB|   00                            | ??        
+004018DC|   00                            | ??        
+004018DD|   00                            | ??        
+004018DE|   00                            | ??        
+004018DF|   00                            | ??        
+004018E0|   00                            | ??        
+004018E1|   00                            | ??        
+004018E2|   00                            | ??        
+004018E3|   00                            | ??        
+004018E4|   00                            | ??        
+004018E5|   00                            | ??        
+004018E6|   00                            | ??        
+004018E7|   00                            | ??        
+004018E8|   00                            | ??        
+004018E9|   00                            | ??        
+004018EA|   00                            | ??        
+004018EB|   00                            | ??        
+004018EC|   00                            | ??        
+004018ED|   00                            | ??        
+004018EE|   00                            | ??        
+004018EF|   00                            | ??        
+004018F0|   00                            | ??        
+004018F1|   00                            | ??        
+004018F2|   00                            | ??        
+004018F3|   00                            | ??        
+004018F4|   00                            | ??        
+004018F5|   00                            | ??        
+004018F6|   00                            | ??        
+004018F7|   00                            | ??        
+004018F8|   00                            | ??        
+004018F9|   00                            | ??        
+004018FA|   00                            | ??        
+004018FB|   00                            | ??        
+004018FC|   00                            | ??        
+004018FD|   00                            | ??        
+004018FE|   00                            | ??        
+004018FF|   00                            | ??        
+00401900|   00                            | ??        
+00401901|   00                            | ??        
+00401902|   00                            | ??        
+00401903|   00                            | ??        
+00401904|   00                            | ??        
+00401905|   00                            | ??        
+00401906|   00                            | ??        
+00401907|   00                            | ??        
+00401908|   00                            | ??        
+00401909|   00                            | ??        
+0040190A|   00                            | ??        
+0040190B|   00                            | ??        
+0040190C|   00                            | ??        
+0040190D|   00                            | ??        
+0040190E|   00                            | ??        
+0040190F|   00                            | ??        
+00401910|   00                            | ??        
+00401911|   00                            | ??        
+00401912|   00                            | ??        
+00401913|   00                            | ??        
+00401914|   00                            | ??        
+00401915|   00                            | ??        
+00401916|   00                            | ??        
+00401917|   00                            | ??        
+00401918|   00                            | ??        
+00401919|   00                            | ??        
+0040191A|   00                            | ??        
+0040191B|   00                            | ??        
+0040191C|   00                            | ??        
+0040191D|   00                            | ??        
+0040191E|   00                            | ??        
+0040191F|   00                            | ??        
+00401920|   00                            | ??        
+00401921|   00                            | ??        
+00401922|   00                            | ??        
+00401923|   00                            | ??        
+00401924|   00                            | ??        
+00401925|   00                            | ??        
+00401926|   00                            | ??        
+00401927|   00                            | ??        
+00401928|   00                            | ??        
+00401929|   00                            | ??        
+0040192A|   00                            | ??        
+0040192B|   00                            | ??        
+0040192C|   00                            | ??        
+0040192D|   00                            | ??        
+0040192E|   00                            | ??        
+0040192F|   00                            | ??        
+00401930|   00                            | ??        
+00401931|   00                            | ??        
+00401932|   00                            | ??        
+00401933|   00                            | ??        
+00401934|   00                            | ??        
+00401935|   00                            | ??        
+00401936|   00                            | ??        
+00401937|   00                            | ??        
+00401938|   00                            | ??        
+00401939|   00                            | ??        
+0040193A|   00                            | ??        
+0040193B|   00                            | ??        
+0040193C|   00                            | ??        
+0040193D|   00                            | ??        
+0040193E|   00                            | ??        
+0040193F|   00                            | ??        
+00401940|   00                            | ??        
+00401941|   00                            | ??        
+00401942|   00                            | ??        
+00401943|   00                            | ??        
+00401944|   00                            | ??        
+00401945|   00                            | ??        
+00401946|   00                            | ??        
+00401947|   00                            | ??        
+00401948|   00                            | ??        
+00401949|   00                            | ??        
+0040194A|   00                            | ??        
+0040194B|   00                            | ??        
+0040194C|   00                            | ??        
+0040194D|   00                            | ??        
+0040194E|   00                            | ??        
+0040194F|   00                            | ??        
+00401950|   00                            | ??        
+00401951|   00                            | ??        
+00401952|   00                            | ??        
+00401953|   00                            | ??        
+00401954|   00                            | ??        
+00401955|   00                            | ??        
+00401956|   00                            | ??        
+00401957|   00                            | ??        
+00401958|   00                            | ??        
+00401959|   00                            | ??        
+0040195A|   00                            | ??        
+0040195B|   00                            | ??        
+0040195C|   00                            | ??        
+0040195D|   00                            | ??        
+0040195E|   00                            | ??        
+0040195F|   00                            | ??        
+00401960|   00                            | ??        
+00401961|   00                            | ??        
+00401962|   00                            | ??        
+00401963|   00                            | ??        
+00401964|   00                            | ??        
+00401965|   00                            | ??        
+00401966|   00                            | ??        
+00401967|   00                            | ??        
+00401968|   00                            | ??        
+00401969|   00                            | ??        
+0040196A|   00                            | ??        
+0040196B|   00                            | ??        
+0040196C|   00                            | ??        
+0040196D|   00                            | ??        
+0040196E|   00                            | ??        
+0040196F|   00                            | ??        
+00401970|   00                            | ??        
+00401971|   00                            | ??        
+00401972|   00                            | ??        
+00401973|   00                            | ??        
+00401974|   00                            | ??        
+00401975|   00                            | ??        
+00401976|   00                            | ??        
+00401977|   00                            | ??        
+00401978|   00                            | ??        
+00401979|   00                            | ??        
+0040197A|   00                            | ??        
+0040197B|   00                            | ??        
+0040197C|   00                            | ??        
+0040197D|   00                            | ??        
+0040197E|   00                            | ??        
+0040197F|   00                            | ??        
+00401980|   00                            | ??        
+00401981|   00                            | ??        
+00401982|   00                            | ??        
+00401983|   00                            | ??        
+00401984|   00                            | ??        
+00401985|   00                            | ??        
+00401986|   00                            | ??        
+00401987|   00                            | ??        
+00401988|   00                            | ??        
+00401989|   00                            | ??        
+0040198A|   00                            | ??        
+0040198B|   00                            | ??        
+0040198C|   00                            | ??        
+0040198D|   00                            | ??        
+0040198E|   00                            | ??        
+0040198F|   00                            | ??        
+00401990|   00                            | ??        
+00401991|   00                            | ??        
+00401992|   00                            | ??        
+00401993|   00                            | ??        
+00401994|   00                            | ??        
+00401995|   00                            | ??        
+00401996|   00                            | ??        
+00401997|   00                            | ??        
+00401998|   00                            | ??        
+00401999|   00                            | ??        
+0040199A|   00                            | ??        
+0040199B|   00                            | ??        
+0040199C|   00                            | ??        
+0040199D|   00                            | ??        
+0040199E|   00                            | ??        
+0040199F|   00                            | ??        
+004019A0|   00                            | ??        
+004019A1|   00                            | ??        
+004019A2|   00                            | ??        
+004019A3|   00                            | ??        
+004019A4|   00                            | ??        
+004019A5|   00                            | ??        
+004019A6|   00                            | ??        
+004019A7|   00                            | ??        
+004019A8|   00                            | ??        
+004019A9|   00                            | ??        
+004019AA|   00                            | ??        
+004019AB|   00                            | ??        
+004019AC|   00                            | ??        
+004019AD|   00                            | ??        
+004019AE|   00                            | ??        
+004019AF|   00                            | ??        
+004019B0|   00                            | ??        
+004019B1|   00                            | ??        
+004019B2|   00                            | ??        
+004019B3|   00                            | ??        
+004019B4|   00                            | ??        
+004019B5|   00                            | ??        
+004019B6|   00                            | ??        
+004019B7|   00                            | ??        
+004019B8|   00                            | ??        
+004019B9|   00                            | ??        
+004019BA|   00                            | ??        
+004019BB|   00                            | ??        
+004019BC|   00                            | ??        
+004019BD|   00                            | ??        
+004019BE|   00                            | ??        
+004019BF|   00                            | ??        
+004019C0|   00                            | ??        
+004019C1|   00                            | ??        
+004019C2|   00                            | ??        
+004019C3|   00                            | ??        
+004019C4|   00                            | ??        
+004019C5|   00                            | ??        
+004019C6|   00                            | ??        
+004019C7|   00                            | ??        
+004019C8|   00                            | ??        
+004019C9|   00                            | ??        
+004019CA|   00                            | ??        
+004019CB|   00                            | ??        
+004019CC|   00                            | ??        
+004019CD|   00                            | ??        
+004019CE|   00                            | ??        
+004019CF|   00                            | ??        
+004019D0|   00                            | ??        
+004019D1|   00                            | ??        
+004019D2|   00                            | ??        
+004019D3|   00                            | ??        
+004019D4|   00                            | ??        
+004019D5|   00                            | ??        
+004019D6|   00                            | ??        
+004019D7|   00                            | ??        
+004019D8|   00                            | ??        
+004019D9|   00                            | ??        
+004019DA|   00                            | ??        
+004019DB|   00                            | ??        
+004019DC|   00                            | ??        
+004019DD|   00                            | ??        
+004019DE|   00                            | ??        
+004019DF|   00                            | ??        
+004019E0|   00                            | ??        
+004019E1|   00                            | ??        
+004019E2|   00                            | ??        
+004019E3|   00                            | ??        
+004019E4|   00                            | ??        
+004019E5|   00                            | ??        
+004019E6|   00                            | ??        
+004019E7|   00                            | ??        
+004019E8|   00                            | ??        
+004019E9|   00                            | ??        
+004019EA|   00                            | ??        
+004019EB|   00                            | ??        
+004019EC|   00                            | ??        
+004019ED|   00                            | ??        
+004019EE|   00                            | ??        
+004019EF|   00                            | ??        
+004019F0|   00                            | ??        
+004019F1|   00                            | ??        
+004019F2|   00                            | ??        
+004019F3|   00                            | ??        
+004019F4|   00                            | ??        
+004019F5|   00                            | ??        
+004019F6|   00                            | ??        
+004019F7|   00                            | ??        
+004019F8|   00                            | ??        
+004019F9|   00                            | ??        
+004019FA|   00                            | ??        
+004019FB|   00                            | ??        
+004019FC|   00                            | ??        
+004019FD|   00                            | ??        
+004019FE|   00                            | ??        
+004019FF|   00                            | ??        

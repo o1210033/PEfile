@@ -997,7 +997,7 @@
 004116DF|   8B 0D D0904100                | MOV       ECX, [004190D0h]   | MSVCR120D.dll _fmode
 004116E5|   8B 15 78814100                | MOV       EDX, [00418178h]
 004116EB|   89 11                         | MOV       [ECX], EDX
-004116ED|   A1 CC904100                   | MOV       EAX, [004190CCh]
+004116ED|   A1 CC904100                   | MOV       EAX, [004190CCh]   | MSVCR120D.dll _commode
 004116F2|   8B 0D 6C814100                | MOV       ECX, [0041816Ch]
 004116F8|   89 08                         | MOV       [EAX], ECX
 004116FA|   E8 46FAFFFF                   | CALL      00411145h
@@ -2050,7 +2050,7 @@
 00411FC6|   EB 08                         | JMP       00411FD0h
 00411FC8|   8D A4 24 00000000             | LEA       ESP, [ESP+00000000h]
 00411FCF|   90                            | NOP       
-00411FD0|   8A 88 A8594100                | MOV       CL, [EAX+004159A8h]
+00411FD0|   8A 88 A8594100                | MOV       CL, [EAX+004159A8h]   | ASCII "Stack around the variable '"
 00411FD6|   8D 40 01                      | LEA       EAX, [EAX+01h]
 00411FD9|   88 8C 05 FBFBFFFF             | MOV       [EBP+EAX*1+FFFFFBFBh], CL
 00411FE0|   84 C9                         | TEST      CL, CL
@@ -2590,7 +2590,7 @@
 00412416|   33 C0                         | XOR       EAX, EAX
 00412418|   EB 06                         | JMP       00412420h
 0041241A|   8D 9B 00000000                | LEA       EBX, [EBX+00000000h]
-00412420|   8A 88 D8594100                | MOV       CL, [EAX+004159D8h]
+00412420|   8A 88 D8594100                | MOV       CL, [EAX+004159D8h]   | ASCII "The variable '"
 00412426|   8D 40 01                      | LEA       EAX, [EAX+01h]
 00412429|   88 8C 05 FBFBFFFF             | MOV       [EBP+EAX*1+FFFFFBFBh], CL
 00412430|   84 C9                         | TEST      CL, CL

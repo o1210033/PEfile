@@ -3337,7 +3337,7 @@
 01003740|   FF 15 5C100001                | CALL      [0100105Ch]   | KERNEL32.dll InterlockedExchange
 01003746|   83 3D 0CCD0001 00             | CMP       [0100CD0Ch], 00h
 0100374D|   0F 85 E8340000                | JNE       01006C3Bh
-01003753|   A1 10130001                   | MOV       EAX, [01001310h]
+01003753|   A1 10130001                   | MOV       EAX, [01001310h]   | msvcrt.dll _acmdln
 01003758|   8B 30                         | MOV       ESI, [EAX]
 0100375A|   89 75 E0                      | MOV       [EBP+E0h], ESI
 0100375D|   8A 06                         | MOV       AL, [ESI]

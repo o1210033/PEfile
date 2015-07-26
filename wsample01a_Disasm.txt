@@ -130,7 +130,7 @@
 004011A9|   6A 02                         | PUSH      02h
 004011AB|   53                            | PUSH      EBX
 004011AC|   FF 15 80334000                | CALL      [00403380h]
-004011B2|   A1 88204000                   | MOV       EAX, [00402088h]
+004011B2|   A1 88204000                   | MOV       EAX, [00402088h]   | MSVCR100.dll _wcmdln
 004011B7|   8B 00                         | MOV       EAX, [EAX]
 004011B9|   89 45 DC                      | MOV       [EBP+DCh], EAX
 004011BC|   0F B7 08                      | MOVZX     ECX, [EAX]
@@ -227,9 +227,9 @@
 004012D5|   8B 0D 68334000                | MOV       ECX, [00403368h]
 004012DB|   A3 74334000                   | MOV       [00403374h], EAX
 004012E0|   A3 78334000                   | MOV       [00403378h], EAX
-004012E5|   A1 70204000                   | MOV       EAX, [00402070h]
+004012E5|   A1 70204000                   | MOV       EAX, [00402070h]   | MSVCR100.dll _fmode
 004012EA|   89 08                         | MOV       [EAX], ECX
-004012EC|   A1 74204000                   | MOV       EAX, [00402074h]
+004012EC|   A1 74204000                   | MOV       EAX, [00402074h]   | MSVCR100.dll _commode
 004012F1|   8B 0D 64334000                | MOV       ECX, [00403364h]
 004012F7|   89 08                         | MOV       [EAX], ECX
 004012F9|   E8 52020000                   | CALL      00401550h

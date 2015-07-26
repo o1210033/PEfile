@@ -20,7 +20,8 @@ void Set_regname(char reg_name[8][5], int size_reg);
 int Print_disasm(FILE *dtfp, t_disasm *da, t_header *th, t_idata ti[]);
 int Print_function(FILE *dtfp, unsigned long rva, t_idata ti[]);
 int Print_string(FILE *dtfp, unsigned long rva, FILE *bfp, t_header *th);
-
+int Set_rtable(FILE *bfp, t_disasm *da, t_header *th, t_idata ti[]);
+void Free_rtable(t_disasm *da);
 
 
 /* main関数 */
@@ -35,8 +36,8 @@ int main(void){
 
 	/* 必要なファイル名を取得、設定 */
 	//strcpy(szFile, Get_filename(szFile));
-	strcpy(szFile, "wsample01a.exe");
-	//strcpy(szFile, "HelloWorld(MBCS).exe");
+	//strcpy(szFile, "wsample01a.exe");
+	strcpy(szFile, "HelloWorld(MBCS).exe");
 	//strcpy(szFile, "HelloWorld(UNICODE).exe");
 	//strcpy(szFile, "ls.exe");
 	//strcpy(szFile, "memo(32bit).exe");
@@ -58,20 +59,46 @@ int main(void){
 	}
 
 	/* ヘッダ情報を取得＆ファイル出力 */
-	if (Read_header(bfp, &th) == 1){
+	if (Read_header(bfp, &th) != 0){
 		printf("ERROR: Read_header\n");
+		fclose(bfp);
 		exit(1);
 	}
 
 	/* インポート情報を取得＆ファイル出力 */
-	Read_idata(bfp, &th, ti);
+	if (Read_idata(bfp, &th, ti) != 0){
+		printf("ERROR: Read_idata\n");
+	}
 
-	/* .textセクションの読み込み＆逆アセンブル処理＆ファイル出力 */
-	da.rtable.num = 0;
-	if (Disasm(bfp, &da, &th, ti) == 1){
+	/* referenceナシの逆アセンブル結果をファイル出力 */
+	da.flag_print = 1;
+	da.flag_ref = 0;
+	if (Disasm(bfp, &da, &th, ti) != 0){
 		printf("ERROR: Disasm\n");
+		fclose(bfp);
 		exit(1);
 	}
+
+	//Reference Table を設定
+	if (Set_rtable(bfp, &da, &th, ti) != 0){
+		printf("ERROR: Set_rtable\n");
+		fclose(bfp);
+		exit(1);
+	}
+
+	//referenceアリの逆アセンブル結果をファイル出力
+	da.flag_print = 1;
+	da.flag_ref = PRINT;
+	sprintf(da.dtname, "%s_RefDisasm.txt", szFile);
+	if (Disasm(bfp, &da, &th, ti) != 0){
+		printf("ERROR: Disasm\n");
+		Free_rtable(&da);
+		fclose(bfp);
+		exit(1);
+	}
+
+	//Reference Table 内のメモリ解放
+	Free_rtable(&da);
 
 	/* PEファイルのクローズ処理 */
 	fclose(bfp);
@@ -120,11 +147,13 @@ int Disasm(FILE *bfp, t_disasm *da, t_header *th, t_idata ti[]){
 	
 
 	/* 逆アセンブル結果出力ファイルのオープン処理 */
-	if ((dtfp = fopen(da->dtname, "w")) == NULL){
-		printf("\aファイルをオープンできません。\n");
-		return 1;
+	if (da->flag_print){
+		if ((dtfp = fopen(da->dtname, "w")) == NULL){
+			printf("\aファイルをオープンできません。\n");
+			return 1;
+		}
 	}
-
+	
 	/* .textセクションの読み込み＆逆アセンブル処理＆ファイル出力 */
 	fseek(bfp, th->ts[th->no.text].PointerToRawData, SEEK_SET);   //.textセクションの先頭へシーク
 	while (addr_code < EndAddressOfCode){   //.textセクションの最後まで読み込み
@@ -205,34 +234,75 @@ int Disasm(FILE *bfp, t_disasm *da, t_header *th, t_idata ti[]){
 		}
 
 		//逆アセンブル結果をファイル出力
-		da->addr_code = addr_code;
-		da->offs = offs;
-		Print_disasm(dtfp, da, th, ti);
+		if (da->flag_print){
+			da->addr_code = addr_code;
+			da->offs = offs;
+			Print_disasm(dtfp, da, th, ti);
 
-		//必要に応じて注釈を出力
-		if (da->size_disp == 32){
-			Print_function(dtfp, da->disp32 - th->ImageBase, ti);
+			//必要に応じて注釈をファイル出力
+			if (da->flag_ref == PRINT){
+
+			}
+			if (da->size_disp == 32){
+				rva = da->disp32 - th->ImageBase;
+				if (Print_function(dtfp, rva, ti) != 0){
+					Print_string(dtfp, rva, bfp, th);
+				}
+			}
+
+			if (da->size_imm != 0){
+				if (da->operand[0] == REL8){
+					rva = addr_code + offs + (char)da->imm8 - th->ImageBase;
+				}
+				else if (da->operand[0] == REL32){
+					rva = addr_code + offs + (long)da->imm32 - th->ImageBase;
+				}
+				else if (da->size_imm == 32){
+					rva = da->imm32 - th->ImageBase;
+				}
+
+				if (Print_function(dtfp, rva, ti) != 0){
+					Print_string(dtfp, rva, bfp, th);
+				}
+			}	
+
+			fputc('\n', dtfp);	//改行
 		}
-		else if (da->size_imm == 32){
-			Print_string(dtfp, da->imm32 - th->ImageBase, bfp, th);
+
+		//Reference Table
+		if (da->flag_ref){
+			if ((da->instruction[0] == 'J' && strcmp(da->instruction, "JMPF") != 0) || strcmp(da->instruction, "CALL") == 0){
+				if (da->flag_ref == COUNT){
+					da->rtable.num++;
+				}
+				if (da->flag_ref == SET){
+					da->rtable.src[da->rtable.ptr] = addr_code;
+					if (da->operand[0] == REL8){
+						da->rtable.dst[da->rtable.ptr] = addr_code + offs + (char)da->imm8;
+					}
+					else if (da->operand[0] == REL32){
+						da->rtable.dst[da->rtable.ptr] = addr_code + offs + (long)da->imm32;
+					}
+					if (strcmp(da->instruction, "JMP") == 0){
+						da->rtable.flag[da->rtable.ptr] = UJMP;
+					}
+					else if (da->instruction[0] == 'J'){
+						da->rtable.flag[da->rtable.ptr] = CJMP;
+					}
+					else if (strcmp(da->instruction, "CALL") == 0){
+						da->rtable.flag[da->rtable.ptr] = CALL;
+					}
+					da->rtable.ptr++;
+				}
+			}
 		}
-
-		//reference
-		if (da->instruction[0] == 'J'){
-
-			da->rtable.num++;
-		}
-
-		fputc('\n', dtfp);	//改行
-
+	
 		//Addressの更新
 		addr_code += offs;
 		offs = 0;
 	}
 
-	printf("ref-num: %d\n", da->rtable.num);
-
-	fclose(dtfp);
+	if (da->flag_print){ fclose(dtfp); }
 	return 0;
 }
 
@@ -289,6 +359,7 @@ int Print_disasm(FILE *dtfp, t_disasm *da, t_header *th, t_idata ti[]){
 	int scale[4] = { 1, 2, 4, 8 };
 	char data[50];
 	char reg_name[8][5];
+	unsigned long ptr;
 	union{
 		unsigned short b2;
 		unsigned char b1[2];
@@ -302,6 +373,28 @@ int Print_disasm(FILE *dtfp, t_disasm *da, t_header *th, t_idata ti[]){
 	for (i = 0; i < 16; i++){
 		if (da->flag_IDD[i]){
 			fprintf(dtfp, "\n* %s (%08X - %08X)\n\n", th->IDD[i].Name, th->ImageBase + th->IDD[i].RVA, th->ImageBase + th->IDD[i].RVA + th->IDD[i].Size - 1);
+		}
+	}
+
+	//Reference of JUMP or CALL を出力
+	if (da->flag_ref == PRINT){
+		for (ptr = 0; ptr < da->rtable.num; ptr++){
+			if (da->addr_code == da->rtable.dst[ptr]){
+				fprintf(dtfp, "\n* Referenced by (U)nconditional or (C)onditional Jump or (c)all at Address:\n");
+				fprintf(dtfp, "| %08X", da->rtable.src[ptr]);
+				if (da->rtable.flag[ptr] == UJMP){ fprintf(dtfp, "(U)"); }
+				if (da->rtable.flag[ptr] == CJMP){ fprintf(dtfp, "(C)"); }
+				if (da->rtable.flag[ptr] == CALL){ fprintf(dtfp, "(c)"); }
+				for (ptr++; ptr < da->rtable.num; ptr++){
+					if (da->addr_code == da->rtable.dst[ptr]){
+						fprintf(dtfp, ", %08X", da->rtable.src[ptr]);
+						if (da->rtable.flag[ptr] == UJMP){ fprintf(dtfp, "(U)"); }
+						if (da->rtable.flag[ptr] == CJMP){ fprintf(dtfp, "(C)"); }
+						if (da->rtable.flag[ptr] == CALL){ fprintf(dtfp, "(c)"); }
+					}
+				}
+				fprintf(dtfp, "\n|\n");
+			}
 		}
 	}
 
@@ -578,4 +671,38 @@ int Print_string(FILE *dtfp, unsigned long rva, FILE *bfp, t_header *th){
 
 	fseek(bfp, offs_log, SEEK_SET);
 	return -1;
+}
+
+int Set_rtable(FILE *bfp, t_disasm *da, t_header *th, t_idata ti[]){
+	int i;
+
+	da->flag_print = 0;
+	da->flag_ref = COUNT;
+	da->rtable.num = 0;
+	if (Disasm(bfp, da, th, ti) == 1){
+		printf("ERROR: Disasm\n");
+		return 1;
+	}
+
+	da->flag_ref = SET;
+	da->rtable.ptr = 0;
+	da->rtable.dst = (unsigned long *)malloc(sizeof(unsigned long) * da->rtable.num);
+	da->rtable.src = (unsigned long *)malloc(sizeof(unsigned long) * da->rtable.num);
+	da->rtable.flag = (int *)malloc(sizeof(int) * da->rtable.num);
+	if (da->rtable.dst == NULL || da->rtable.src == NULL || da->rtable.flag == NULL){
+		printf("ERROR: malloc rtable");
+		return 1;
+	}
+	if (Disasm(bfp, da, th, ti) == 1){
+		printf("ERROR: Disasm\n");
+		return 1;
+	}
+
+	return 0;
+}
+
+void Free_rtable(t_disasm *da){
+	free(da->rtable.dst);
+	free(da->rtable.src);
+	free(da->rtable.flag);
 }
