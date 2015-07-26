@@ -1,24 +1,24 @@
 00401000|   55                            | PUSH      EBP
 00401001|   8B EC                         | MOV       EBP, ESP
 00401003|   8B 45 10                      | MOV       EAX, [EBP+10h]
-00401006|   68 04214000                   | PUSH      00402104h   | UNICODE "2012"
+00401006|   68 04214000                   | PUSH      00402104h
 0040100B|   50                            | PUSH      EAX
-0040100C|   FF 15 00204000                | CALL      [00402000h]   | KERNEL32.dll lstrcmpW
+0040100C|   FF 15 00204000                | CALL      [00402000h]
 00401012|   6A 00                         | PUSH      00h
-00401014|   68 10214000                   | PUSH      00402110h   | UNICODE "MESSAGE"
+00401014|   68 10214000                   | PUSH      00402110h
 00401019|   85 C0                         | TEST      EAX, EAX
 0040101B|   75 18                         | JNZ       00401035h
-0040101D|   68 20214000                   | PUSH      00402120h   | UNICODE "Hello! 2012"
-00401022|   FF 15 B0204000                | CALL      [004020B0h]   | USER32.dll GetActiveWindow
+0040101D|   68 20214000                   | PUSH      00402120h
+00401022|   FF 15 B0204000                | CALL      [004020B0h]
 00401028|   50                            | PUSH      EAX
-00401029|   FF 15 AC204000                | CALL      [004020ACh]   | USER32.dll MessageBoxW
+00401029|   FF 15 AC204000                | CALL      [004020ACh]
 0040102F|   33 C0                         | XOR       EAX, EAX
 00401031|   5D                            | POP       EBP
 00401032|   C2 1000                       | RETN      0010h
-00401035|   68 38214000                   | PUSH      00402138h   | UNICODE "Hello! Windows"
-0040103A|   FF 15 B0204000                | CALL      [004020B0h]   | USER32.dll GetActiveWindow
+00401035|   68 38214000                   | PUSH      00402138h
+0040103A|   FF 15 B0204000                | CALL      [004020B0h]
 00401040|   50                            | PUSH      EAX
-00401041|   FF 15 AC204000                | CALL      [004020ACh]   | USER32.dll MessageBoxW
+00401041|   FF 15 AC204000                | CALL      [004020ACh]
 00401047|   33 C0                         | XOR       EAX, EAX
 00401049|   5D                            | POP       EBP
 0040104A|   C2 1000                       | RETN      0010h
@@ -36,7 +36,7 @@
 0040107D|   68 1C304000                   | PUSH      0040301Ch
 00401082|   68 20304000                   | PUSH      00403020h
 00401087|   68 18304000                   | PUSH      00403018h
-0040108C|   FF 15 9C204000                | CALL      [0040209Ch]   | MSVCR100.dll __wgetmainargs
+0040108C|   FF 15 9C204000                | CALL      [0040209Ch]
 00401092|   83 C4 14                      | ADD       ESP, 14h
 00401095|   A3 28304000                   | MOV       [00403028h], EAX
 0040109A|   85 C0                         | TEST      EAX, EAX
@@ -52,14 +52,14 @@
 004010B5|   89 5D E4                      | MOV       [EBP+E4h], EBX
 004010B8|   8D 45 94                      | LEA       EAX, [EBP+94h]
 004010BB|   50                            | PUSH      EAX
-004010BC|   FF 15 30204000                | CALL      [00402030h]   | KERNEL32.dll GetStartupInfoW
+004010BC|   FF 15 30204000                | CALL      [00402030h]
 004010C2|   39 1D 7C334000                | CMP       [0040337Ch], EBX
 004010C8|   75 0B                         | JNZ       004010D5h
 004010CA|   53                            | PUSH      EBX
 004010CB|   53                            | PUSH      EBX
 004010CC|   6A 01                         | PUSH      01h
 004010CE|   53                            | PUSH      EBX
-004010CF|   FF 15 34204000                | CALL      [00402034h]   | KERNEL32.dll HeapSetInformation
+004010CF|   FF 15 34204000                | CALL      [00402034h]
 004010D5|   89 5D FC                      | MOV       [EBP+FCh], EBX
 004010D8|   64:                           | PREFIX 64:
 004010D9|   A1 18000000                   | MOV       EAX, [00000018h]
@@ -69,7 +69,7 @@
 004010E9|   53                            | PUSH      EBX
 004010EA|   56                            | PUSH      ESI
 004010EB|   57                            | PUSH      EDI
-004010EC|   FF 15 38204000                | CALL      [00402038h]   | KERNEL32.dll InterlockedCompareExchange
+004010EC|   FF 15 38204000                | CALL      [00402038h]
 004010F2|   3B C3                         | CMP       EAX, EBX
 004010F4|   74 19                         | JE        0040110Fh
 004010F6|   3B C6                         | CMP       EAX, ESI
@@ -79,7 +79,7 @@
 004010FD|   89 75 E0                      | MOV       [EBP+E0h], ESI
 00401100|   EB 10                         | JMP       00401112h
 00401102|   68 E8030000                   | PUSH      000003E8h
-00401107|   FF 15 3C204000                | CALL      [0040203Ch]   | KERNEL32.dll Sleep
+00401107|   FF 15 3C204000                | CALL      [0040203Ch]
 0040110D|   EB DA                         | JMP       004010E9h
 0040110F|   33 F6                         | XOR       ESI, ESI
 00401111|   46                            | INC       ESI
@@ -118,7 +118,7 @@
 00401187|   75 08                         | JNZ       00401191h
 00401189|   53                            | PUSH      EBX
 0040118A|   57                            | PUSH      EDI
-0040118B|   FF 15 40204000                | CALL      [00402040h]   | KERNEL32.dll InterlockedExchange
+0040118B|   FF 15 40204000                | CALL      [00402040h]
 00401191|   39 1D 80334000                | CMP       [00403380h], EBX
 00401197|   74 19                         | JE        004011B2h
 00401199|   68 80334000                   | PUSH      00403380h
@@ -130,7 +130,7 @@
 004011A9|   6A 02                         | PUSH      02h
 004011AB|   53                            | PUSH      EBX
 004011AC|   FF 15 80334000                | CALL      [00403380h]
-004011B2|   A1 88204000                   | MOV       EAX, [00402088h]   | MSVCR100.dll _wcmdln
+004011B2|   A1 88204000                   | MOV       EAX, [00402088h]
 004011B7|   8B 00                         | MOV       EAX, [EAX]
 004011B9|   89 45 DC                      | MOV       [EBP+DCh], EAX
 004011BC|   0F B7 08                      | MOVZX     ECX, [EAX]
@@ -165,7 +165,7 @@
 00401204|   39 1D 24304000                | CMP       [00403024h], EBX
 0040120A|   75 4C                         | JNZ       00401258h
 0040120C|   50                            | PUSH      EAX
-0040120D|   FF 15 8C204000                | CALL      [0040208Ch]   | MSVCR100.dll exit
+0040120D|   FF 15 8C204000                | CALL      [0040208Ch]
 00401213|   83 F9 22                      | CMP       ECX, 22h
 00401216|   75 0B                         | JNZ       00401223h
 00401218|   33 C9                         | XOR       ECX, ECX
@@ -191,10 +191,10 @@
 00401249|   39 1D 24304000                | CMP       [00403024h], EBX
 0040124F|   75 07                         | JNZ       00401258h
 00401251|   50                            | PUSH      EAX
-00401252|   FF 15 94204000                | CALL      [00402094h]   | MSVCR100.dll _exit
+00401252|   FF 15 94204000                | CALL      [00402094h]
 00401258|   39 1D 34304000                | CMP       [00403034h], EBX
 0040125E|   75 06                         | JNZ       00401266h
-00401260|   FF 15 98204000                | CALL      [00402098h]   | MSVCR100.dll _cexit
+00401260|   FF 15 98204000                | CALL      [00402098h]
 00401266|   C7 45 FC FEFFFFFF             | MOV       [EBP+FCh], FFFFFFFEh
 0040126D|   A1 30304000                   | MOV       EAX, [00403030h]
 00401272|   E8 DE040000                   | CALL      00401755h
@@ -220,16 +220,16 @@
 004012BD|   8B C1                         | MOV       EAX, ECX
 004012BF|   6A 02                         | PUSH      02h
 004012C1|   A3 24304000                   | MOV       [00403024h], EAX
-004012C6|   FF 15 5C204000                | CALL      [0040205Ch]   | MSVCR100.dll __set_app_type
+004012C6|   FF 15 5C204000                | CALL      [0040205Ch]
 004012CC|   59                            | POP       ECX
 004012CD|   6A FF                         | PUSH      FFh
-004012CF|   FF 15 2C204000                | CALL      [0040202Ch]   | KERNEL32.dll EncodePointer
+004012CF|   FF 15 2C204000                | CALL      [0040202Ch]
 004012D5|   8B 0D 68334000                | MOV       ECX, [00403368h]
 004012DB|   A3 74334000                   | MOV       [00403374h], EAX
 004012E0|   A3 78334000                   | MOV       [00403378h], EAX
-004012E5|   A1 70204000                   | MOV       EAX, [00402070h]   | MSVCR100.dll _fmode
+004012E5|   A1 70204000                   | MOV       EAX, [00402070h]
 004012EA|   89 08                         | MOV       [EAX], ECX
-004012EC|   A1 74204000                   | MOV       EAX, [00402074h]   | MSVCR100.dll _commode
+004012EC|   A1 74204000                   | MOV       EAX, [00402074h]
 004012F1|   8B 0D 64334000                | MOV       ECX, [00403364h]
 004012F7|   89 08                         | MOV       [EAX], ECX
 004012F9|   E8 52020000                   | CALL      00401550h
@@ -237,13 +237,13 @@
 00401303|   83 3D 14304000 00             | CMP       [00403014h], 00h
 0040130A|   75 0C                         | JNZ       00401318h
 0040130C|   68 B6174000                   | PUSH      004017B6h
-00401311|   FF 15 78204000                | CALL      [00402078h]   | MSVCR100.dll __setusermatherr
+00401311|   FF 15 78204000                | CALL      [00402078h]
 00401317|   59                            | POP       ECX
 00401318|   E8 71040000                   | CALL      0040178Eh
 0040131D|   83 3D 10304000 FF             | CMP       [00403010h], FFh
 00401324|   75 09                         | JNZ       0040132Fh
 00401326|   6A FF                         | PUSH      FFh
-00401328|   FF 15 7C204000                | CALL      [0040207Ch]   | MSVCR100.dll _configthreadlocale
+00401328|   FF 15 7C204000                | CALL      [0040207Ch]
 0040132E|   59                            | POP       ECX
 0040132F|   33 C0                         | XOR       EAX, EAX
 00401331|   C3                            | RETN      
@@ -289,24 +289,24 @@
 004013E6|   89 85 D8FCFFFF                | MOV       [EBP+FFFFFCD8h], EAX
 004013EC|   A1 04304000                   | MOV       EAX, [00403004h]
 004013F1|   89 85 DCFCFFFF                | MOV       [EBP+FFFFFCDCh], EAX
-004013F7|   FF 15 18204000                | CALL      [00402018h]   | KERNEL32.dll IsDebuggerPresent
+004013F7|   FF 15 18204000                | CALL      [00402018h]
 004013FD|   A3 88304000                   | MOV       [00403088h], EAX
 00401402|   6A 01                         | PUSH      01h
 00401404|   E8 4B040000                   | CALL      00401854h
 00401409|   59                            | POP       ECX
 0040140A|   6A 00                         | PUSH      00h
-0040140C|   FF 15 1C204000                | CALL      [0040201Ch]   | KERNEL32.dll SetUnhandledExceptionFilter
+0040140C|   FF 15 1C204000                | CALL      [0040201Ch]
 00401412|   68 FC204000                   | PUSH      004020FCh
-00401417|   FF 15 20204000                | CALL      [00402020h]   | KERNEL32.dll UnhandledExceptionFilter
+00401417|   FF 15 20204000                | CALL      [00402020h]
 0040141D|   83 3D 88304000 00             | CMP       [00403088h], 00h
 00401424|   75 08                         | JNZ       0040142Eh
 00401426|   6A 01                         | PUSH      01h
 00401428|   E8 27040000                   | CALL      00401854h
 0040142D|   59                            | POP       ECX
 0040142E|   68 090400C0                   | PUSH      C0000409h
-00401433|   FF 15 24204000                | CALL      [00402024h]   | KERNEL32.dll GetCurrentProcess
+00401433|   FF 15 24204000                | CALL      [00402024h]
 00401439|   50                            | PUSH      EAX
-0040143A|   FF 15 28204000                | CALL      [00402028h]   | KERNEL32.dll TerminateProcess
+0040143A|   FF 15 28204000                | CALL      [00402028h]
 00401440|   C9                            | LEAVE     
 00401441|   C3                            | RETN      
 00401442|   8B FF                         | MOV       EDI, EDI
@@ -332,21 +332,21 @@
 00401480|   5D                            | POP       EBP
 00401481|   C2 0400                       | RETN      0004h
 00401484|   68 42144000                   | PUSH      00401442h
-00401489|   FF 15 1C204000                | CALL      [0040201Ch]   | KERNEL32.dll SetUnhandledExceptionFilter
+00401489|   FF 15 1C204000                | CALL      [0040201Ch]
 0040148F|   33 C0                         | XOR       EAX, EAX
 00401491|   C3                            | RETN      
-00401492|   FF 25 A0204000                | JMP       [004020A0h]   | MSVCR100.dll _amsg_exit
+00401492|   FF 25 A0204000                | JMP       [004020A0h]
 00401498|   6A 14                         | PUSH      14h
 0040149A|   68 68224000                   | PUSH      00402268h
 0040149F|   E8 6C020000                   | CALL      00401710h
 004014A4|   FF 35 78334000                | PUSH      [00403378h]
-004014AA|   8B 35 14204000                | MOV       ESI, [00402014h]   | KERNEL32.dll DecodePointer
+004014AA|   8B 35 14204000                | MOV       ESI, [00402014h]
 004014B0|   FF D6                         | CALL      ESI
 004014B2|   89 45 E4                      | MOV       [EBP+E4h], EAX
 004014B5|   83 F8 FF                      | CMP       EAX, FFh
 004014B8|   75 0C                         | JNZ       004014C6h
 004014BA|   FF 75 08                      | PUSH      [EBP+08h]
-004014BD|   FF 15 60204000                | CALL      [00402060h]   | MSVCR100.dll _onexit
+004014BD|   FF 15 60204000                | CALL      [00402060h]
 004014C3|   59                            | POP       ECX
 004014C4|   EB 64                         | JMP       0040152Ah
 004014C6|   6A 08                         | PUSH      08h
@@ -364,7 +364,7 @@
 004014EC|   8D 45 E4                      | LEA       EAX, [EBP+E4h]
 004014EF|   50                            | PUSH      EAX
 004014F0|   FF 75 08                      | PUSH      [EBP+08h]
-004014F3|   8B 35 2C204000                | MOV       ESI, [0040202Ch]   | KERNEL32.dll EncodePointer
+004014F3|   8B 35 2C204000                | MOV       ESI, [0040202Ch]
 004014F9|   FF D6                         | CALL      ESI
 004014FB|   50                            | PUSH      EAX
 004014FC|   E8 65030000                   | CALL      00401866h
@@ -433,7 +433,7 @@
 00401599|   5F                            | POP       EDI
 0040159A|   5E                            | POP       ESI
 0040159B|   C3                            | RETN      
-0040159C|   FF 25 90204000                | JMP       [00402090h]   | MSVCR100.dll _XcptFilter
+0040159C|   FF 25 90204000                | JMP       [00402090h]
 004015A2|   CC                            | INT3      
 004015A3|   CC                            | INT3      
 004015A4|   CC                            | INT3      
@@ -597,8 +597,8 @@
 004016F8|   8B E5                         | MOV       ESP, EBP
 004016FA|   5D                            | POP       EBP
 004016FB|   C3                            | RETN      
-004016FC|   FF 25 84204000                | JMP       [00402084h]   | MSVCR100.dll _initterm
-00401702|   FF 25 80204000                | JMP       [00402080h]   | MSVCR100.dll _initterm_e
+004016FC|   FF 25 84204000                | JMP       [00402084h]
+00401702|   FF 25 80204000                | JMP       [00402080h]
 00401708|   CC                            | INT3      
 00401709|   CC                            | INT3      
 0040170A|   CC                            | INT3      
@@ -696,18 +696,18 @@
 004017EB|   56                            | PUSH      ESI
 004017EC|   8D 45 F8                      | LEA       EAX, [EBP+F8h]
 004017EF|   50                            | PUSH      EAX
-004017F0|   FF 15 44204000                | CALL      [00402044h]   | KERNEL32.dll GetSystemTimeAsFileTime
+004017F0|   FF 15 44204000                | CALL      [00402044h]
 004017F6|   8B 75 FC                      | MOV       ESI, [EBP+FCh]
 004017F9|   33 75 F8                      | XOR       ESI, [EBP+F8h]
-004017FC|   FF 15 04204000                | CALL      [00402004h]   | KERNEL32.dll GetCurrentProcessId
+004017FC|   FF 15 04204000                | CALL      [00402004h]
 00401802|   33 F0                         | XOR       ESI, EAX
-00401804|   FF 15 08204000                | CALL      [00402008h]   | KERNEL32.dll GetCurrentThreadId
+00401804|   FF 15 08204000                | CALL      [00402008h]
 0040180A|   33 F0                         | XOR       ESI, EAX
-0040180C|   FF 15 0C204000                | CALL      [0040200Ch]   | KERNEL32.dll GetTickCount
+0040180C|   FF 15 0C204000                | CALL      [0040200Ch]
 00401812|   33 F0                         | XOR       ESI, EAX
 00401814|   8D 45 F0                      | LEA       EAX, [EBP+F0h]
 00401817|   50                            | PUSH      EAX
-00401818|   FF 15 10204000                | CALL      [00402010h]   | KERNEL32.dll QueryPerformanceCounter
+00401818|   FF 15 10204000                | CALL      [00402010h]
 0040181E|   8B 45 F4                      | MOV       EAX, [EBP+F4h]
 00401821|   33 45 F0                      | XOR       EAX, [EBP+F0h]
 00401824|   33 F0                         | XOR       ESI, EAX
@@ -729,14 +729,14 @@
 00401851|   5B                            | POP       EBX
 00401852|   C9                            | LEAVE     
 00401853|   C3                            | RETN      
-00401854|   FF 25 4C204000                | JMP       [0040204Ch]   | MSVCR100.dll _crt_debugger_hook
-0040185A|   FF 25 50204000                | JMP       [00402050h]   | MSVCR100.dll ?terminate@@YAXXZ
-00401860|   FF 25 54204000                | JMP       [00402054h]   | MSVCR100.dll _unlock
-00401866|   FF 25 58204000                | JMP       [00402058h]   | MSVCR100.dll __dllonexit
-0040186C|   FF 25 A4204000                | JMP       [004020A4h]   | MSVCR100.dll _lock
-00401872|   FF 25 64204000                | JMP       [00402064h]   | MSVCR100.dll _except_handler4_common
-00401878|   FF 25 68204000                | JMP       [00402068h]   | MSVCR100.dll _invoke_watson
-0040187E|   FF 25 6C204000                | JMP       [0040206Ch]   | MSVCR100.dll _controlfp_s
+00401854|   FF 25 4C204000                | JMP       [0040204Ch]
+0040185A|   FF 25 50204000                | JMP       [00402050h]
+00401860|   FF 25 54204000                | JMP       [00402054h]
+00401866|   FF 25 58204000                | JMP       [00402058h]
+0040186C|   FF 25 A4204000                | JMP       [004020A4h]
+00401872|   FF 25 64204000                | JMP       [00402064h]
+00401878|   FF 25 68204000                | JMP       [00402068h]
+0040187E|   FF 25 6C204000                | JMP       [0040206Ch]
 00401884|   00                            | ??        
 00401885|   00                            | ??        
 00401886|   00                            | ??        

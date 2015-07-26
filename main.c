@@ -17,7 +17,7 @@ char *Get_filename(void);
 int Disasm(FILE *bfp, t_disasm *da, t_header *th, t_idata ti[]);
 void change_reg(char reg_name[8][5], char reg[8][5]);
 void Set_regname(char reg_name[8][5], int size_reg);
-int Print_disasm(FILE *dtfp, t_disasm *da, t_header *th, t_idata ti[]);
+int Print_disasm(FILE *dtfp, FILE *bfp, t_disasm *da, t_header *th, t_idata ti[]);
 int Print_function(FILE *dtfp, unsigned long rva, t_idata ti[]);
 int Print_string(FILE *dtfp, unsigned long rva, FILE *bfp, t_header *th);
 int Set_rtable(FILE *bfp, t_disasm *da, t_header *th, t_idata ti[]);
@@ -36,8 +36,8 @@ int main(void){
 
 	/* 必要なファイル名を取得、設定 */
 	//strcpy(szFile, Get_filename(szFile));
-	//strcpy(szFile, "wsample01a.exe");
-	strcpy(szFile, "HelloWorld(MBCS).exe");
+	strcpy(szFile, "wsample01a.exe");
+	//strcpy(szFile, "HelloWorld(MBCS).exe");
 	//strcpy(szFile, "HelloWorld(UNICODE).exe");
 	//strcpy(szFile, "ls.exe");
 	//strcpy(szFile, "memo(32bit).exe");
@@ -237,39 +237,10 @@ int Disasm(FILE *bfp, t_disasm *da, t_header *th, t_idata ti[]){
 		if (da->flag_print){
 			da->addr_code = addr_code;
 			da->offs = offs;
-			Print_disasm(dtfp, da, th, ti);
-
-			//必要に応じて注釈をファイル出力
-			if (da->flag_ref == PRINT){
-
-			}
-			if (da->size_disp == 32){
-				rva = da->disp32 - th->ImageBase;
-				if (Print_function(dtfp, rva, ti) != 0){
-					Print_string(dtfp, rva, bfp, th);
-				}
-			}
-
-			if (da->size_imm != 0){
-				if (da->operand[0] == REL8){
-					rva = addr_code + offs + (char)da->imm8 - th->ImageBase;
-				}
-				else if (da->operand[0] == REL32){
-					rva = addr_code + offs + (long)da->imm32 - th->ImageBase;
-				}
-				else if (da->size_imm == 32){
-					rva = da->imm32 - th->ImageBase;
-				}
-
-				if (Print_function(dtfp, rva, ti) != 0){
-					Print_string(dtfp, rva, bfp, th);
-				}
-			}	
-
-			fputc('\n', dtfp);	//改行
+			Print_disasm(dtfp, bfp, da, th, ti);
 		}
 
-		//Reference Table
+		//Reference Table 設定用
 		if (da->flag_ref){
 			if ((da->instruction[0] == 'J' && strcmp(da->instruction, "JMPF") != 0) || strcmp(da->instruction, "CALL") == 0){
 				if (da->flag_ref == COUNT){
@@ -353,13 +324,12 @@ void Set_regname(char reg_name[8][5], int size_reg){
 }
 
 //逆アセンブル結果をファイル出力
-int Print_disasm(FILE *dtfp, t_disasm *da, t_header *th, t_idata ti[]){
+int Print_disasm(FILE *dtfp, FILE *bfp, t_disasm *da, t_header *th, t_idata ti[]){
 	int i, j;
 	int size_code;
 	int scale[4] = { 1, 2, 4, 8 };
-	char data[50];
-	char reg_name[8][5];
-	unsigned long ptr;
+	char data[50], reg_name[8][5];
+	unsigned long ptr, rva;
 	union{
 		unsigned short b2;
 		unsigned char b1[2];
@@ -376,8 +346,8 @@ int Print_disasm(FILE *dtfp, t_disasm *da, t_header *th, t_idata ti[]){
 		}
 	}
 
-	//Reference of JUMP or CALL を出力
-	if (da->flag_ref == PRINT){
+	//必要に応じて Reference of JUMP or CALL を出力
+	if (da->flag_ref == PRINT){   //reference出力フラグ
 		for (ptr = 0; ptr < da->rtable.num; ptr++){
 			if (da->addr_code == da->rtable.dst[ptr]){
 				fprintf(dtfp, "\n* Referenced by (U)nconditional or (C)onditional Jump or (c)all at Address:\n");
@@ -595,6 +565,34 @@ int Print_disasm(FILE *dtfp, t_disasm *da, t_header *th, t_idata ti[]){
 			break;
 		}
 	}
+
+	//必要に応じて注釈をファイル出力
+	if (da->flag_ref == PRINT){   //reference出力フラグ
+		if (da->size_disp == 32){
+			rva = da->disp32 - th->ImageBase;
+			if (Print_function(dtfp, rva, ti) != 0){
+				Print_string(dtfp, rva, bfp, th);
+			}
+		}
+
+		if (da->size_imm != 0){
+			if (da->operand[0] == REL8){
+				rva = da->addr_code + da->offs + (char)da->imm8 - th->ImageBase;
+			}
+			else if (da->operand[0] == REL32){
+				rva = da->addr_code + da->offs + (long)da->imm32 - th->ImageBase;
+			}
+			else if (da->size_imm == 32){
+				rva = da->imm32 - th->ImageBase;
+			}
+
+			if (Print_function(dtfp, rva, ti) != 0){
+				Print_string(dtfp, rva, bfp, th);
+			}
+		}
+	}
+	
+	fputc('\n', dtfp);	//改行
 
 	return 0;
 }

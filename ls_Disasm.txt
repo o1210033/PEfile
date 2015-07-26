@@ -37,7 +37,7 @@
 00401094|   56                            | PUSH      ESI
 00401095|   53                            | PUSH      EBX
 00401096|   83 EC 1C                      | SUB       ESP, 1Ch
-00401099|   8B 35 4C144200                | MOV       ESI, [0042144Ch]   | KERNEL32.dll GetModuleHandleA
+00401099|   8B 35 4C144200                | MOV       ESI, [0042144Ch]
 0040109F|   C7 04 24 00504100             | MOV       [ESP], 00415000h
 004010A6|   FF D6                         | CALL      ESI
 004010A8|   83 EC 04                      | SUB       ESP, 04h
@@ -45,8 +45,8 @@
 004010AD|   89 C3                         | MOV       EBX, EAX
 004010AF|   0F 84 B2000000                | JE        00401167h
 004010B5|   C7 04 24 00504100             | MOV       [ESP], 00415000h
-004010BC|   FF 15 54144200                | CALL      [00421454h]   | KERNEL32.dll LoadLibraryA
-004010C2|   8B 15 50144200                | MOV       EDX, [00421450h]   | KERNEL32.dll GetProcAddress
+004010BC|   FF 15 54144200                | CALL      [00421454h]
+004010C2|   8B 15 50144200                | MOV       EDX, [00421450h]
 004010C8|   89 55 E4                      | MOV       [EBP+E4h], EDX
 004010CB|   83 EC 04                      | SUB       ESP, 04h
 004010CE|   A3 400D4200                   | MOV       [00420D40h], EAX
@@ -77,7 +77,7 @@
 0040112E|   74 16                         | JE        00401146h
 00401130|   C7 44 24 04 4B504100          | MOV       [ESP+04h], 0041504Bh
 00401138|   89 04 24                      | MOV       [ESP], EAX
-0040113B|   FF 15 50144200                | CALL      [00421450h]   | KERNEL32.dll GetProcAddress
+0040113B|   FF 15 50144200                | CALL      [00421450h]
 00401141|   83 EC 08                      | SUB       ESP, 08h
 00401144|   89 C2                         | MOV       EDX, EAX
 00401146|   85 D2                         | TEST      EDX, EDX
@@ -109,7 +109,7 @@
 0040119D|   85 C0                         | TEST      EAX, EAX
 0040119F|   74 0C                         | JE        004011ADh
 004011A1|   89 04 24                      | MOV       [ESP], EAX
-004011A4|   FF 15 44144200                | CALL      [00421444h]   | KERNEL32.dll FreeLibrary
+004011A4|   FF 15 44144200                | CALL      [00421444h]
 004011AA|   83 EC 04                      | SUB       ESP, 04h
 004011AD|   C9                            | LEAVE     
 004011AE|   C3                            | RETN      
@@ -939,7 +939,7 @@
 00401C16|   D8                            | ??        
 00401C17|   39 C7                         | CMP       EDI, EAX
 00401C19|   0F 83 64020000                | JAE       00401E83h
-00401C1F|   8B 15 64124200                | MOV       EDX, [00421264h]   | cygwin1.dll __ctype_ptr__
+00401C1F|   8B 15 64124200                | MOV       EDX, [00421264h]
 00401C25|   8B 32                         | MOV       ESI, [EDX]
 00401C27|   89 FA                         | MOV       EDX, EDI
 00401C29|   31 FF                         | XOR       EDI, EDI
@@ -1095,7 +1095,7 @@
 00401E4E|   8D 0C 1F                      | LEA       ECX, [EDI+EBX*1]
 00401E51|   39 CF                         | CMP       EDI, ECX
 00401E53|   73 23                         | JNB       00401E78h
-00401E55|   A1 64124200                   | MOV       EAX, [00421264h]   | cygwin1.dll __ctype_ptr__
+00401E55|   A1 64124200                   | MOV       EAX, [00421264h]
 00401E5A|   8B 30                         | MOV       ESI, [EAX]
 00401E5C|   89 F8                         | MOV       EAX, EDI
 00401E5E|   0F B6 10                      | MOVZX     EDX, [EAX]
@@ -6770,9 +6770,9 @@
 00406791|   C1 38 CA                      | SAR       [EAX], CAh
 00406794|   75 0A                         | JNZ       004067A0h
 00406796|   8D 58 04                      | LEA       EBX, [EAX+04h]
-00406799|   A1 64134200                   | MOV       EAX, [00421364h]   | cygwin1.dll program_invocation_short_name
+00406799|   A1 64134200                   | MOV       EAX, [00421364h]
 0040679E|   89 18                         | MOV       [EAX], EBX
-004067A0|   A1 60134200                   | MOV       EAX, [00421360h]   | cygwin1.dll program_invocation_name
+004067A0|   A1 60134200                   | MOV       EAX, [00421360h]
 004067A5|   89 1D A0064200                | MOV       [004206A0h], EBX
 004067AB|   89 18                         | MOV       [EAX], EBX
 004067AD|   83 C4 1C                      | ADD       ESP, 1Ch
@@ -7198,7 +7198,7 @@
 00406D4E|   E9 34FDFFFF                   | JMP       00406A87h
 00406D53|   83 7C 24 3C 01                | CMP       [ESP+3Ch], 01h
 00406D58|   0F 85 F2020000                | JNE       00407050h
-00406D5E|   8B 15 64124200                | MOV       EDX, [00421264h]   | cygwin1.dll __ctype_ptr__
+00406D5E|   8B 15 64124200                | MOV       EDX, [00421264h]
 00406D64|   0F B6 C3                      | MOVZX     EAX, BL
 00406D67|   C7 44 24 30 01000000          | MOV       [ESP+30h], 00000001h
 00406D6F|   8B 12                         | MOV       EDX, [EDX]
@@ -8837,7 +8837,7 @@
 004082D7|   C3                            | RETN      
 004082D8|   3B 5C 24 18                   | CMP       EBX, [ESP+18h]
 004082DC|   73 74                         | JNB       00408352h
-004082DE|   A1 64124200                   | MOV       EAX, [00421264h]   | cygwin1.dll __ctype_ptr__
+004082DE|   A1 64124200                   | MOV       EAX, [00421264h]
 004082E3|   8B 74 24 58                   | MOV       ESI, [ESP+58h]
 004082E7|   8B 7C 24 18                   | MOV       EDI, [ESP+18h]
 004082EB|   8B 08                         | MOV       ECX, [EAX]
@@ -17719,7 +17719,7 @@
 0040EB82|   0F B6 55 00                   | MOVZX     EDX, [EBP+00h]
 0040EB86|   0F 44                         | ??        
 0040EB88|   D8                            | ??        
-0040EB89|   A1 64124200                   | MOV       EAX, [00421264h]   | cygwin1.dll __ctype_ptr__
+0040EB89|   A1 64124200                   | MOV       EAX, [00421264h]
 0040EB8E|   8B 38                         | MOV       EDI, [EAX]
 0040EB90|   0F B6 C2                      | MOVZX     EAX, DL
 0040EB93|   F6 44 07 01 08                | TEST      [EDI+EAX*1+01h], 08h
@@ -19017,7 +19017,7 @@
 0040FBEA|   80 38 00                      | CMP       [EAX], 00h
 0040FBED|   75 46                         | JNZ       0040FC35h
 0040FBEF|   90                            | NOP       
-0040FBF0|   FF 15 48144200                | CALL      [00421448h]   | KERNEL32.dll GetACP
+0040FBF0|   FF 15 48144200                | CALL      [00421448h]
 0040FBF6|   BD 4C0C4200                   | MOV       EBP, 00420C4Ch
 0040FBFB|   C7 44 24 04 5CA84100          | MOV       [ESP+04h], 0041A85Ch
 0040FC03|   C7 04 24 4C0C4200             | MOV       [ESP], 00420C4Ch
@@ -19226,7 +19226,7 @@
 0040FE22|   0F B6 17                      | MOVZX     EDX, [EDI]
 0040FE25|   0F 44                         | ??        
 0040FE27|   D8                            | ??        
-0040FE28|   A1 64124200                   | MOV       EAX, [00421264h]   | cygwin1.dll __ctype_ptr__
+0040FE28|   A1 64124200                   | MOV       EAX, [00421264h]
 0040FE2D|   8B 28                         | MOV       EBP, [EAX]
 0040FE2F|   0F B6 C2                      | MOVZX     EAX, DL
 0040FE32|   F6 44 05 01 08                | TEST      [EBP+EAX*1+01h], 08h
@@ -19895,31 +19895,31 @@
 0041067D|   90                            | NOP       
 0041067E|   90                            | NOP       
 0041067F|   90                            | NOP       
-00410680|   FF 25 20144200                | JMP       [00421420h]   | cygintl-8.dll libintl_gettext
+00410680|   FF 25 20144200                | JMP       [00421420h]
 00410686|   90                            | NOP       
 00410687|   90                            | NOP       
-00410688|   FF 25 18144200                | JMP       [00421418h]   | cygintl-8.dll libintl_bindtextdomain
+00410688|   FF 25 18144200                | JMP       [00421418h]
 0041068E|   90                            | NOP       
 0041068F|   90                            | NOP       
-00410690|   FF 25 28144200                | JMP       [00421428h]   | cygintl-8.dll libintl_textdomain
+00410690|   FF 25 28144200                | JMP       [00421428h]
 00410696|   90                            | NOP       
 00410697|   90                            | NOP       
-00410698|   FF 25 1C144200                | JMP       [0042141Ch]   | cygintl-8.dll libintl_dcgettext
+00410698|   FF 25 1C144200                | JMP       [0042141Ch]
 0041069E|   90                            | NOP       
 0041069F|   90                            | NOP       
-004106A0|   FF 25 24144200                | JMP       [00421424h]   | cygintl-8.dll libintl_setlocale
+004106A0|   FF 25 24144200                | JMP       [00421424h]
 004106A6|   90                            | NOP       
 004106A7|   90                            | NOP       
-004106A8|   FF 25 3C144200                | JMP       [0042143Ch]   | cyggcc_s-1.dll __umoddi3
+004106A8|   FF 25 3C144200                | JMP       [0042143Ch]
 004106AE|   90                            | NOP       
 004106AF|   90                            | NOP       
-004106B0|   FF 25 38144200                | JMP       [00421438h]   | cyggcc_s-1.dll __udivdi3
+004106B0|   FF 25 38144200                | JMP       [00421438h]
 004106B6|   90                            | NOP       
 004106B7|   90                            | NOP       
-004106B8|   FF 25 34144200                | JMP       [00421434h]   | cyggcc_s-1.dll __moddi3
+004106B8|   FF 25 34144200                | JMP       [00421434h]
 004106BE|   90                            | NOP       
 004106BF|   90                            | NOP       
-004106C0|   FF 25 30144200                | JMP       [00421430h]   | cyggcc_s-1.dll __divdi3
+004106C0|   FF 25 30144200                | JMP       [00421430h]
 004106C6|   90                            | NOP       
 004106C7|   90                            | NOP       
 004106C8|   51                            | PUSH      ECX
@@ -19956,7 +19956,7 @@
 00410711|   89 04 24                      | MOV       [ESP], EAX
 00410714|   E8 67030000                   | CALL      00410A80h
 00410719|   83 EC 08                      | SUB       ESP, 08h
-0041071C|   FF 15 7C124200                | CALL      [0042127Ch]   | cygwin1.dll _dll_crt0@0
+0041071C|   FF 15 7C124200                | CALL      [0042127Ch]
 00410722|   90                            | NOP       
 00410723|   90                            | NOP       
 00410724|   90                            | NOP       
@@ -20035,298 +20035,298 @@
 0041076D|   90                            | NOP       
 0041076E|   90                            | NOP       
 0041076F|   90                            | NOP       
-00410770|   FF 25 A4124200                | JMP       [004212A4h]   | cygwin1.dll atexit
+00410770|   FF 25 A4124200                | JMP       [004212A4h]
 00410776|   90                            | NOP       
 00410777|   90                            | NOP       
-00410778|   FF 25 74124200                | JMP       [00421274h]   | cygwin1.dll __main
+00410778|   FF 25 74124200                | JMP       [00421274h]
 0041077E|   90                            | NOP       
 0041077F|   90                            | NOP       
-00410780|   FF 25 E0124200                | JMP       [004212E0h]   | cygwin1.dll free
+00410780|   FF 25 E0124200                | JMP       [004212E0h]
 00410786|   90                            | NOP       
 00410787|   90                            | NOP       
-00410788|   FF 25 6C134200                | JMP       [0042136Ch]   | cygwin1.dll putchar_unlocked
+00410788|   FF 25 6C134200                | JMP       [0042136Ch]
 0041078E|   90                            | NOP       
 0041078F|   90                            | NOP       
-00410790|   FF 25 6C124200                | JMP       [0042126Ch]   | cygwin1.dll __getreent
+00410790|   FF 25 6C124200                | JMP       [0042126Ch]
 00410796|   90                            | NOP       
 00410797|   90                            | NOP       
-00410798|   FF 25 DC124200                | JMP       [004212DCh]   | cygwin1.dll fputs
+00410798|   FF 25 DC124200                | JMP       [004212DCh]
 0041079E|   90                            | NOP       
 0041079F|   90                            | NOP       
-004107A0|   FF 25 5C134200                | JMP       [0042135Ch]   | cygwin1.dll printf
+004107A0|   FF 25 5C134200                | JMP       [0042135Ch]
 004107A6|   90                            | NOP       
 004107A7|   90                            | NOP       
-004107A8|   FF 25 B8134200                | JMP       [004213B8h]   | cygwin1.dll strcmp
+004107A8|   FF 25 B8134200                | JMP       [004213B8h]
 004107AE|   90                            | NOP       
 004107AF|   90                            | NOP       
-004107B0|   FF 25 80134200                | JMP       [00421380h]   | cygwin1.dll setjmp
+004107B0|   FF 25 80134200                | JMP       [00421380h]
 004107B6|   90                            | NOP       
 004107B7|   90                            | NOP       
-004107B8|   FF 25 60124200                | JMP       [00421260h]   | cygwin1.dll __assert_func
+004107B8|   FF 25 60124200                | JMP       [00421260h]
 004107BE|   90                            | NOP       
 004107BF|   90                            | NOP       
-004107C0|   FF 25 70124200                | JMP       [00421270h]   | cygwin1.dll __locale_mb_cur_max
+004107C0|   FF 25 70124200                | JMP       [00421270h]
 004107C6|   90                            | NOP       
 004107C7|   90                            | NOP       
-004107C8|   FF 25 1C134200                | JMP       [0042131Ch]   | cygwin1.dll mbrtowc
+004107C8|   FF 25 1C134200                | JMP       [0042131Ch]
 004107CE|   90                            | NOP       
 004107CF|   90                            | NOP       
-004107D0|   FF 25 08144200                | JMP       [00421408h]   | cygwin1.dll wcwidth
+004107D0|   FF 25 08144200                | JMP       [00421408h]
 004107D6|   90                            | NOP       
 004107D7|   90                            | NOP       
-004107D8|   FF 25 20134200                | JMP       [00421320h]   | cygwin1.dll mbsinit
+004107D8|   FF 25 20134200                | JMP       [00421320h]
 004107DE|   90                            | NOP       
 004107DF|   90                            | NOP       
-004107E0|   FF 25 68124200                | JMP       [00421268h]   | cygwin1.dll __errno
+004107E0|   FF 25 68124200                | JMP       [00421268h]
 004107E6|   90                            | NOP       
 004107E7|   90                            | NOP       
-004107E8|   FF 25 C8124200                | JMP       [004212C8h]   | cygwin1.dll error
+004107E8|   FF 25 C8124200                | JMP       [004212C8h]
 004107EE|   90                            | NOP       
 004107EF|   90                            | NOP       
-004107F0|   FF 25 A0134200                | JMP       [004213A0h]   | cygwin1.dll sprintf
+004107F0|   FF 25 A0134200                | JMP       [004213A0h]
 004107F6|   90                            | NOP       
 004107F7|   90                            | NOP       
-004107F8|   FF 25 D4134200                | JMP       [004213D4h]   | cygwin1.dll strrchr
+004107F8|   FF 25 D4134200                | JMP       [004213D4h]
 004107FE|   90                            | NOP       
 004107FF|   90                            | NOP       
-00410800|   FF 25 D4124200                | JMP       [004212D4h]   | cygwin1.dll fflush
+00410800|   FF 25 D4124200                | JMP       [004212D4h]
 00410806|   90                            | NOP       
 00410807|   90                            | NOP       
-00410808|   FF 25 9C134200                | JMP       [0042139Ch]   | cygwin1.dll sigprocmask
+00410808|   FF 25 9C134200                | JMP       [0042139Ch]
 0041080E|   90                            | NOP       
 0041080F|   90                            | NOP       
-00410810|   FF 25 70134200                | JMP       [00421370h]   | cygwin1.dll raise
+00410810|   FF 25 70134200                | JMP       [00421370h]
 00410816|   90                            | NOP       
 00410817|   90                            | NOP       
-00410818|   FF 25 98134200                | JMP       [00421398h]   | cygwin1.dll signal
+00410818|   FF 25 98134200                | JMP       [00421398h]
 0041081E|   90                            | NOP       
 0041081F|   90                            | NOP       
-00410820|   FF 25 D0134200                | JMP       [004213D0h]   | cygwin1.dll strncmp
+00410820|   FF 25 D0134200                | JMP       [004213D0h]
 00410826|   90                            | NOP       
 00410827|   90                            | NOP       
-00410828|   FF 25 D8134200                | JMP       [004213D8h]   | cygwin1.dll strstr
+00410828|   FF 25 D8134200                | JMP       [004213D8h]
 0041082E|   90                            | NOP       
 0041082F|   90                            | NOP       
-00410830|   FF 25 3C134200                | JMP       [0042133Ch]   | cygwin1.dll mempcpy
+00410830|   FF 25 3C134200                | JMP       [0042133Ch]
 00410836|   90                            | NOP       
 00410837|   90                            | NOP       
-00410838|   FF 25 A4134200                | JMP       [004213A4h]   | cygwin1.dll stpcpy
+00410838|   FF 25 A4134200                | JMP       [004213A4h]
 0041083E|   90                            | NOP       
 0041083F|   90                            | NOP       
-00410840|   FF 25 10134200                | JMP       [00421310h]   | cygwin1.dll localtime
+00410840|   FF 25 10134200                | JMP       [00421310h]
 00410846|   90                            | NOP       
 00410847|   90                            | NOP       
-00410848|   FF 25 A0124200                | JMP       [004212A0h]   | cygwin1.dll abort
+00410848|   FF 25 A0124200                | JMP       [004212A0h]
 0041084E|   90                            | NOP       
 0041084F|   90                            | NOP       
-00410850|   FF 25 E4124200                | JMP       [004212E4h]   | cygwin1.dll fwrite
+00410850|   FF 25 E4124200                | JMP       [004212E4h]
 00410856|   90                            | NOP       
 00410857|   90                            | NOP       
-00410858|   FF 25 BC134200                | JMP       [004213BCh]   | cygwin1.dll strcoll
+00410858|   FF 25 BC134200                | JMP       [004213BCh]
 0041085E|   90                            | NOP       
 0041085F|   90                            | NOP       
-00410860|   FF 25 14134200                | JMP       [00421314h]   | cygwin1.dll longjmp
+00410860|   FF 25 14134200                | JMP       [00421314h]
 00410866|   90                            | NOP       
 00410867|   90                            | NOP       
-00410868|   FF 25 9C124200                | JMP       [0042129Ch]   | cygwin1.dll _stat64
+00410868|   FF 25 9C124200                | JMP       [0042129Ch]
 0041086E|   90                            | NOP       
 0041086F|   90                            | NOP       
-00410870|   FF 25 98124200                | JMP       [00421298h]   | cygwin1.dll _lstat64
+00410870|   FF 25 98124200                | JMP       [00421298h]
 00410876|   90                            | NOP       
 00410877|   90                            | NOP       
-00410878|   FF 25 B4134200                | JMP       [004213B4h]   | cygwin1.dll strchr
+00410878|   FF 25 B4134200                | JMP       [004213B4h]
 0041087E|   90                            | NOP       
 0041087F|   90                            | NOP       
-00410880|   FF 25 CC134200                | JMP       [004213CCh]   | cygwin1.dll strlen
+00410880|   FF 25 CC134200                | JMP       [004213CCh]
 00410886|   90                            | NOP       
 00410887|   90                            | NOP       
-00410888|   FF 25 A8134200                | JMP       [004213A8h]   | cygwin1.dll stpncpy
+00410888|   FF 25 A8134200                | JMP       [004213A8h]
 0041088E|   90                            | NOP       
 0041088F|   90                            | NOP       
-00410890|   FF 25 C0134200                | JMP       [004213C0h]   | cygwin1.dll strcpy
+00410890|   FF 25 C0134200                | JMP       [004213C0h]
 00410896|   90                            | NOP       
 00410897|   90                            | NOP       
-00410898|   FF 25 4C134200                | JMP       [0042134Ch]   | cygwin1.dll opendir
+00410898|   FF 25 4C134200                | JMP       [0042134Ch]
 0041089E|   90                            | NOP       
 0041089F|   90                            | NOP       
-004108A0|   FF 25 C0124200                | JMP       [004212C0h]   | cygwin1.dll dirfd
+004108A0|   FF 25 C0124200                | JMP       [004212C0h]
 004108A6|   90                            | NOP       
 004108A7|   90                            | NOP       
-004108A8|   FF 25 84124200                | JMP       [00421284h]   | cygwin1.dll _fstat64
+004108A8|   FF 25 84124200                | JMP       [00421284h]
 004108AE|   90                            | NOP       
 004108AF|   90                            | NOP       
-004108B0|   FF 25 B4124200                | JMP       [004212B4h]   | cygwin1.dll closedir
+004108B0|   FF 25 B4124200                | JMP       [004212B4h]
 004108B6|   90                            | NOP       
 004108B7|   90                            | NOP       
-004108B8|   FF 25 74134200                | JMP       [00421374h]   | cygwin1.dll readdir
+004108B8|   FF 25 74134200                | JMP       [00421374h]
 004108BE|   90                            | NOP       
 004108BF|   90                            | NOP       
-004108C0|   FF 25 D8124200                | JMP       [004212D8h]   | cygwin1.dll fprintf
+004108C0|   FF 25 D8124200                | JMP       [004212D8h]
 004108C6|   90                            | NOP       
 004108C7|   90                            | NOP       
-004108C8|   FF 25 CC124200                | JMP       [004212CCh]   | cygwin1.dll exit
+004108C8|   FF 25 CC124200                | JMP       [004212CCh]
 004108CE|   90                            | NOP       
 004108CF|   90                            | NOP       
-004108D0|   FF 25 FC124200                | JMP       [004212FCh]   | cygwin1.dll isatty
+004108D0|   FF 25 FC124200                | JMP       [004212FCh]
 004108D6|   90                            | NOP       
 004108D7|   90                            | NOP       
-004108D8|   FF 25 E8124200                | JMP       [004212E8h]   | cygwin1.dll getenv
+004108D8|   FF 25 E8124200                | JMP       [004212E8h]
 004108DE|   90                            | NOP       
 004108DF|   90                            | NOP       
-004108E0|   FF 25 F8124200                | JMP       [004212F8h]   | cygwin1.dll ioctl
+004108E0|   FF 25 F8124200                | JMP       [004212F8h]
 004108E6|   90                            | NOP       
 004108E7|   90                            | NOP       
-004108E8|   FF 25 EC124200                | JMP       [004212ECh]   | cygwin1.dll getopt_long
+004108E8|   FF 25 EC124200                | JMP       [004212ECh]
 004108EE|   90                            | NOP       
 004108EF|   90                            | NOP       
-004108F0|   FF 25 48134200                | JMP       [00421348h]   | cygwin1.dll nl_langinfo
+004108F0|   FF 25 48134200                | JMP       [00421348h]
 004108F6|   90                            | NOP       
 004108F7|   90                            | NOP       
-004108F8|   FF 25 E4134200                | JMP       [004213E4h]   | cygwin1.dll tcgetpgrp
+004108F8|   FF 25 E4134200                | JMP       [004213E4h]
 004108FE|   90                            | NOP       
 004108FF|   90                            | NOP       
-00410900|   FF 25 90134200                | JMP       [00421390h]   | cygwin1.dll sigemptyset
+00410900|   FF 25 90134200                | JMP       [00421390h]
 00410906|   90                            | NOP       
 00410907|   90                            | NOP       
-00410908|   FF 25 88134200                | JMP       [00421388h]   | cygwin1.dll sigaction
+00410908|   FF 25 88134200                | JMP       [00421388h]
 0041090E|   90                            | NOP       
 0041090F|   90                            | NOP       
-00410910|   FF 25 8C134200                | JMP       [0042138Ch]   | cygwin1.dll sigaddset
+00410910|   FF 25 8C134200                | JMP       [0042138Ch]
 00410916|   90                            | NOP       
 00410917|   90                            | NOP       
-00410918|   FF 25 94134200                | JMP       [00421394h]   | cygwin1.dll sigismember
+00410918|   FF 25 94134200                | JMP       [00421394h]
 0041091E|   90                            | NOP       
 0041091F|   90                            | NOP       
-00410920|   FF 25 18134200                | JMP       [00421318h]   | cygwin1.dll malloc
+00410920|   FF 25 18134200                | JMP       [00421318h]
 00410926|   90                            | NOP       
 00410927|   90                            | NOP       
-00410928|   FF 25 30134200                | JMP       [00421330h]   | cygwin1.dll memcmp
+00410928|   FF 25 30134200                | JMP       [00421330h]
 0041092E|   90                            | NOP       
 0041092F|   90                            | NOP       
-00410930|   FF 25 08134200                | JMP       [00421308h]   | cygwin1.dll iswprint
+00410930|   FF 25 08134200                | JMP       [00421308h]
 00410936|   90                            | NOP       
 00410937|   90                            | NOP       
-00410938|   FF 25 40134200                | JMP       [00421340h]   | cygwin1.dll memset
+00410938|   FF 25 40134200                | JMP       [00421340h]
 0041093E|   90                            | NOP       
 0041093F|   90                            | NOP       
-00410940|   FF 25 68134200                | JMP       [00421368h]   | cygwin1.dll putc_unlocked
+00410940|   FF 25 68134200                | JMP       [00421368h]
 00410946|   90                            | NOP       
 00410947|   90                            | NOP       
-00410948|   FF 25 7C134200                | JMP       [0042137Ch]   | cygwin1.dll realloc
+00410948|   FF 25 7C134200                | JMP       [0042137Ch]
 0041094E|   90                            | NOP       
 0041094F|   90                            | NOP       
-00410950|   FF 25 AC124200                | JMP       [004212ACh]   | cygwin1.dll calloc
+00410950|   FF 25 AC124200                | JMP       [004212ACh]
 00410956|   90                            | NOP       
 00410957|   90                            | NOP       
-00410958|   FF 25 34134200                | JMP       [00421334h]   | cygwin1.dll memcpy
+00410958|   FF 25 34134200                | JMP       [00421334h]
 0041095E|   90                            | NOP       
 0041095F|   90                            | NOP       
-00410960|   FF 25 00134200                | JMP       [00421300h]   | cygwin1.dll iswcntrl
+00410960|   FF 25 00134200                | JMP       [00421300h]
 00410966|   90                            | NOP       
 00410967|   90                            | NOP       
-00410968|   FF 25 90124200                | JMP       [00421290h]   | cygwin1.dll _getpwuid32
+00410968|   FF 25 90124200                | JMP       [00421290h]
 0041096E|   90                            | NOP       
 0041096F|   90                            | NOP       
-00410970|   FF 25 F0124200                | JMP       [004212F0h]   | cygwin1.dll getpwnam
+00410970|   FF 25 F0124200                | JMP       [004212F0h]
 00410976|   90                            | NOP       
 00410977|   90                            | NOP       
-00410978|   FF 25 88124200                | JMP       [00421288h]   | cygwin1.dll _getgrgid32
+00410978|   FF 25 88124200                | JMP       [00421288h]
 0041097E|   90                            | NOP       
 0041097F|   90                            | NOP       
-00410980|   FF 25 8C124200                | JMP       [0042128Ch]   | cygwin1.dll _getgrnam32
+00410980|   FF 25 8C124200                | JMP       [0042128Ch]
 00410986|   90                            | NOP       
 00410987|   90                            | NOP       
-00410988|   FF 25 0C134200                | JMP       [0042130Ch]   | cygwin1.dll localeconv
+00410988|   FF 25 0C134200                | JMP       [0042130Ch]
 0041098E|   90                            | NOP       
 0041098F|   90                            | NOP       
-00410990|   FF 25 38134200                | JMP       [00421338h]   | cygwin1.dll memmove
+00410990|   FF 25 38134200                | JMP       [00421338h]
 00410996|   90                            | NOP       
 00410997|   90                            | NOP       
-00410998|   FF 25 EC134200                | JMP       [004213ECh]   | cygwin1.dll toupper
+00410998|   FF 25 EC134200                | JMP       [004213ECh]
 0041099E|   90                            | NOP       
 0041099F|   90                            | NOP       
-004109A0|   FF 25 C8134200                | JMP       [004213C8h]   | cygwin1.dll strftime
+004109A0|   FF 25 C8134200                | JMP       [004213C8h]
 004109A6|   90                            | NOP       
 004109A7|   90                            | NOP       
-004109A8|   FF 25 E8134200                | JMP       [004213E8h]   | cygwin1.dll tolower
+004109A8|   FF 25 E8134200                | JMP       [004213E8h]
 004109AE|   90                            | NOP       
 004109AF|   90                            | NOP       
-004109B0|   FF 25 44134200                | JMP       [00421344h]   | cygwin1.dll mktime
+004109B0|   FF 25 44134200                | JMP       [00421344h]
 004109B6|   90                            | NOP       
 004109B7|   90                            | NOP       
-004109B8|   FF 25 B0124200                | JMP       [004212B0h]   | cygwin1.dll clock_gettime
+004109B8|   FF 25 B0124200                | JMP       [004212B0h]
 004109BE|   90                            | NOP       
 004109BF|   90                            | NOP       
-004109C0|   FF 25 F4124200                | JMP       [004212F4h]   | cygwin1.dll gettimeofday
+004109C0|   FF 25 F4124200                | JMP       [004212F4h]
 004109C6|   90                            | NOP       
 004109C7|   90                            | NOP       
-004109C8|   FF 25 78124200                | JMP       [00421278h]   | cygwin1.dll _acl32
+004109C8|   FF 25 78124200                | JMP       [00421278h]
 004109CE|   90                            | NOP       
 004109CF|   90                            | NOP       
-004109D0|   FF 25 AC134200                | JMP       [004213ACh]   | cygwin1.dll strcasecmp
+004109D0|   FF 25 AC134200                | JMP       [004213ACh]
 004109D6|   90                            | NOP       
 004109D7|   90                            | NOP       
-004109D8|   FF 25 78134200                | JMP       [00421378h]   | cygwin1.dll readlink
+004109D8|   FF 25 78134200                | JMP       [00421378h]
 004109DE|   90                            | NOP       
 004109DF|   90                            | NOP       
-004109E0|   FF 25 F8134200                | JMP       [004213F8h]   | cygwin1.dll wcslen
+004109E0|   FF 25 F8134200                | JMP       [004213F8h]
 004109E6|   90                            | NOP       
 004109E7|   90                            | NOP       
-004109E8|   FF 25 10144200                | JMP       [00421410h]   | cygwin1.dll wmemcpy
+004109E8|   FF 25 10144200                | JMP       [00421410h]
 004109EE|   90                            | NOP       
 004109EF|   90                            | NOP       
-004109F0|   FF 25 F4134200                | JMP       [004213F4h]   | cygwin1.dll wcscat
+004109F0|   FF 25 F4134200                | JMP       [004213F4h]
 004109F6|   90                            | NOP       
 004109F7|   90                            | NOP       
-004109F8|   FF 25 F0134200                | JMP       [004213F0h]   | cygwin1.dll towlower
+004109F8|   FF 25 F0134200                | JMP       [004213F0h]
 004109FE|   90                            | NOP       
 004109FF|   90                            | NOP       
-00410A00|   FF 25 0C144200                | JMP       [0042140Ch]   | cygwin1.dll wmemchr
+00410A00|   FF 25 0C144200                | JMP       [0042140Ch]
 00410A06|   90                            | NOP       
 00410A07|   90                            | NOP       
-00410A08|   FF 25 04144200                | JMP       [00421404h]   | cygwin1.dll wctype
+00410A08|   FF 25 04144200                | JMP       [00421404h]
 00410A0E|   90                            | NOP       
 00410A0F|   90                            | NOP       
-00410A10|   FF 25 04134200                | JMP       [00421304h]   | cygwin1.dll iswctype
+00410A10|   FF 25 04134200                | JMP       [00421304h]
 00410A16|   90                            | NOP       
 00410A17|   90                            | NOP       
-00410A18|   FF 25 B0134200                | JMP       [004213B0h]   | cygwin1.dll strcat
+00410A18|   FF 25 B0134200                | JMP       [004213B0h]
 00410A1E|   90                            | NOP       
 00410A1F|   90                            | NOP       
-00410A20|   FF 25 2C134200                | JMP       [0042132Ch]   | cygwin1.dll memchr
+00410A20|   FF 25 2C134200                | JMP       [0042132Ch]
 00410A26|   90                            | NOP       
 00410A27|   90                            | NOP       
-00410A28|   FF 25 A8124200                | JMP       [004212A8h]   | cygwin1.dll btowc
+00410A28|   FF 25 A8124200                | JMP       [004212A8h]
 00410A2E|   90                            | NOP       
 00410A2F|   90                            | NOP       
-00410A30|   FF 25 24134200                | JMP       [00421324h]   | cygwin1.dll mbsrtowcs
+00410A30|   FF 25 24134200                | JMP       [00421324h]
 00410A36|   90                            | NOP       
 00410A37|   90                            | NOP       
-00410A38|   FF 25 80124200                | JMP       [00421280h]   | cygwin1.dll _exit
+00410A38|   FF 25 80124200                | JMP       [00421280h]
 00410A3E|   90                            | NOP       
 00410A3F|   90                            | NOP       
-00410A40|   FF 25 DC134200                | JMP       [004213DCh]   | cygwin1.dll strtoul
+00410A40|   FF 25 DC134200                | JMP       [004213DCh]
 00410A46|   90                            | NOP       
 00410A47|   90                            | NOP       
-00410A48|   FF 25 84134200                | JMP       [00421384h]   | cygwin1.dll setlocale
+00410A48|   FF 25 84134200                | JMP       [00421384h]
 00410A4E|   90                            | NOP       
 00410A4F|   90                            | NOP       
-00410A50|   FF 25 C4134200                | JMP       [004213C4h]   | cygwin1.dll strdup
+00410A50|   FF 25 C4134200                | JMP       [004213C4h]
 00410A56|   90                            | NOP       
 00410A57|   90                            | NOP       
-00410A58|   FF 25 28134200                | JMP       [00421328h]   | cygwin1.dll mbstowcs
+00410A58|   FF 25 28134200                | JMP       [00421328h]
 00410A5E|   90                            | NOP       
 00410A5F|   90                            | NOP       
-00410A60|   FF 25 00144200                | JMP       [00421400h]   | cygwin1.dll wcswidth
+00410A60|   FF 25 00144200                | JMP       [00421400h]
 00410A66|   90                            | NOP       
 00410A67|   90                            | NOP       
-00410A68|   FF 25 FC134200                | JMP       [004213FCh]   | cygwin1.dll wcstombs
+00410A68|   FF 25 FC134200                | JMP       [004213FCh]
 00410A6E|   90                            | NOP       
 00410A6F|   90                            | NOP       
-00410A70|   FF 25 E0134200                | JMP       [004213E0h]   | cygwin1.dll strtoumax
+00410A70|   FF 25 E0134200                | JMP       [004213E0h]
 00410A76|   90                            | NOP       
 00410A77|   90                            | NOP       
-00410A78|   FF 25 D0124200                | JMP       [004212D0h]   | cygwin1.dll fclose
+00410A78|   FF 25 D0124200                | JMP       [004212D0h]
 00410A7E|   90                            | NOP       
 00410A7F|   90                            | NOP       
 00410A80|   55                            | PUSH      EBP
@@ -20338,7 +20338,7 @@
 00410A91|   E8 2A040000                   | CALL      00410EC0h
 00410A96|   85 DB                         | TEST      EBX, EBX
 00410A98|   0F 84 C8010000                | JE        00410C66h
-00410A9E|   8B 15 94124200                | MOV       EDX, [00421294h]   | cygwin1.dll _impure_ptr
+00410A9E|   8B 15 94124200                | MOV       EDX, [00421294h]
 00410AA4|   85 C0                         | TEST      EAX, EAX
 00410AA6|   8B 4D 08                      | MOV       ECX, [EBP+08h]
 00410AA9|   C7 43 04 A8000000             | MOV       [EBX+04h], 000000A8h
@@ -20429,7 +20429,7 @@
 00410C63|   C2 0800                       | RETN      0008h
 00410C66|   8B 88 A4000000                | MOV       ECX, [EAX+000000A4h]
 00410C6C|   85 C0                         | TEST      EAX, EAX
-00410C6E|   8B 15 94124200                | MOV       EDX, [00421294h]   | cygwin1.dll _impure_ptr
+00410C6E|   8B 15 94124200                | MOV       EDX, [00421294h]
 00410C74|   C7 40 04 A8000000             | MOV       [EAX+04h], 000000A8h
 00410C7B|   C7 40 08 EF030000             | MOV       [EAX+08h], 000003EFh
 00410C82|   C7 40 0C 20000000             | MOV       [EAX+0Ch], 00000020h
@@ -20580,10 +20580,10 @@
 00410EBD|   90                            | NOP       
 00410EBE|   90                            | NOP       
 00410EBF|   90                            | NOP       
-00410EC0|   FF 25 BC124200                | JMP       [004212BCh]   | cygwin1.dll cygwin_internal
+00410EC0|   FF 25 BC124200                | JMP       [004212BCh]
 00410EC6|   90                            | NOP       
 00410EC7|   90                            | NOP       
-00410EC8|   FF 25 58134200                | JMP       [00421358h]   | cygwin1.dll posix_memalign
+00410EC8|   FF 25 58134200                | JMP       [00421358h]
 00410ECE|   90                            | NOP       
 00410ECF|   90                            | NOP       
 00410ED0|   F3:                           | PREFIX F3:
@@ -20612,7 +20612,7 @@
 00410EED|   90                            | NOP       
 00410EEE|   90                            | NOP       
 00410EEF|   90                            | NOP       
-00410EF0|   FF 25 B8124200                | JMP       [004212B8h]   | cygwin1.dll cygwin_detach_dll
+00410EF0|   FF 25 B8124200                | JMP       [004212B8h]
 00410EF6|   90                            | NOP       
 00410EF7|   90                            | NOP       
 00410EF8|   66:                           | PREFIX 66:
@@ -20651,10 +20651,10 @@
 00410F3D|   90                            | NOP       
 00410F3E|   90                            | NOP       
 00410F3F|   90                            | NOP       
-00410F40|   FF 25 C4124200                | JMP       [004212C4h]   | cygwin1.dll dll_dllcrt0
+00410F40|   FF 25 C4124200                | JMP       [004212C4h]
 00410F46|   90                            | NOP       
 00410F47|   90                            | NOP       
-00410F48|   FF 25 4C144200                | JMP       [0042144Ch]   | KERNEL32.dll GetModuleHandleA
+00410F48|   FF 25 4C144200                | JMP       [0042144Ch]
 00410F4E|   90                            | NOP       
 00410F4F|   90                            | NOP       
 00410F50|   83 EC 1C                      | SUB       ESP, 1Ch
@@ -20792,7 +20792,7 @@
 004111EB|   0F 85 D0110000                | JNE       004123C1h
 004111F1|   8B 44 24 40                   | MOV       EAX, [ESP+40h]
 004111F5|   A3 D4054200                   | MOV       [004205D4h], EAX
-004111FA|   A1 50134200                   | MOV       EAX, [00421350h]   | cygwin1.dll optarg
+004111FA|   A1 50134200                   | MOV       EAX, [00421350h]
 004111FF|   31 FF                         | XOR       EDI, EDI
 00411201|   C6 44 24 24 00                | MOV       [ESP+24h], 00h
 00411206|   8D 5C 24 3C                   | LEA       EBX, [ESP+3Ch]
@@ -20875,7 +20875,7 @@
 00411374|   0F 86 820E0000                | JBE       004121FCh
 0041137A|   83 3D 30064200 00             | CMP       [00420630h], 00h
 00411381|   0F 84 A6090000                | JE        00411D2Dh
-00411387|   A1 54134200                   | MOV       EAX, [00421354h]   | cygwin1.dll optind
+00411387|   A1 54134200                   | MOV       EAX, [00421354h]
 0041138C|   80 3D 05064200 00             | CMP       [00420605h], 00h
 00411393|   8B 00                         | MOV       EAX, [EAX]
 00411395|   89 44 24 28                   | MOV       [ESP+28h], EAX
@@ -21048,7 +21048,7 @@
 004116D4|   BF 01000000                   | MOV       EDI, 00000001h
 004116D9|   E9 38FBFFFF                   | JMP       00411216h
 004116DE|   8B 44 24 2C                   | MOV       EAX, [ESP+2Ch]
-004116E2|   8B 35 50134200                | MOV       ESI, [00421350h]   | cygwin1.dll optarg
+004116E2|   8B 35 50134200                | MOV       ESI, [00421350h]
 004116E8|   C7 44 24 10 00000000          | MOV       [ESP+10h], 00000000h
 004116F0|   C7 44 24 08 00000000          | MOV       [ESP+08h], 00000000h
 004116F8|   89 44 24 0C                   | MOV       [ESP+0Ch], EAX
@@ -21073,7 +21073,7 @@
 00411754|   C7 44 24 0C 887D4100          | MOV       [ESP+0Ch], 00417D88h
 0041175C|   C7 44 24 08 BC7D4100          | MOV       [ESP+08h], 00417DBCh
 00411764|   89 44 24 14                   | MOV       [ESP+14h], EAX
-00411768|   A1 50134200                   | MOV       EAX, [00421350h]   | cygwin1.dll optarg
+00411768|   A1 50134200                   | MOV       EAX, [00421350h]
 0041176D|   8B 00                         | MOV       EAX, [EAX]
 0041176F|   C7 04 24 12744100             | MOV       [ESP], 00417412h
 00411776|   89 44 24 04                   | MOV       [ESP+04h], EAX
@@ -21087,7 +21087,7 @@
 004117A2|   C7 44 24 0C D47D4100          | MOV       [ESP+0Ch], 00417DD4h
 004117AA|   C7 44 24 08 047E4100          | MOV       [ESP+08h], 00417E04h
 004117B2|   89 44 24 14                   | MOV       [ESP+14h], EAX
-004117B6|   A1 50134200                   | MOV       EAX, [00421350h]   | cygwin1.dll optarg
+004117B6|   A1 50134200                   | MOV       EAX, [00421350h]
 004117BB|   8B 00                         | MOV       EAX, [EAX]
 004117BD|   C7 04 24 0B744100             | MOV       [ESP], 0041740Bh
 004117C4|   89 44 24 04                   | MOV       [ESP+04h], EAX
@@ -21109,7 +21109,7 @@
 00411838|   C7 44 24 0C E0994100          | MOV       [ESP+0Ch], 004199E0h
 00411840|   C7 44 24 08 409A4100          | MOV       [ESP+08h], 00419A40h
 00411848|   89 44 24 14                   | MOV       [ESP+14h], EAX
-0041184C|   A1 50134200                   | MOV       EAX, [00421350h]   | cygwin1.dll optarg
+0041184C|   A1 50134200                   | MOV       EAX, [00421350h]
 00411851|   8B 00                         | MOV       EAX, [EAX]
 00411853|   C7 04 24 3C744100             | MOV       [ESP], 0041743Ch
 0041185A|   89 44 24 04                   | MOV       [ESP+04h], EAX
@@ -21124,7 +21124,7 @@
 0041188C|   C7 44 24 0C 44844100          | MOV       [ESP+0Ch], 00418444h
 00411894|   C7 44 24 08 5C844100          | MOV       [ESP+08h], 0041845Ch
 0041189C|   89 44 24 14                   | MOV       [ESP+14h], EAX
-004118A0|   A1 50134200                   | MOV       EAX, [00421350h]   | cygwin1.dll optarg
+004118A0|   A1 50134200                   | MOV       EAX, [00421350h]
 004118A5|   8B 00                         | MOV       EAX, [EAX]
 004118A7|   C7 04 24 2A744100             | MOV       [ESP], 0041742Ah
 004118AE|   89 44 24 04                   | MOV       [ESP+04h], EAX
@@ -21134,7 +21134,7 @@
 004118C3|   E9 4EF9FFFF                   | JMP       00411216h
 004118C8|   C7 04 24 08000000             | MOV       [ESP], 00000008h
 004118CF|   E8 6C66FFFF                   | CALL      00407F40h
-004118D4|   8B 15 50134200                | MOV       EDX, [00421350h]   | cygwin1.dll optarg
+004118D4|   8B 15 50134200                | MOV       EDX, [00421350h]
 004118DA|   8B 12                         | MOV       EDX, [EDX]
 004118DC|   89 10                         | MOV       [EAX], EDX
 004118DE|   8B 15 E4054200                | MOV       EDX, [004205E4h]
@@ -21151,7 +21151,7 @@
 00411921|   C7 44 24 0C 1C7E4100          | MOV       [ESP+0Ch], 00417E1Ch
 00411929|   C7 44 24 08 807E4100          | MOV       [ESP+08h], 00417E80h
 00411931|   89 44 24 14                   | MOV       [ESP+14h], EAX
-00411935|   A1 50134200                   | MOV       EAX, [00421350h]   | cygwin1.dll optarg
+00411935|   A1 50134200                   | MOV       EAX, [00421350h]
 0041193A|   8B 00                         | MOV       EAX, [EAX]
 0041193C|   C7 04 24 19744100             | MOV       [ESP], 00417419h
 00411943|   89 44 24 04                   | MOV       [ESP+04h], EAX
@@ -21163,7 +21163,7 @@
 00411967|   E9 AAF8FFFF                   | JMP       00411216h
 0041196C|   C7 05 F4054200 04000000       | MOV       [004205F4h], 00000004h
 00411976|   E9 9BF8FFFF                   | JMP       00411216h
-0041197B|   A1 50134200                   | MOV       EAX, [00421350h]   | cygwin1.dll optarg
+0041197B|   A1 50134200                   | MOV       EAX, [00421350h]
 00411980|   8B 00                         | MOV       EAX, [EAX]
 00411982|   85 C0                         | TEST      EAX, EAX
 00411984|   0F 84 CE0A0000                | JE        00412458h
@@ -21182,7 +21182,7 @@
 004119CF|   0F 84 6F0A0000                | JE        00412444h
 004119D5|   C6 05 05064200 00             | MOV       [00420605h], 00h
 004119DC|   E9 35F8FFFF                   | JMP       00411216h
-004119E1|   A1 50134200                   | MOV       EAX, [00421350h]   | cygwin1.dll optarg
+004119E1|   A1 50134200                   | MOV       EAX, [00421350h]
 004119E6|   C7 44 24 08 18064200          | MOV       [ESP+08h], 00420618h
 004119EE|   C7 44 24 04 20064200          | MOV       [ESP+04h], 00420620h
 004119F6|   8B 00                         | MOV       EAX, [EAX]
@@ -21216,7 +21216,7 @@
 00411A99|   C7 05 30064200 03000000       | MOV       [00420630h], 00000003h
 00411AA3|   E9 6EF7FFFF                   | JMP       00411216h
 00411AA8|   8B 44 24 2C                   | MOV       EAX, [ESP+2Ch]
-00411AAC|   8B 35 50134200                | MOV       ESI, [00421350h]   | cygwin1.dll optarg
+00411AAC|   8B 35 50134200                | MOV       ESI, [00421350h]
 00411AB2|   C7 44 24 10 00000000          | MOV       [ESP+10h], 00000000h
 00411ABA|   C7 44 24 08 00000000          | MOV       [ESP+08h], 00000000h
 00411AC2|   89 44 24 0C                   | MOV       [ESP+0Ch], EAX
@@ -21280,7 +21280,7 @@
 00411BE8|   E9 29F6FFFF                   | JMP       00411216h
 00411BED|   C7 05 F4054200 05000000       | MOV       [004205F4h], 00000005h
 00411BF7|   E9 1AF6FFFF                   | JMP       00411216h
-00411BFC|   A1 50134200                   | MOV       EAX, [00421350h]   | cygwin1.dll optarg
+00411BFC|   A1 50134200                   | MOV       EAX, [00421350h]
 00411C01|   8B 30                         | MOV       ESI, [EAX]
 00411C03|   C7 04 24 08000000             | MOV       [ESP], 00000008h
 00411C0A|   E8 3163FFFF                   | CALL      00407F40h
@@ -22094,7 +22094,7 @@
 00412AC4|   89 04 24                      | MOV       [ESP], EAX
 00412AC7|   E8 F4DDFFFF                   | CALL      004108C0h
 00412ACC|   EB D5                         | JMP       00412AA3h
-00412ACE|   8B 3D 50134200                | MOV       EDI, [00421350h]   | cygwin1.dll optarg
+00412ACE|   8B 3D 50134200                | MOV       EDI, [00421350h]
 00412AD4|   8B 17                         | MOV       EDX, [EDI]
 00412AD6|   C7 44 24 0C 60804100          | MOV       [ESP+0Ch], 00418060h
 00412ADE|   C7 44 24 08 00000000          | MOV       [ESP+08h], 00000000h
