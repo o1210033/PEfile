@@ -38,7 +38,7 @@ int main(void){
 	//strcpy(szFile, Get_filename(szFile));
 	strcpy(szFile, "wsample01a.exe");
 	//strcpy(szFile, "HelloWorld(MBCS).exe");
-	//strcpy(szFile, "HelloWorld(UNICODE).exe");
+	//strcpy(szFile, "HelloWorld(Unicode).exe");
 	//strcpy(szFile, "ls.exe");
 	//strcpy(szFile, "memo(32bit).exe");
 	//strcpy(szFile, "calculator(32bit).exe");
