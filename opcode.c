@@ -6,463 +6,463 @@ void Set_opc1(t_disasm *da){
 	switch (da->opc[0])
 	{
 	case 0x03:
-		strcpy(da->asm, "ADD");
+		strcpy(da->instruction, "ADD");
 		da->operand[0] = R32; da->operand[1] = RM32; da->operand[2] = 0;
 		break;
 	case 0x05:
-		strcpy(da->asm, "ADD");
+		strcpy(da->instruction, "ADD");
 		da->operand[0] = EAX; da->operand[1] = IMM32; da->operand[2] = 0;
 		break;
 	case 0x0B:
-		strcpy(da->asm, "OR");
+		strcpy(da->instruction, "OR");
 		da->operand[0] = R32; da->operand[1] = RM32; da->operand[2] = 0;
 		break;
 	case 0x0D:
-		strcpy(da->asm, "OR");
+		strcpy(da->instruction, "OR");
 		da->operand[0] = EAX; da->operand[1] = IMM32; da->operand[2] = 0;
 		break;
 	case 0x1B:
-		strcpy(da->asm, "SBB");
+		strcpy(da->instruction, "SBB");
 		da->operand[0] = R32; da->operand[1] = RM32; da->operand[2] = 0;
 		break;
 	case 0x25:
-		strcpy(da->asm, "AND");
+		strcpy(da->instruction, "AND");
 		da->operand[0] = EAX; da->operand[1] = IMM32; da->operand[2] = 0;
 		break;
 	case 0x2B:
-		strcpy(da->asm, "SUB");
+		strcpy(da->instruction, "SUB");
 		da->operand[0] = R32; da->operand[1] = RM32; da->operand[2] = 0;
 		break;
 	case 0x2D:
-		strcpy(da->asm, "SUB");
+		strcpy(da->instruction, "SUB");
 		da->operand[0] = EAX; da->operand[1] = IMM32; da->operand[2] = 0;
 		break;
 	case 0x31:
-		strcpy(da->asm, "XOR");
+		strcpy(da->instruction, "XOR");
 		da->operand[0] = RM32; da->operand[1] = R32; da->operand[2] = 0;
 		break;
 	case 0x32:
-		strcpy(da->asm, "XOR");
+		strcpy(da->instruction, "XOR");
 		da->operand[0] = R8; da->operand[1] = RM8; da->operand[2] = 0;
 		break;
 	case 0x33:
-		strcpy(da->asm, "XOR");
+		strcpy(da->instruction, "XOR");
 		da->operand[0] = R32; da->operand[1] = RM32; da->operand[2] = 0;
 		break;
 	case 0x39:
-		strcpy(da->asm, "CMP");
+		strcpy(da->instruction, "CMP");
 		da->operand[0] = RM32; da->operand[1] = R32; da->operand[2] = 0;
 		break;
 	case 0x3B:
-		strcpy(da->asm, "CMP");
+		strcpy(da->instruction, "CMP");
 		da->operand[0] = R32; da->operand[1] = RM32; da->operand[2] = 0;
 		break;
 	case 0x3D:
-		strcpy(da->asm, "CMP");
+		strcpy(da->instruction, "CMP");
 		da->operand[0] = EAX; da->operand[1] = IMM32; da->operand[2] = 0;
 		break;
 	case 0x40:
-		strcpy(da->asm, "INC");
+		strcpy(da->instruction, "INC");
 		da->operand[0] = R32; da->operand[1] = 0; da->operand[2] = 0;
 		break;
 	case 0x41:
-		strcpy(da->asm, "INC");
+		strcpy(da->instruction, "INC");
 		da->operand[0] = R32; da->operand[1] = 0; da->operand[2] = 0;
 		break;
 	case 0x42:
-		strcpy(da->asm, "INC");
+		strcpy(da->instruction, "INC");
 		da->operand[0] = R32; da->operand[1] = 0; da->operand[2] = 0;
 		break;
 	case 0x43:
-		strcpy(da->asm, "INC");
+		strcpy(da->instruction, "INC");
 		da->operand[0] = R32; da->operand[1] = 0; da->operand[2] = 0;
 		break;
 	case 0x44:
-		strcpy(da->asm, "INC");
+		strcpy(da->instruction, "INC");
 		da->operand[0] = R32; da->operand[1] = 0; da->operand[2] = 0;
 		break;
 	case 0x45:
-		strcpy(da->asm, "INC");
+		strcpy(da->instruction, "INC");
 		da->operand[0] = R32; da->operand[1] = 0; da->operand[2] = 0;
 		break;
 	case 0x46:
-		strcpy(da->asm, "INC");
+		strcpy(da->instruction, "INC");
 		da->operand[0] = R32; da->operand[1] = 0; da->operand[2] = 0;
 		break;
 	case 0x47:
-		strcpy(da->asm, "INC");
+		strcpy(da->instruction, "INC");
 		da->operand[0] = R32; da->operand[1] = 0; da->operand[2] = 0;
 		break;
 	case 0x48:
-		strcpy(da->asm, "DEC");
+		strcpy(da->instruction, "DEC");
 		da->operand[0] = R32; da->operand[1] = 0; da->operand[2] = 0;
 		break;
 	case 0x49:
-		strcpy(da->asm, "DEC");
+		strcpy(da->instruction, "DEC");
 		da->operand[0] = R32; da->operand[1] = 0; da->operand[2] = 0;
 		break;
 	case 0x4A:
-		strcpy(da->asm, "DEC");
+		strcpy(da->instruction, "DEC");
 		da->operand[0] = R32; da->operand[1] = 0; da->operand[2] = 0;
 		break;
 	case 0x4B:
-		strcpy(da->asm, "DEC");
+		strcpy(da->instruction, "DEC");
 		da->operand[0] = R32; da->operand[1] = 0; da->operand[2] = 0;
 		break;
 	case 0x4C:
-		strcpy(da->asm, "DEC");
+		strcpy(da->instruction, "DEC");
 		da->operand[0] = R32; da->operand[1] = 0; da->operand[2] = 0;
 		break;
 	case 0x4D:
-		strcpy(da->asm, "DEC");
+		strcpy(da->instruction, "DEC");
 		da->operand[0] = R32; da->operand[1] = 0; da->operand[2] = 0;
 		break;
 	case 0x4E:
-		strcpy(da->asm, "DEC");
+		strcpy(da->instruction, "DEC");
 		da->operand[0] = R32; da->operand[1] = 0; da->operand[2] = 0;
 		break;
 	case 0x4F:
-		strcpy(da->asm, "DEC");
+		strcpy(da->instruction, "DEC");
 		da->operand[0] = R32; da->operand[1] = 0; da->operand[2] = 0;
 		break;
 	case 0x50:
-		strcpy(da->asm, "PUSH");
+		strcpy(da->instruction, "PUSH");
 		da->operand[0] = R32; da->operand[1] = 0; da->operand[2] = 0;
 		break;
 	case 0x51:
-		strcpy(da->asm, "PUSH");
+		strcpy(da->instruction, "PUSH");
 		da->operand[0] = R32; da->operand[1] = 0; da->operand[2] = 0;
 		break;
 	case 0x52:
-		strcpy(da->asm, "PUSH");
+		strcpy(da->instruction, "PUSH");
 		da->operand[0] = R32; da->operand[1] = 0; da->operand[2] = 0;
 		break;
 	case 0x53:
-		strcpy(da->asm, "PUSH");
+		strcpy(da->instruction, "PUSH");
 		da->operand[0] = R32; da->operand[1] = 0; da->operand[2] = 0;
 		break;
 	case 0x54:
-		strcpy(da->asm, "PUSH");
+		strcpy(da->instruction, "PUSH");
 		da->operand[0] = R32; da->operand[1] = 0; da->operand[2] = 0;
 		break;
 	case 0x55:
-		strcpy(da->asm, "PUSH");
+		strcpy(da->instruction, "PUSH");
 		da->operand[0] = R32; da->operand[1] = 0; da->operand[2] = 0;
 		break;
 	case 0x56:
-		strcpy(da->asm, "PUSH");
+		strcpy(da->instruction, "PUSH");
 		da->operand[0] = R32; da->operand[1] = 0; da->operand[2] = 0;
 		break;
 	case 0x57:
-		strcpy(da->asm, "PUSH");
+		strcpy(da->instruction, "PUSH");
 		da->operand[0] = R32; da->operand[1] = 0; da->operand[2] = 0;
 		break;
 	case 0x58:
-		strcpy(da->asm, "POP");
+		strcpy(da->instruction, "POP");
 		da->operand[0] = R32; da->operand[1] = 0; da->operand[2] = 0;
 		break;
 	case 0x59:
-		strcpy(da->asm, "POP");
+		strcpy(da->instruction, "POP");
 		da->operand[0] = R32; da->operand[1] = 0; da->operand[2] = 0;
 		break;
 	case 0x5A:
-		strcpy(da->asm, "POP");
+		strcpy(da->instruction, "POP");
 		da->operand[0] = R32; da->operand[1] = 0; da->operand[2] = 0;
 		break;
 	case 0x5B:
-		strcpy(da->asm, "POP");
+		strcpy(da->instruction, "POP");
 		da->operand[0] = R32; da->operand[1] = 0; da->operand[2] = 0;
 		break;
 	case 0x5C:
-		strcpy(da->asm, "POP");
+		strcpy(da->instruction, "POP");
 		da->operand[0] = R32; da->operand[1] = 0; da->operand[2] = 0;
 		break;
 	case 0x5D:
-		strcpy(da->asm, "POP");
+		strcpy(da->instruction, "POP");
 		da->operand[0] = R32; da->operand[1] = 0; da->operand[2] = 0;
 		break;
 	case 0x5E:
-		strcpy(da->asm, "POP");
+		strcpy(da->instruction, "POP");
 		da->operand[0] = R32; da->operand[1] = 0; da->operand[2] = 0;
 		break;
 	case 0x5F:
-		strcpy(da->asm, "POP");
+		strcpy(da->instruction, "POP");
 		da->operand[0] = R32; da->operand[1] = 0; da->operand[2] = 0;
 		break;
 	case 0x68:
-		strcpy(da->asm, "PUSH");
+		strcpy(da->instruction, "PUSH");
 		da->operand[0] = IMM32; da->operand[1] = 0; da->operand[2] = 0;
 		break;
 	case 0x69:
-		strcpy(da->asm, "IMUL");
+		strcpy(da->instruction, "IMUL");
 		da->operand[0] = R32; da->operand[1] = RM32; da->operand[2] = IMM32;
 		break;
 	case 0x6A:
-		strcpy(da->asm, "PUSH");
+		strcpy(da->instruction, "PUSH");
 		da->operand[0] = IMM8; da->operand[1] = 0; da->operand[2] = 0;
 		break;
 	case 0x6B:
-		strcpy(da->asm, "IMUL");
+		strcpy(da->instruction, "IMUL");
 		da->operand[0] = R32; da->operand[1] = RM32; da->operand[2] = IMM8;
 		break;
 	case 0x72:
-		strcpy(da->asm, "JB");
+		strcpy(da->instruction, "JB");
 		da->operand[0] = REL8; da->operand[1] = 0; da->operand[2] = 0;
 		break;
 	case 0x73:
-		strcpy(da->asm, "JNB");
+		strcpy(da->instruction, "JNB");
 		da->operand[0] = REL8; da->operand[1] = 0; da->operand[2] = 0;
 		break;
 	case 0x74:
-		strcpy(da->asm, "JE");
+		strcpy(da->instruction, "JE");
 		da->operand[0] = REL8; da->operand[1] = 0; da->operand[2] = 0;
 		break;
 	case 0x75:
-		strcpy(da->asm, "JNZ");
+		strcpy(da->instruction, "JNZ");
 		da->operand[0] = REL8; da->operand[1] = 0; da->operand[2] = 0;
 		break;
 	case 0x76:
-		strcpy(da->asm, "JBE");
+		strcpy(da->instruction, "JBE");
 		da->operand[0] = REL8; da->operand[1] = 0; da->operand[2] = 0;
 		break;
 	case 0x77:
-		strcpy(da->asm, "JA");
+		strcpy(da->instruction, "JA");
 		da->operand[0] = REL8; da->operand[1] = 0; da->operand[2] = 0;
 		break;
 	case 0x79:
-		strcpy(da->asm, "JNS");
+		strcpy(da->instruction, "JNS");
 		da->operand[0] = REL8; da->operand[1] = 0; da->operand[2] = 0;
 		break;
 	case 0x7C:
-		strcpy(da->asm, "JL");
+		strcpy(da->instruction, "JL");
 		da->operand[0] = REL8; da->operand[1] = 0; da->operand[2] = 0;
 		break;
 	case 0x7D:
-		strcpy(da->asm, "JGE");
+		strcpy(da->instruction, "JGE");
 		da->operand[0] = REL8; da->operand[1] = 0; da->operand[2] = 0;
 		break;
 	case 0x7E:
-		strcpy(da->asm, "JLE");
+		strcpy(da->instruction, "JLE");
 		da->operand[0] = REL8; da->operand[1] = 0; da->operand[2] = 0;
 		break;
 	case 0x7F:
-		strcpy(da->asm, "JG");
+		strcpy(da->instruction, "JG");
 		da->operand[0] = REL8; da->operand[1] = 0; da->operand[2] = 0;
 		break;
 	case 0x80:
-		strcpy(da->asm, "ModRM");
+		strcpy(da->instruction, "ModRM");
 		da->operand[0] = RM8; da->operand[1] = IMM8; da->operand[2] = 0;
 		break;
 	case 0x81:
-		strcpy(da->asm, "ModRM");
+		strcpy(da->instruction, "ModRM");
 		da->operand[0] = RM32; da->operand[1] = IMM32; da->operand[2] = 0;
 		break;
 	case 0x82:
-		strcpy(da->asm, "ModRM");
+		strcpy(da->instruction, "ModRM");
 		da->operand[0] = RM8; da->operand[1] = IMM8; da->operand[2] = 0;
 		break;
 	case 0x83:
-		strcpy(da->asm, "ModRM");
+		strcpy(da->instruction, "ModRM");
 		da->operand[0] = RM32; da->operand[1] = IMM8; da->operand[2] = 0;
 		break;
 	case 0x84:
-		strcpy(da->asm, "TEST");
+		strcpy(da->instruction, "TEST");
 		da->operand[0] = RM8; da->operand[1] = R8; da->operand[2] = 0;
 		break;
 	case 0x85:
-		strcpy(da->asm, "TEST");
+		strcpy(da->instruction, "TEST");
 		da->operand[0] = RM32; da->operand[1] = R32; da->operand[2] = 0;
 		break;
 	case 0x87:
-		strcpy(da->asm, "XCHG");
+		strcpy(da->instruction, "XCHG");
 		da->operand[0] = RM32; da->operand[1] = R32; da->operand[2] = 0;
 		break;
 	case 0x88:
-		strcpy(da->asm, "MOV");
+		strcpy(da->instruction, "MOV");
 		da->operand[0] = RM8; da->operand[1] = R8; da->operand[2] = 0;
 		break;
 	case 0x89:
-		strcpy(da->asm, "MOV");
+		strcpy(da->instruction, "MOV");
 		da->operand[0] = RM32; da->operand[1] = R32; da->operand[2] = 0;
 		break;
 	case 0x8A:
-		strcpy(da->asm, "MOV");
+		strcpy(da->instruction, "MOV");
 		da->operand[0] = R8; da->operand[1] = RM8; da->operand[2] = 0;
 		break;
 	case 0x8B:
-		strcpy(da->asm, "MOV");
+		strcpy(da->instruction, "MOV");
 		da->operand[0] = R32; da->operand[1] = RM32; da->operand[2] = 0;
 		break;
 	case 0x8C:
-		strcpy(da->asm, "MOV");
+		strcpy(da->instruction, "MOV");
 		da->operand[0] = RM32; da->operand[1] = SREG; da->operand[2] = 0;
 		break;
 	case 0x8D:
-		strcpy(da->asm, "LEA");
+		strcpy(da->instruction, "LEA");
 		da->operand[0] = R32; da->operand[1] = RM32; da->operand[2] = 0;
 		break;
 	case 0x8F:
-		strcpy(da->asm, "POP");
+		strcpy(da->instruction, "POP");
 		da->operand[0] = RM32; da->operand[1] = 0; da->operand[2] = 0;
 		break;
 	case 0x90:
-		strcpy(da->asm, "NOP");
+		strcpy(da->instruction, "NOP");
 		da->operand[0] = 0; da->operand[1] = 0; da->operand[2] = 0;
 		break;
 	case 0x9C:
-		strcpy(da->asm, "PUSHFD");
+		strcpy(da->instruction, "PUSHFD");
 		da->operand[0] = 0; da->operand[1] = 0; da->operand[2] = 0;
 		break;
 	case 0xA1:
-		strcpy(da->asm, "MOV");
+		strcpy(da->instruction, "MOV");
 		da->operand[0] = EAX; da->operand[1] = MOFFS32; da->operand[2] = 0;
 		break;
 	case 0xA3:
-		strcpy(da->asm, "MOV");
+		strcpy(da->instruction, "MOV");
 		da->operand[0] = MOFFS32; da->operand[1] = EAX; da->operand[2] = 0;
 		break;
 	case 0xA4:
-		strcpy(da->asm, "MOVSB");
+		strcpy(da->instruction, "MOVSB");
 		da->operand[0] = 0; da->operand[1] = 0; da->operand[2] = 0;
 		break;
 	case 0xA5:
-		strcpy(da->asm, "MOVSD");
+		strcpy(da->instruction, "MOVSD");
 		da->operand[0] = 0; da->operand[1] = 0; da->operand[2] = 0;
 		break;
 	case 0xAA:
-		strcpy(da->asm, "STOSB");
+		strcpy(da->instruction, "STOSB");
 		da->operand[0] = 0; da->operand[1] = 0; da->operand[2] = 0;
 		break;
 	case 0xAB:
-		strcpy(da->asm, "STOSD");
+		strcpy(da->instruction, "STOSD");
 		da->operand[0] = 0; da->operand[1] = 0; da->operand[2] = 0;
 		break;
 	case 0xB0:
-		strcpy(da->asm, "MOV");
+		strcpy(da->instruction, "MOV");
 		da->operand[0] = R8; da->operand[1] = IMM8; da->operand[2] = 0;
 		break;
 	case 0xB1:
-		strcpy(da->asm, "MOV");
+		strcpy(da->instruction, "MOV");
 		da->operand[0] = R8; da->operand[1] = IMM8; da->operand[2] = 0;
 		break;
 	case 0xB2:
-		strcpy(da->asm, "MOV");
+		strcpy(da->instruction, "MOV");
 		da->operand[0] = R8; da->operand[1] = IMM8; da->operand[2] = 0;
 		break;
 	case 0xB3:
-		strcpy(da->asm, "MOV");
+		strcpy(da->instruction, "MOV");
 		da->operand[0] = R8; da->operand[1] = IMM8; da->operand[2] = 0;
 		break;
 	case 0xB4:
-		strcpy(da->asm, "MOV");
+		strcpy(da->instruction, "MOV");
 		da->operand[0] = R8; da->operand[1] = IMM8; da->operand[2] = 0;
 		break;
 	case 0xB5:
-		strcpy(da->asm, "MOV");
+		strcpy(da->instruction, "MOV");
 		da->operand[0] = R8; da->operand[1] = IMM8; da->operand[2] = 0;
 		break;
 	case 0xB6:
-		strcpy(da->asm, "MOV");
+		strcpy(da->instruction, "MOV");
 		da->operand[0] = R8; da->operand[1] = IMM8; da->operand[2] = 0;
 		break;
 	case 0xB7:
-		strcpy(da->asm, "MOV");
+		strcpy(da->instruction, "MOV");
 		da->operand[0] = R8; da->operand[1] = IMM8; da->operand[2] = 0;
 		break;
 	case 0xB8:
-		strcpy(da->asm, "MOV");
+		strcpy(da->instruction, "MOV");
 		da->operand[0] = R32; da->operand[1] = IMM32; da->operand[2] = 0;
 		break;
 	case 0xB9:
-		strcpy(da->asm, "MOV");
+		strcpy(da->instruction, "MOV");
 		da->operand[0] = R32; da->operand[1] = IMM32; da->operand[2] = 0;
 		break;
 	case 0xBA:
-		strcpy(da->asm, "MOV");
+		strcpy(da->instruction, "MOV");
 		da->operand[0] = R32; da->operand[1] = IMM32; da->operand[2] = 0;
 		break;
 	case 0xBB:
-		strcpy(da->asm, "MOV");
+		strcpy(da->instruction, "MOV");
 		da->operand[0] = R32; da->operand[1] = IMM32; da->operand[2] = 0;
 		break;
 	case 0xBC:
-		strcpy(da->asm, "MOV");
+		strcpy(da->instruction, "MOV");
 		da->operand[0] = R32; da->operand[1] = IMM32; da->operand[2] = 0;
 		break;
 	case 0xBD:
-		strcpy(da->asm, "MOV");
+		strcpy(da->instruction, "MOV");
 		da->operand[0] = R32; da->operand[1] = IMM32; da->operand[2] = 0;
 		break;
 	case 0xBE:
-		strcpy(da->asm, "MOV");
+		strcpy(da->instruction, "MOV");
 		da->operand[0] = R32; da->operand[1] = IMM32; da->operand[2] = 0;
 		break;
 	case 0xBF:
-		strcpy(da->asm, "MOV");
+		strcpy(da->instruction, "MOV");
 		da->operand[0] = R32; da->operand[1] = IMM32; da->operand[2] = 0;
 		break;
 	case 0xC1:
-		strcpy(da->asm, "ModRM");
+		strcpy(da->instruction, "ModRM");
 		da->operand[0] = RM32; da->operand[1] = IMM8; da->operand[2] = 0;
 		break;
 	case 0xC2:
-		strcpy(da->asm, "RETN");
+		strcpy(da->instruction, "RETN");
 		da->operand[0] = IMM16; da->operand[1] = 0; da->operand[2] = 0;
 		break;
 	case 0xC3:
-		strcpy(da->asm, "RETN");
+		strcpy(da->instruction, "RETN");
 		da->operand[0] = 0; da->operand[1] = 0; da->operand[2] = 0;
 		break;
 	case 0xC6:
-		strcpy(da->asm, "MOV");
+		strcpy(da->instruction, "MOV");
 		da->operand[0] = RM8; da->operand[1] = IMM8; da->operand[2] = 0;
 		break;
 	case 0xC7:
-		strcpy(da->asm, "MOV");
+		strcpy(da->instruction, "MOV");
 		da->operand[0] = RM32; da->operand[1] = IMM32; da->operand[2] = 0;
 		break;
 	case 0xC9:
-		strcpy(da->asm, "LEAVE");
+		strcpy(da->instruction, "LEAVE");
 		da->operand[0] = 0; da->operand[1] = 0; da->operand[2] = 0;
 		break;
 	case 0xCC:
-		strcpy(da->asm, "INT3");
+		strcpy(da->instruction, "INT3");
 		da->operand[0] = 0; da->operand[1] = 0; da->operand[2] = 0;
 		break;
 	case 0xCD:
-		strcpy(da->asm, "INT");
+		strcpy(da->instruction, "INT");
 		da->operand[0] = IMM8; da->operand[1] = 0; da->operand[2] = 0;
 		break;
 	case 0xD1:
-		strcpy(da->asm, "ModRM");
+		strcpy(da->instruction, "ModRM");
 		da->operand[0] = RM32; da->operand[1] = DEF1; da->operand[2] = 0;
 		break;
 	case 0xE8:
-		strcpy(da->asm, "CALL");
+		strcpy(da->instruction, "CALL");
 		da->operand[0] = REL32; da->operand[1] = 0; da->operand[2] = 0;
 		break;
 	case 0xE9:
-		strcpy(da->asm, "JMP");
+		strcpy(da->instruction, "JMP");
 		da->operand[0] = REL32; da->operand[1] = 0; da->operand[2] = 0;
 		break;
 	case 0xEB:
-		strcpy(da->asm, "JMP");
+		strcpy(da->instruction, "JMP");
 		da->operand[0] = REL8; da->operand[1] = 0; da->operand[2] = 0;
 		break;
 	case 0xF6:
-		strcpy(da->asm, "ModRM");
+		strcpy(da->instruction, "ModRM");
 		da->operand[0] = RM8; da->operand[1] = 0; da->operand[2] = 0;
 		break;
 	case 0xF7:
-		strcpy(da->asm, "ModRM");
+		strcpy(da->instruction, "ModRM");
 		da->operand[0] = RM32; da->operand[1] = 0; da->operand[2] = 0;
 		break;
 	case 0xFF:
-		strcpy(da->asm, "ModRM");
+		strcpy(da->instruction, "ModRM");
 		da->operand[0] = RM32; da->operand[1] = 0; da->operand[2] = 0;
 		break;
 	default:
-		strcpy(da->asm, "??");
+		strcpy(da->instruction, "??");
 		da->operand[0] = 0; da->operand[1] = 0; da->operand[2] = 0;
 		break;
 	}
@@ -472,63 +472,63 @@ void Set_opc2(t_disasm *da){
 	switch (da->opc[1])
 	{
 	case 0x82:
-		strcpy(da->asm, "JB");
+		strcpy(da->instruction, "JB");
 		da->operand[0] = REL32; da->operand[1] = 0; da->operand[2] = 0;
 		break;
 	case 0x83:
-		strcpy(da->asm, "JAE");
+		strcpy(da->instruction, "JAE");
 		da->operand[0] = REL32; da->operand[1] = 0; da->operand[2] = 0;
 		break;
 	case 0x84:
-		strcpy(da->asm, "JE");
+		strcpy(da->instruction, "JE");
 		da->operand[0] = REL32; da->operand[1] = 0; da->operand[2] = 0;
 		break;
 	case 0x85:
-		strcpy(da->asm, "JNE");
+		strcpy(da->instruction, "JNE");
 		da->operand[0] = REL32; da->operand[1] = 0; da->operand[2] = 0;
 		break;
 	case 0x86:
-		strcpy(da->asm, "JBE");
+		strcpy(da->instruction, "JBE");
 		da->operand[0] = REL32; da->operand[1] = 0; da->operand[2] = 0;
 		break;
 	case 0x87:
-		strcpy(da->asm, "JA");
+		strcpy(da->instruction, "JA");
 		da->operand[0] = REL32; da->operand[1] = 0; da->operand[2] = 0;
 		break;
 	case 0x8c:
-		strcpy(da->asm, "JL");
+		strcpy(da->instruction, "JL");
 		da->operand[0] = REL32; da->operand[1] = 0; da->operand[2] = 0;
 		break;
 	case 0x8e:
-		strcpy(da->asm, "JLE");
+		strcpy(da->instruction, "JLE");
 		da->operand[0] = REL32; da->operand[1] = 0; da->operand[2] = 0;
 		break;
 	case 0x8f:
-		strcpy(da->asm, "JG");
+		strcpy(da->instruction, "JG");
 		da->operand[0] = REL32; da->operand[1] = 0; da->operand[2] = 0;
 		break;
 	case 0x94:
-		strcpy(da->asm, "SETE");
+		strcpy(da->instruction, "SETE");
 		da->operand[0] = RM8; da->operand[1] = 0; da->operand[2] = 0;
 		break;
 	case 0x95:
-		strcpy(da->asm, "SETNE");
+		strcpy(da->instruction, "SETNE");
 		da->operand[0] = RM8; da->operand[1] = 0; da->operand[2] = 0;
 		break;
 	case 0xb1:
-		strcpy(da->asm, "CMPXCHG");
+		strcpy(da->instruction, "CMPXCHG");
 		da->operand[0] = RM32; da->operand[1] = R32; da->operand[2] = 0;
 		break;
 	case 0xb6:
-		strcpy(da->asm, "MOVZX");
+		strcpy(da->instruction, "MOVZX");
 		da->operand[0] = R32; da->operand[1] = RM8; da->operand[2] = 0;
 		break;
 	case 0xb7:
-		strcpy(da->asm, "MOVZX");
+		strcpy(da->instruction, "MOVZX");
 		da->operand[0] = R32; da->operand[1] = RM16; da->operand[2] = 0;
 		break;
 	default:
-		strcpy(da->asm, "??");
+		strcpy(da->instruction, "??");
 		da->operand[0] = 0; da->operand[1] = 0; da->operand[2] = 0;
 		break;
 	}

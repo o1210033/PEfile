@@ -28,29 +28,36 @@ typedef struct Disasm{
 	char dtname[300];
 
 	int flag_pref, flag_modrm, flag_sib;
-	int operand[3];
 	int size_opc, size_disp, size_imm;
-
-	char asm[15];
-	unsigned char pref[5], opc[3];
+	int ptr_pref, ptr_opc;
+	int operand[3];
+	char instruction[15];
+	unsigned char pref[4], opc[3];
 	unsigned char disp8, imm8;
 	unsigned short imm16;
 	unsigned long disp32, imm32;
 
 	struct ModRM{
 		int mod, ro, rm;
+		unsigned long hex;
 	} modrm;
 	struct SIB{
 		int scale, index, base;
+		unsigned long hex;
 	} sib;
 
 	struct ReferenceTable{
 		int num;
 	}rtable;
+
+	//ファイル出力用
+	int flag_IDD[16];
+	int size_code;
+	unsigned long addr_code, offs;
+
 }t_disasm;
 
 /* disasm.c */
-void Init_disasm(t_disasm *da);
 void Check_pref(t_disasm *da, unsigned char hex);
 int Set_opc(t_disasm *da, unsigned char hex);
 void Set_modrm(t_disasm *da, unsigned char hex);

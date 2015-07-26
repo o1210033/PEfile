@@ -4,47 +4,31 @@
 #include "disasm.h"
 
 
-/* 引数da構造体の要素を必要なだけ初期化する関数 */
-void Init_disasm(t_disasm *da){
-	da->flag_modrm = da->flag_sib = 0;
-	da->size_disp = da->size_imm = 0;
-}
 
 /* 引数hexがprefixであるかどうかを判定する関数 */
 void Check_pref(t_disasm *da, unsigned char hex){
 	da->flag_pref = 1;
 	switch (hex)
 	{
-	//group1
 	case 0xf0:
 	case 0xf2:
 	case 0xf3:
-		da->pref[1] = hex;
-		break;
-	//group2
 	case 0x2e:
 	case 0x36:
 	case 0x3e:
 	case 0x26:
 	case 0x64:
 	case 0x65:
-		da->pref[2] = hex;
-		break;
-	//group3
 	case 0x66:
-		da->pref[3] = hex;
-		break;
-	//group4
 	case 0x67:
-		da->pref[4] = hex;
+		da->pref[da->ptr_pref++] = hex;
+		if (da->ptr_pref == 4){ da->flag_pref = 0; }
 		break;
 	//Not Prefix
 	default:
 		da->flag_pref = 0;
 		break;
 	}
-
-	sprintf(da->asm, "%02X", hex);
 }
 
 /*
@@ -55,7 +39,7 @@ int Set_opc(t_disasm *da, unsigned char hex){
 	int i;
 	int size[3] = { 8, 16, 32 };
 
-	da->opc[da->size_opc - 1] = hex;
+	da->opc[da->ptr_opc++] = hex;
 
 	if (da->size_opc == 1){		//1 byte opcode
 		if (hex == 0x0f){
@@ -70,6 +54,9 @@ int Set_opc(t_disasm *da, unsigned char hex){
 		Set_opc2(da);
 	}
 
+	//opcodeに適した値を各変数にセット
+	da->flag_modrm = da->flag_sib = 0;
+	da->size_disp = da->size_imm = 0;
 	for (i = 0; i < 3; i++){
 		if (!da->operand[i]){ break; }
 		switch (da->operand[i])
@@ -110,6 +97,7 @@ void Set_modrm(t_disasm *da, unsigned char hex){
 	da->modrm.mod = hex >> 6;
 	da->modrm.ro = (hex >> 3) & 7;
 	da->modrm.rm = hex & 7;
+	da->modrm.hex = hex;   //ファイル出力用
 
 	if (da->modrm.rm == 4 && da->modrm.mod != 3){
 		da->flag_sib = 1;
@@ -138,14 +126,14 @@ void Set_modrm(t_disasm *da, unsigned char hex){
 	case 0x81:
 	case 0x82:
 	case 0x83:
-		strcpy(da->asm, ro_0x80[da->modrm.ro]);
+		strcpy(da->instruction, ro_0x80[da->modrm.ro]);
 		break;
 	case 0xc1:
 	case 0xd1:
-		strcpy(da->asm, ro_0xc1[da->modrm.ro]);
+		strcpy(da->instruction, ro_0xc1[da->modrm.ro]);
 		break;
 	case 0xf6:
-		strcpy(da->asm, ro_0xf6[da->modrm.ro]);
+		strcpy(da->instruction, ro_0xf6[da->modrm.ro]);
 		switch (da->modrm.ro)
 		{
 		case 0:
@@ -157,7 +145,7 @@ void Set_modrm(t_disasm *da, unsigned char hex){
 		}
 		break;
 	case 0xf7:
-		strcpy(da->asm, ro_0xf6[da->modrm.ro]);
+		strcpy(da->instruction, ro_0xf6[da->modrm.ro]);
 		switch (da->modrm.ro)
 		{
 		case 2:
@@ -169,7 +157,7 @@ void Set_modrm(t_disasm *da, unsigned char hex){
 		}
 		break;
 	case 0xff:
-		strcpy(da->asm, ro_0xff[da->modrm.ro]);
+		strcpy(da->instruction, ro_0xff[da->modrm.ro]);
 		break;
 	}
 }
@@ -179,6 +167,7 @@ void Set_sib(t_disasm *da, unsigned char hex){
 	da->sib.scale = hex >> 6;
 	da->sib.index = (hex >> 3) & 7;
 	da->sib.base = hex & 7;
+	da->sib.hex = hex;   //ファイル出力用
 
 	if (da->sib.base == 5){
 		if (da->modrm.mod == 1)
