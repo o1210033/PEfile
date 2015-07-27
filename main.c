@@ -13,8 +13,8 @@
 
 char *Get_filename(void);
 
-//逆アセンブル関連の関数
-int Disasm(FILE *bfp, t_disasm *da, t_header *th, t_idata ti[]);
+//逆アセンブル結果出力関連の関数
+int Disasm_LinearSweep(FILE *bfp, t_disasm *da, t_header *th, t_idata ti[]);
 void change_reg(char reg_name[8][5], char reg[8][5]);
 void Set_regname(char reg_name[8][5], int size_reg);
 int Print_disasm(FILE *dtfp, FILE *bfp, t_disasm *da, t_header *th, t_idata ti[]);
@@ -22,6 +22,7 @@ int Print_function(FILE *dtfp, unsigned long rva, t_idata ti[]);
 int Print_string(FILE *dtfp, unsigned long rva, FILE *bfp, t_header *th);
 int Set_rtable(FILE *bfp, t_disasm *da, t_header *th, t_idata ti[]);
 void Free_rtable(t_disasm *da);
+
 
 
 /* main関数 */
@@ -73,42 +74,35 @@ int main(void){
 	/* referenceナシの逆アセンブル結果をファイル出力 */
 	da.flag_print = 1;
 	da.flag_ref = 0;
-	if (Disasm(bfp, &da, &th, ti) != 0){
-		printf("ERROR: Disasm\n");
+	if (Disasm_LinearSweep(bfp, &da, &th, ti) != 0){
+		printf("ERROR: Disasm_LinearSweep\n");
 		fclose(bfp);
 		exit(1);
 	}
 
-	//Reference Table を設定
+	/* jump, call命令のreference tableを設定 */
 	if (Set_rtable(bfp, &da, &th, ti) != 0){
 		printf("ERROR: Set_rtable\n");
 		fclose(bfp);
 		exit(1);
 	}
 
-	//referenceアリの逆アセンブル結果をファイル出力
+	/* referenceアリの逆アセンブル結果をファイル出力 */
 	da.flag_print = 1;
 	da.flag_ref = PRINT;
 	sprintf(da.dtname, "%s_RefDisasm.txt", szFile);
-	if (Disasm(bfp, &da, &th, ti) != 0){
-		printf("ERROR: Disasm\n");
+	if (Disasm_LinearSweep(bfp, &da, &th, ti) != 0){
+		printf("ERROR: Disasm_LinearSweep\n");
 		Free_rtable(&da);
 		fclose(bfp);
 		exit(1);
 	}
 
-	//Reference Table 内のメモリ解放
+	/* rtable構造体内の動的確保したメモリを解放 */
 	Free_rtable(&da);
 
 	/* PEファイルのクローズ処理 */
 	fclose(bfp);
-
-	//出力結果ファイルをメモ帳で開く
-	//char cmdbuf[300];
-	//sprintf(cmdbuf, "notepad %s", th.htname);
-	//system(cmdbuf);
-	//sprintf(cmdbuf, "notepad %s", tname);
-	//system(cmdbuf);
 
 	return 0;
 }
@@ -135,16 +129,14 @@ char *Get_filename(void){
 
 
 /* .textセクションの読み込み＆逆アセンブル処理＆ファイル出力関数 */
-int Disasm(FILE *bfp, t_disasm *da, t_header *th, t_idata ti[]){
-	int i, n;
+int Disasm_LinearSweep(FILE *bfp, t_disasm *da, t_header *th, t_idata ti[]){
+	int i, j;
 	FILE *dtfp;
-	unsigned long AddressOfCode = th->ImageBase + th->ts[th->no.text].VirtualAddress;
-	unsigned long EndAddressOfCode = AddressOfCode + th->ts[th->no.text].SizeOfRawData;
-	unsigned long addr_code = AddressOfCode;
-	unsigned long offs = 0;
-	unsigned long rva;
 	unsigned char hex;
-	
+	unsigned long rva;
+	unsigned long AddressOfCode = th->ImageBase + th->ts[th->no.text].VirtualAddress;
+	unsigned long EndAddressOfCode = th->ImageBase + th->ts[th->no.text].VirtualAddress + th->ts[th->no.text].SizeOfRawData;
+
 
 	/* 逆アセンブル結果出力ファイルのオープン処理 */
 	if (da->flag_print){
@@ -154,105 +146,49 @@ int Disasm(FILE *bfp, t_disasm *da, t_header *th, t_idata ti[]){
 		}
 	}
 	
+	/* da構造体のaddr_code, offsの初期化 */
+	da->addr_code = AddressOfCode;
+	da->offs = 0;
+
 	/* .textセクションの読み込み＆逆アセンブル処理＆ファイル出力 */
 	fseek(bfp, th->ts[th->no.text].PointerToRawData, SEEK_SET);   //.textセクションの先頭へシーク
-	while (addr_code < EndAddressOfCode){   //.textセクションの最後まで読み込み
+	while (da->addr_code < EndAddressOfCode){   //.textセクションの最後まで読み込み
 		//ネイティブコード以外のデータ(IMAGE_DATA_DIRECTORY)部分は逆アセンブルしない
 		for (i = 0; i < 16; i++){ da->flag_IDD[i] = 0; }
 		while (1){
-			rva = addr_code - th->ImageBase;
+			rva = da->addr_code - th->ImageBase;
 			for (i = 0; i < 16; i++){
 				if (th->IDD[i].RVA <= rva && rva < th->IDD[i].RVA + th->IDD[i].Size){
-					addr_code += th->IDD[i].Size - (rva - th->IDD[i].RVA);
-					fseek(bfp, th->ts[th->no.text].PointerToRawData + (addr_code - AddressOfCode), SEEK_SET);
-					da->flag_IDD[i] = 1;
+					da->addr_code += th->IDD[i].Size - (rva - th->IDD[i].RVA);
+					fseek(bfp, th->ts[th->no.text].PointerToRawData + (da->addr_code - AddressOfCode), SEEK_SET);
+					da->flag_IDD[i] = 1;   //ファイル出力用のフラグセット
 					break;
 				}
 			}
 			if (i == 16){ break; }
 		}
 
-		//prefixの有無を確認＆解析
-		fread(&hex, 1, 1, bfp);
-		offs = 1;
-		da->ptr_pref = 0;
-		Check_pref(da, hex);
-		while (da->flag_pref){
-			fread(&hex, 1, 1, bfp);
-			offs++;
-			Check_pref(da, hex);
-		}
-
-		//opcodeの解析
-		da->size_opc = 1;
-		da->ptr_opc = 0;
-		Set_opc(da, hex);
-		while (da->ptr_opc < da->size_opc){
-			fread(&hex, 1, 1, bfp);
-			offs++;
-			Set_opc(da, hex);
-		}
-
-		if (da->flag_modrm){		//ModR/M アリ
-			fread(&hex, 1, 1, bfp);
-			offs++;
-			Set_modrm(da, hex);
-		}
-
-		if (da->flag_sib){		//SIB アリ
-			fread(&hex, 1, 1, bfp);
-			offs++;
-			Set_sib(da, hex);
-		}
-
-		switch (da->size_disp)	//ディスプレースメント アリ
-		{
-		case 8:
-			fread(&da->disp8, 1, 1, bfp);
-			offs++;
-			break;
-		case 32:
-			fread(&da->disp32, 1, 4, bfp);
-			offs += 4;
-			break;
-		}
-
-		switch (da->size_imm)	//即値 アリ
-		{
-		case 8:
-			fread(&da->imm8, 1, 1, bfp);
-			offs++;
-			break;
-		case 16:
-			fread(&da->imm16, 1, 2, bfp);
-			offs += 2;
-			break;
-		case 32:
-			fread(&da->imm32, 1, 4, bfp);
-			offs += 4;
-			break;
-		}
+		//逆アセンブル処理
+		if (Disasm(bfp, da) != 0){ return 1; }
 
 		//逆アセンブル結果をファイル出力
 		if (da->flag_print){
-			da->addr_code = addr_code;
-			da->offs = offs;
 			Print_disasm(dtfp, bfp, da, th, ti);
 		}
 
-		//Reference Table 設定用
+		//jump, call命令のreference table 設定用
 		if (da->flag_ref){
 			if ((da->instruction[0] == 'J' && strcmp(da->instruction, "JMPF") != 0) || strcmp(da->instruction, "CALL") == 0){
-				if (da->flag_ref == COUNT){
+				if (da->flag_ref == COUNT){   //jump, call命令の総数をカウント
 					da->rtable.num++;
 				}
-				if (da->flag_ref == SET){
-					da->rtable.src[da->rtable.ptr] = addr_code;
+				if (da->flag_ref == SET){   //rtable構造体に適切な値をセット
+					da->rtable.src[da->rtable.ptr] = da->addr_code;
 					if (da->operand[0] == REL8){
-						da->rtable.dst[da->rtable.ptr] = addr_code + offs + (char)da->imm8;
+						da->rtable.dst[da->rtable.ptr] = da->addr_code + da->offs + (char)da->imm8;
 					}
 					else if (da->operand[0] == REL32){
-						da->rtable.dst[da->rtable.ptr] = addr_code + offs + (long)da->imm32;
+						da->rtable.dst[da->rtable.ptr] = da->addr_code + da->offs + (long)da->imm32;
 					}
 					if (strcmp(da->instruction, "JMP") == 0){
 						da->rtable.flag[da->rtable.ptr] = UJMP;
@@ -269,8 +205,8 @@ int Disasm(FILE *bfp, t_disasm *da, t_header *th, t_idata ti[]){
 		}
 	
 		//Addressの更新
-		addr_code += offs;
-		offs = 0;
+		da->addr_code += da->offs;
+		da->offs = 0;
 	}
 
 	if (da->flag_print){ fclose(dtfp); }
@@ -323,7 +259,7 @@ void Set_regname(char reg_name[8][5], int size_reg){
 	}
 }
 
-//逆アセンブル結果をファイル出力
+/* 逆アセンブル結果をファイル出力 */
 int Print_disasm(FILE *dtfp, FILE *bfp, t_disasm *da, t_header *th, t_idata ti[]){
 	int i, j;
 	int size_code;
@@ -548,7 +484,7 @@ int Print_disasm(FILE *dtfp, FILE *bfp, t_disasm *da, t_header *th, t_idata ti[]
 		case MOFFS16:
 			break;
 		case MOFFS32:
-			fprintf(dtfp, "%s[%08Xh]", data, da->imm32);
+			fprintf(dtfp, "%s[%08Xh]", data, da->disp32);
 			break;
 		case DEF1:
 			fprintf(dtfp, "1");
@@ -570,25 +506,12 @@ int Print_disasm(FILE *dtfp, FILE *bfp, t_disasm *da, t_header *th, t_idata ti[]
 	if (da->flag_ref == PRINT){   //reference出力フラグ
 		if (da->size_disp == 32){
 			rva = da->disp32 - th->ImageBase;
-			if (Print_function(dtfp, rva, ti) != 0){
-				Print_string(dtfp, rva, bfp, th);
-			}
 		}
-
-		if (da->size_imm != 0){
-			if (da->operand[0] == REL8){
-				rva = da->addr_code + da->offs + (char)da->imm8 - th->ImageBase;
-			}
-			else if (da->operand[0] == REL32){
-				rva = da->addr_code + da->offs + (long)da->imm32 - th->ImageBase;
-			}
-			else if (da->size_imm == 32){
-				rva = da->imm32 - th->ImageBase;
-			}
-
-			if (Print_function(dtfp, rva, ti) != 0){
-				Print_string(dtfp, rva, bfp, th);
-			}
+		else if (da->size_imm == 32){
+			rva = da->imm32 - th->ImageBase;
+		}
+		if (Print_function(dtfp, rva, ti) != 0){
+			Print_string(dtfp, rva, bfp, th);
 		}
 	}
 	
@@ -671,17 +594,20 @@ int Print_string(FILE *dtfp, unsigned long rva, FILE *bfp, t_header *th){
 	return -1;
 }
 
+/* jump, call命令のreference table設定用関数 */
 int Set_rtable(FILE *bfp, t_disasm *da, t_header *th, t_idata ti[]){
 	int i;
 
+	//jump, call命令の総数をカウント
 	da->flag_print = 0;
 	da->flag_ref = COUNT;
 	da->rtable.num = 0;
-	if (Disasm(bfp, da, th, ti) == 1){
-		printf("ERROR: Disasm\n");
+	if (Disasm_LinearSweep(bfp, da, th, ti) == 1){
+		printf("ERROR: Disasm_LinearSweep\n");
 		return 1;
 	}
 
+	//rtable構造体内の配列を動的確保し、適切な値をセット
 	da->flag_ref = SET;
 	da->rtable.ptr = 0;
 	da->rtable.dst = (unsigned long *)malloc(sizeof(unsigned long) * da->rtable.num);
@@ -691,14 +617,15 @@ int Set_rtable(FILE *bfp, t_disasm *da, t_header *th, t_idata ti[]){
 		printf("ERROR: malloc rtable");
 		return 1;
 	}
-	if (Disasm(bfp, da, th, ti) == 1){
-		printf("ERROR: Disasm\n");
+	if (Disasm_LinearSweep(bfp, da, th, ti) == 1){
+		printf("ERROR: Disasm_LinearSweep\n");
 		return 1;
 	}
 
 	return 0;
 }
 
+/* rtable構造体内の動的確保したメモリを解放する関数 */
 void Free_rtable(t_disasm *da){
 	free(da->rtable.dst);
 	free(da->rtable.src);

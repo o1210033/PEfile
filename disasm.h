@@ -60,7 +60,7 @@ typedef struct Disasm{
 	//ファイル出力用
 	int flag_print, flag_ref, flag_IDD[16];
 	unsigned long addr_code, offs;
-	struct ReferenceTable{
+	struct ReferenceTable{   //jump, call命令reference用
 		unsigned long ptr, num;
 		unsigned long *dst, *src;
 		int *flag;
@@ -68,6 +68,7 @@ typedef struct Disasm{
 }t_disasm;
 
 /* disasm.c */
+int Disasm(FILE *bfp, t_disasm *da);
 void Check_pref(t_disasm *da, unsigned char hex);
 int Set_opc(t_disasm *da, unsigned char hex);
 void Set_modrm(t_disasm *da, unsigned char hex);

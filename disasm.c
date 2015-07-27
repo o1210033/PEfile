@@ -5,6 +5,79 @@
 
 
 
+/* 
+引数FILE *bfpの現在位置から1命令文読み込み、
+引数da構造体に適切な値をセット
+*/
+int Disasm(FILE *bfp, t_disasm *da){
+	int i;
+	unsigned char hex;
+
+
+	//prefixの有無を確認＆解析
+	fread(&hex, 1, 1, bfp);
+	da->offs = 1;
+	da->ptr_pref = 0;
+	Check_pref(da, hex);
+	while (da->flag_pref){
+		fread(&hex, 1, 1, bfp);
+		da->offs++;
+		Check_pref(da, hex);
+	}
+
+	//opcodeの解析
+	da->size_opc = 1;
+	da->ptr_opc = 0;
+	Set_opc(da, hex);
+	while (da->ptr_opc < da->size_opc){
+		fread(&hex, 1, 1, bfp);
+		da->offs++;
+		Set_opc(da, hex);
+	}
+
+	if (da->flag_modrm){		//ModR/M アリ
+		fread(&hex, 1, 1, bfp);
+		da->offs++;
+		Set_modrm(da, hex);
+	}
+
+	if (da->flag_sib){		//SIB アリ
+		fread(&hex, 1, 1, bfp);
+		da->offs++;
+		Set_sib(da, hex);
+	}
+
+	switch (da->size_disp)	//ディスプレースメント アリ
+	{
+	case 8:
+		fread(&da->disp8, 1, 1, bfp);
+		da->offs++;
+		break;
+	case 32:
+		fread(&da->disp32, 1, 4, bfp);
+		da->offs += 4;
+		break;
+	}
+
+	switch (da->size_imm)	//即値 アリ
+	{
+	case 8:
+		fread(&da->imm8, 1, 1, bfp);
+		da->offs++;
+		break;
+	case 16:
+		fread(&da->imm16, 1, 2, bfp);
+		da->offs += 2;
+		break;
+	case 32:
+		fread(&da->imm32, 1, 4, bfp);
+		da->offs += 4;
+		break;
+	}
+
+	return 0;
+}
+
 /* 引数hexがprefixであるかどうかを判定する関数 */
 void Check_pref(t_disasm *da, unsigned char hex){
 	da->flag_pref = 1;
@@ -84,7 +157,7 @@ int Set_opc(t_disasm *da, unsigned char hex){
 		case MOFFS8:
 		case MOFFS16:
 		case MOFFS32:
-			da->size_imm = size[da->operand[i] - MOFFS8];
+			da->size_disp = size[da->operand[i] - MOFFS8];
 			break;
 		}
 	}
