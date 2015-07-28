@@ -112,7 +112,7 @@ int main(void){
 char *Get_filename(void){
 	int i;
 	OPENFILENAME ofn;
-	char szFile[256];
+	char szFile[250];
 
 	szFile[0] = '\0';
 	ZeroMemory(&ofn, sizeof(ofn));
@@ -134,8 +134,8 @@ int Disasm_LinearSweep(FILE *bfp, t_disasm *da, t_header *th, t_idata ti[]){
 	FILE *dtfp;
 	unsigned char hex;
 	unsigned long rva;
-	unsigned long AddressOfCode = th->ImageBase + th->ts[th->no.text].VirtualAddress;
-	unsigned long EndAddressOfCode = th->ImageBase + th->ts[th->no.text].VirtualAddress + th->ts[th->no.text].SizeOfRawData;
+	unsigned long AddressOfCode = th->ImageBase + th->ts[th->ptr_text].VirtualAddress;
+	unsigned long EndAddressOfCode = th->ImageBase + th->ts[th->ptr_text].VirtualAddress + th->ts[th->ptr_text].SizeOfRawData;
 
 
 	/* 逆アセンブル結果出力ファイルのオープン処理 */
@@ -151,7 +151,7 @@ int Disasm_LinearSweep(FILE *bfp, t_disasm *da, t_header *th, t_idata ti[]){
 	da->offs = 0;
 
 	/* .textセクションの読み込み＆逆アセンブル処理＆ファイル出力 */
-	fseek(bfp, th->ts[th->no.text].PointerToRawData, SEEK_SET);   //.textセクションの先頭へシーク
+	fseek(bfp, th->ts[th->ptr_text].PointerToRawData, SEEK_SET);   //.textセクションの先頭へシーク
 	while (da->addr_code < EndAddressOfCode){   //.textセクションの最後まで読み込み
 		//ネイティブコード以外のデータ(IMAGE_DATA_DIRECTORY)部分は逆アセンブルしない
 		for (i = 0; i < 16; i++){ da->flag_IDD[i] = 0; }
@@ -160,7 +160,7 @@ int Disasm_LinearSweep(FILE *bfp, t_disasm *da, t_header *th, t_idata ti[]){
 			for (i = 0; i < 16; i++){
 				if (th->IDD[i].RVA <= rva && rva < th->IDD[i].RVA + th->IDD[i].Size){
 					da->addr_code += th->IDD[i].Size - (rva - th->IDD[i].RVA);
-					fseek(bfp, th->ts[th->no.text].PointerToRawData + (da->addr_code - AddressOfCode), SEEK_SET);
+					fseek(bfp, th->ts[th->ptr_text].PointerToRawData + (da->addr_code - AddressOfCode), SEEK_SET);
 					da->flag_IDD[i] = 1;   //ファイル出力用のフラグセット
 					break;
 				}

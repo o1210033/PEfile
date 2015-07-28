@@ -16,15 +16,19 @@ typedef struct Section{
 
 /* Header‚ğ‰ğÍ‚µ‚Ä“¾‚½î•ñ—p‚Ì\‘¢‘Ì */
 typedef struct Header{
-	char htname[256];
-	char itname[256];
+	char htname[300];
+	char itname[300];
 	unsigned short NumberOfSections;
+	unsigned long SizeOfCode;
+	unsigned long AddressOfEntryPoint;
 	unsigned long BaseOfCode;
 	unsigned long ImageBase;
+	unsigned long SizeOfImage;
 	t_IDD IDD[16];
 	t_section ts[10];
+	int ptr_text;
 	struct NO{
-		int text, idata;
+		int idata;
 	}no;
 }t_header;
 
