@@ -27,28 +27,18 @@ typedef struct Header{
 	t_IDD IDD[16];
 	t_section ts[10];
 	int ptr_text;
-	struct NO{
-		int idata;
-	}no;
 }t_header;
 
 /* インポート情報用の構造体 */
 typedef struct Idata{
-	unsigned long OriginalFirstThunk;
-	unsigned long Name;
-	unsigned long FirstThunk;
+	unsigned long OriginalFirstThunk;   //ILTのRVA
+	unsigned long Name;   //DLL名のRVA
+	unsigned long FirstThunk;   //IATのRVA
 
-	unsigned long ILT_rva[150];   //ILT自身のRVA
-	unsigned long ILT[150];   //ILTが保持しているRVA
-	int size_ILT;   //ILTの数
-
-	unsigned long IAT_rva[150];   //IAT自身のRVA
-	unsigned long IAT[150];   //IATが保持しているRVA
-	int size_IAT;   //IATの数
-
+	int size_IAT;   //IATのサイズ
 	char dll[50];   //DLL名
-	long OrdinalNumber[150];
-	short Hint[150];
+	long OrdinalNumber[150];   //序数
+	short Hint[150];   //ヒント
 	char function[150][50];   //インポート関数名
 }t_idata;
 

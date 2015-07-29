@@ -117,7 +117,7 @@ int Set_opc(t_disasm *da, unsigned char hex){
 	if (da->size_opc == 1){		//1 byte opcode
 		if (hex == 0x0f){
 			da->size_opc = 2;
-			return 1;
+			return -1;
 		}
 		else{
 			Set_opc1(da);

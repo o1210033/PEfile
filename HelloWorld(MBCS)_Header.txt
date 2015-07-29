@@ -2,14 +2,17 @@ e_magic:              5A4D ("MZ")
 e_lfanew:             000000E8
 
 Magic:                00004550 ("PE")
-Machine:              014C (Intel 386以降およびその互換プロセッサ)
+
+Machine:              014C (Intel 386)
 NumberOfSections:     0007
 SizeOfOptionalHeader: 00E0
+Characteristics:      0102
 
 SizeOfCode:           00003C00
 AddressOfEntryPoint:  00011109
 BaseOfCode:           00001000
 ImageBase:            00400000
+SizeOfImage:          0001C000
 
 [IMAGE_DATA_DIRECTORY]
 Name: Export          | RVA: 00000000, Size: 00000000

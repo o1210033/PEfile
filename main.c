@@ -20,24 +20,18 @@ void Set_regname(char reg_name[8][5], int size_reg);
 int Print_disasm(FILE *dtfp, FILE *bfp, t_disasm *da, t_header *th, t_idata ti[]);
 int Print_function(FILE *dtfp, unsigned long rva, t_idata ti[]);
 int Print_string(FILE *dtfp, unsigned long rva, FILE *bfp, t_header *th);
-int Set_rtable(FILE *bfp, t_disasm *da, t_header *th, t_idata ti[]);
+int Print_RefDisasm(FILE *bfp, t_disasm *da, t_header *th, t_idata ti[]);
 void Free_rtable(t_disasm *da);
-
 
 
 /* main関数 */
 int main(void){
 	int i;
 
-	FILE *bfp;
-	t_disasm da;
-	t_header th;
-	t_idata ti[30];
-	char szFile[300], fname[300];
-
 	/* 必要なファイル名を取得、設定 */
-	//strcpy(szFile, Get_filename(szFile));
-	strcpy(szFile, "wsample01a.exe");
+	char szFile[300], fname[300];
+	strcpy(szFile, Get_filename(szFile));
+	//strcpy(szFile, "wsample01a.exe");
 	//strcpy(szFile, "HelloWorld(MBCS).exe");
 	//strcpy(szFile, "HelloWorld(Unicode).exe");
 	//strcpy(szFile, "ls.exe");
@@ -48,58 +42,50 @@ int main(void){
 		if (szFile[i] == '.')
 			szFile[i] = '\0';
 	}
-	sprintf(da.dtname, "%s_Disasm.txt", szFile);
-	sprintf(th.htname, "%s_Header.txt", szFile);
-	sprintf(th.itname, "%s_Imports.txt", szFile);
-
-
+	
 	/* PEファイルのオープン処理 */
+	FILE *bfp;
 	if ((bfp = fopen(fname, "rb")) == NULL){
 		printf("\aファイルをオープンできません。\n");
 		exit(1);
 	}
 
 	/* ヘッダ情報を取得＆ファイル出力 */
+	t_header th = { 0 };
+	sprintf(th.htname, "%s_Header.txt", szFile);
 	if (Read_header(bfp, &th) != 0){
 		printf("ERROR: Read_header\n");
 		fclose(bfp);
 		exit(1);
 	}
 
-	/* インポート情報を取得＆ファイル出力 */
-	if (Read_idata(bfp, &th, ti) != 0){
-		printf("ERROR: Read_idata\n");
-	}
-
 	/* referenceナシの逆アセンブル結果をファイル出力 */
+	t_disasm da = { 0 };
+	sprintf(da.dtname, "%s_Disasm.txt", szFile);
 	da.flag_print = 1;
 	da.flag_ref = 0;
-	if (Disasm_LinearSweep(bfp, &da, &th, ti) != 0){
+	if (Disasm_LinearSweep(bfp, &da, &th, NULL) != 0){
 		printf("ERROR: Disasm_LinearSweep\n");
 		fclose(bfp);
 		exit(1);
 	}
 
-	/* jump, call命令のreference tableを設定 */
-	if (Set_rtable(bfp, &da, &th, ti) != 0){
-		printf("ERROR: Set_rtable\n");
+	/* インポート情報を取得＆ファイル出力 */
+	t_idata ti[30] = { 0 };
+	sprintf(th.itname, "%s_Imports.txt", szFile);
+	if (Read_idata(bfp, &th, ti) != 0){
+		printf("ERROR: Read_idata\n");
 		fclose(bfp);
 		exit(1);
 	}
 
 	/* referenceアリの逆アセンブル結果をファイル出力 */
-	da.flag_print = 1;
-	da.flag_ref = PRINT;
 	sprintf(da.dtname, "%s_RefDisasm.txt", szFile);
-	if (Disasm_LinearSweep(bfp, &da, &th, ti) != 0){
+	if (Print_RefDisasm(bfp, &da, &th, ti) != 0){
 		printf("ERROR: Disasm_LinearSweep\n");
-		Free_rtable(&da);
 		fclose(bfp);
 		exit(1);
 	}
-
-	/* rtable構造体内の動的確保したメモリを解放 */
-	Free_rtable(&da);
 
 	/* PEファイルのクローズ処理 */
 	fclose(bfp);
@@ -110,19 +96,19 @@ int main(void){
 
 /* オープンファイルダイアログを用いて得たファイル名を返す関数 */
 char *Get_filename(void){
-	int i;
-	OPENFILENAME ofn;
-	char szFile[250];
+	char szFile[250] = {0};
+	OPENFILENAME ofn = {0};
 
-	szFile[0] = '\0';
-	ZeroMemory(&ofn, sizeof(ofn));
 	ofn.lStructSize = sizeof(OPENFILENAME);
 	ofn.lpstrFilter = "all file(*.*)\0*.*\0\0";
 	ofn.lpstrFile = szFile;
 	ofn.nMaxFile = sizeof(szFile);
 	ofn.Flags = OFN_FILEMUSTEXIST;
 
-	GetOpenFileName(&ofn);
+	if (GetOpenFileName(&ofn) == 0){
+		printf("ERROR: GetOpenFileName\n");
+		exit(1);
+	}
 
 	return szFile;
 }
@@ -142,7 +128,7 @@ int Disasm_LinearSweep(FILE *bfp, t_disasm *da, t_header *th, t_idata ti[]){
 	if (da->flag_print){
 		if ((dtfp = fopen(da->dtname, "w")) == NULL){
 			printf("\aファイルをオープンできません。\n");
-			return 1;
+			return -1;
 		}
 	}
 	
@@ -169,7 +155,7 @@ int Disasm_LinearSweep(FILE *bfp, t_disasm *da, t_header *th, t_idata ti[]){
 		}
 
 		//逆アセンブル処理
-		if (Disasm(bfp, da) != 0){ return 1; }
+		if (Disasm(bfp, da) != 0){ return -1; }
 
 		//逆アセンブル結果をファイル出力
 		if (da->flag_print){
@@ -504,14 +490,18 @@ int Print_disasm(FILE *dtfp, FILE *bfp, t_disasm *da, t_header *th, t_idata ti[]
 
 	//必要に応じて注釈をファイル出力
 	if (da->flag_ref == PRINT){   //reference出力フラグ
-		if (da->size_disp == 32){
+		rva = th->SizeOfImage + 1;
+		if (da->size_disp == 32){   //ディスプレースメントフィールドが4バイトのとき
 			rva = da->disp32 - th->ImageBase;
 		}
-		else if (da->size_imm == 32){
+		else if (da->size_imm == 32){   //即値フィールドが4バイトのとき
 			rva = da->imm32 - th->ImageBase;
 		}
-		if (Print_function(dtfp, rva, ti) != 0){
-			Print_string(dtfp, rva, bfp, th);
+
+		if (rva <= th->SizeOfImage){   //rvaの値がRVAの範囲内であるかどうか判定
+			if (Print_function(dtfp, rva, ti) != 0){   //rvaがIATを指していない場合、Print_string関数をコール
+				Print_string(dtfp, rva, bfp, th);
+			}
 		}
 	}
 	
@@ -520,15 +510,17 @@ int Print_disasm(FILE *dtfp, FILE *bfp, t_disasm *da, t_header *th, t_idata ti[]
 	return 0;
 }
 
-/* RVAからDLL名とインポート関数名をファイル出力する関数 */
+/* 
+引数rvaがIATを指している場合のみ、そのDLL名とインポート関数名をファイル出力する関数
+引数rvaがIATを指している場合は0を、そうでない場合は-1を返す
+*/
 int Print_function(FILE *dtfp, unsigned long rva, t_idata ti[]){
 	int i, j;
 
-	for (i = 0;; i++){
-		if (ti[i].OriginalFirstThunk == 0){ break; }
-		for (j = 0;; j++){
-			if (ti[i].ILT[j] == 0 || (ti[i].ILT[j] & 0x80000000) != 0){ break; }
-			else if (ti[i].IAT_rva[j] == rva){
+	for (i = 0; ti[i].FirstThunk != 0; i++){
+		for (j = 0; j < ti[i].size_IAT; j++){
+			if (ti[i].function[j][0] == '\0'){ break; }
+			else if (rva == ti[i].FirstThunk + (j * 4)){   //引数rvaがIATを指している場合
 				fprintf(dtfp, "   | %s %s", ti[i].dll, ti[i].function[j]);
 				return 0;
 			}
@@ -537,55 +529,56 @@ int Print_function(FILE *dtfp, unsigned long rva, t_idata ti[]){
 	return -1;
 }
 
-/* RVAから文字列をファイル出力する関数 */
+/* 
+引数rvaがASCIIもしくはUNICODE文字列を指す場合、その文字列をファイル出力する関数 
+成功の場合0を、失敗の場合-1を返す
+*/
 int Print_string(FILE *dtfp, unsigned long rva, FILE *bfp, t_header *th){
 	int i;
 	long offs_log, offs_string;
 	char c, str[200];
 	wchar_t wc, wstr[200];
 
+
 	offs_log = ftell(bfp);   //初期ファイル位置を記憶
-	//RVAからファイル位置を取得
+
+	/* 引数rvaが初期化されたデータを含むセクション内であれば、ファイル位置を取得 */
 	for (i = 0; i < th->NumberOfSections; i++){
-		if (th->ts[i].Characteristics == 0x40000040
-			&& th->ts[i].VirtualAddress <= rva && rva <= th->ts[i].VirtualAddress + th->ts[i].VirtualSize){
-			offs_string = rva - th->ts[i].VirtualAddress + th->ts[i].PointerToRawData;
-			break;
-		}
+			if (th->ts[i].VirtualAddress <= rva && rva <= th->ts[i].VirtualAddress + th->ts[i].VirtualSize){
+				if (th->ts[i].Characteristics == 0x40000040){   //初期化されたデータを含むセクションであるかどうか判定
+					offs_string = rva - th->ts[i].VirtualAddress + th->ts[i].PointerToRawData;
+					break;
+				}
+			}
 	}
-	if (i == th->NumberOfSections){ return -1; }
+	if (i == th->NumberOfSections){ return -1; }   //引数rvaが条件に合わない場合、終了
 
-	//IMAGE_DATA_DIRECTORY部分は対象外とする
-	for (i = 0; i < 16; i++){
-		if (th->IDD[i].RVA <= rva && rva < th->IDD[i].RVA + th->IDD[i].Size){
-			return -1;
-		}
-	}
-
-	//ASCII
+	/* 引数rvaが指すデータがASCII文字列であるか判定し、そうであれば出力 */
 	fseek(bfp, offs_string, SEEK_SET);
 	for (i = 0; i < 100; i++){
 		fread(&c, 1, 1, bfp);
 		if (c < 0x20 || 0x7e < c){ break; }
 		str[i] = c;
 	}
-	if (i >= 4 && i != 100){
+	if (i >= 4){
 		str[i] = '\0';
 		fprintf(dtfp, "   | ASCII \"%s\"", str);
+		if (i == 100){ fprintf(dtfp, "..."); }
 		fseek(bfp, offs_log, SEEK_SET);
 		return 0;
 	}
 
-	//UNICODE
+	/* 引数rvaが指すデータがUNICODE文字列であるか判定し、そうであれば出力 */
 	fseek(bfp, offs_string, SEEK_SET);
 	for (i = 0; i < 100; i++){
 		fread(&wc, 1, 2, bfp);
 		if (wc < 0x0020 || 0x007e < wc){ break; }
 		wstr[i] = wc;
 	}
-	if (i >= 4 && i != 100){
+	if (i >= 4){
 		wstr[i] = L'\0';
 		fwprintf(dtfp, L"   | UNICODE \"%s\"", wstr);
+		if (i == 100){ fprintf(dtfp, "..."); }
 		fseek(bfp, offs_log, SEEK_SET);
 		return 0;
 	}
@@ -594,40 +587,53 @@ int Print_string(FILE *dtfp, unsigned long rva, FILE *bfp, t_header *th){
 	return -1;
 }
 
-/* jump, call命令のreference table設定用関数 */
-int Set_rtable(FILE *bfp, t_disasm *da, t_header *th, t_idata ti[]){
-	int i;
-
-	//jump, call命令の総数をカウント
+/* referenceアリの逆アセンブル結果をファイル出力する関数 */
+int Print_RefDisasm(FILE *bfp, t_disasm *da, t_header *th, t_idata ti[]){
+	/* jump, call命令の総数をカウント */
 	da->flag_print = 0;
 	da->flag_ref = COUNT;
 	da->rtable.num = 0;
-	if (Disasm_LinearSweep(bfp, da, th, ti) == 1){
-		printf("ERROR: Disasm_LinearSweep\n");
-		return 1;
+	if (Disasm_LinearSweep(bfp, da, th, ti) != 0){
+		printf("ERROR: Disasm_LinearSweep (da->flag_ref:COUNT)\n");
+		return -1;
 	}
 
-	//rtable構造体内の配列を動的確保し、適切な値をセット
+	/* rtable構造体内の配列を動的確保し、適切な値をセット */
 	da->flag_ref = SET;
 	da->rtable.ptr = 0;
-	da->rtable.dst = (unsigned long *)malloc(sizeof(unsigned long) * da->rtable.num);
-	da->rtable.src = (unsigned long *)malloc(sizeof(unsigned long) * da->rtable.num);
-	da->rtable.flag = (int *)malloc(sizeof(int) * da->rtable.num);
+	da->rtable.dst = (unsigned long *)calloc(da->rtable.num, sizeof(unsigned long));
+	da->rtable.src = (unsigned long *)calloc(da->rtable.num, sizeof(unsigned long));
+	da->rtable.flag = (int *)calloc(da->rtable.num, sizeof(int));
 	if (da->rtable.dst == NULL || da->rtable.src == NULL || da->rtable.flag == NULL){
-		printf("ERROR: malloc rtable");
-		return 1;
+		printf("ERROR: calloc rtable");
+		Free_rtable(da);
+		return -1;
 	}
-	if (Disasm_LinearSweep(bfp, da, th, ti) == 1){
-		printf("ERROR: Disasm_LinearSweep\n");
-		return 1;
+	if (Disasm_LinearSweep(bfp, da, th, ti) != 0){
+		printf("ERROR: Disasm_LinearSweep (da->flag_ref:SET)\n");
+		Free_rtable(da);
+		return -1;
 	}
+
+	/* referenceアリの逆アセンブル結果をファイル出力 */
+	da->flag_print = 1;
+	da->flag_ref = PRINT;
+	if (Disasm_LinearSweep(bfp, da, th, ti) != 0){
+		printf("ERROR: Disasm_LinearSweep (da->flag_ref:PRINT)\n");
+		Free_rtable(da);
+		fclose(bfp);
+		return -1;
+	}
+
+	/* rtable構造体内の動的確保したメモリを解放 */
+	Free_rtable(da);
 
 	return 0;
 }
 
 /* rtable構造体内の動的確保したメモリを解放する関数 */
 void Free_rtable(t_disasm *da){
-	free(da->rtable.dst);
-	free(da->rtable.src);
-	free(da->rtable.flag);
+	if (da->rtable.dst != NULL){ free(da->rtable.dst); }
+	if (da->rtable.src != NULL){ free(da->rtable.src); }
+	if (da->rtable.flag != NULL){ free(da->rtable.flag); }
 }
