@@ -1,3 +1,8 @@
+/* disasm.c */
+/* 逆アセンブル処理 */
+
+
+
 #include <stdio.h>
 #include <string.h>
 
@@ -78,6 +83,7 @@ int Disasm(FILE *bfp, t_disasm *da){
 	return 0;
 }
 
+
 /* 引数hexがprefixであるかどうかを判定する関数 */
 void Check_pref(t_disasm *da, unsigned char hex){
 	da->flag_pref = 1;
@@ -104,9 +110,10 @@ void Check_pref(t_disasm *da, unsigned char hex){
 	}
 }
 
+
 /*
 引数hex（オペコード）を判定し、逆アセンブルに必要な情報を設定する関数 
-オペコードフィールド終了時は0を、そうでない場合は1を返す
+オペコードフィールド終了時は0を、そうでない場合は-1を返す
 */
 int Set_opc(t_disasm *da, unsigned char hex){
 	int i;
@@ -164,6 +171,7 @@ int Set_opc(t_disasm *da, unsigned char hex){
 
 	return 0;
 }
+
 
 /* 引数hexをModR/Mとして設定する関数 */
 void Set_modrm(t_disasm *da, unsigned char hex){
@@ -234,6 +242,7 @@ void Set_modrm(t_disasm *da, unsigned char hex){
 		break;
 	}
 }
+
 
 /* 引数hexをSIBとして設定する関数 */
 void Set_sib(t_disasm *da, unsigned char hex){

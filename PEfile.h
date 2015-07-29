@@ -1,3 +1,8 @@
+/* PEfile.h */
+/* Pefile.c用ヘッダファイル */
+
+
+
 /* IMAGE_DATA_DIRECTORY構造体用 */
 typedef struct IDD{
 	char Name[20];
@@ -38,4 +43,4 @@ typedef struct Idata{
 
 int Read_header(FILE *htfp, FILE *bfp, t_header *th);
 t_idata *Get_idata(FILE *bfp, t_header *th);
-int Read_idata(FILE *itfp, FILE *bfp, t_header *th, t_idata *ti);
+int Print_idata(FILE *itfp, FILE *bfp, t_header *th, t_idata *ti);

@@ -1,3 +1,8 @@
+/* PEfile.c */
+/* PEファイルのヘッダ解析、インポート情報取得、ファイル出力 */
+
+
+
 #include <stdio.h>
 #include <string.h>
 
@@ -218,7 +223,7 @@ t_idata *Get_idata(FILE *bfp, t_header *th){
 		return NULL;
 	}
 
-	/* ti構造体をインポートするDLLの総数だけ動的確保 */
+	/* t_idata構造体をIMAGE_IMPORT_DESCRIPTORのサイズだけ動的確保 */
 	t_idata *ti;
 	ti = (t_idata *)calloc(size_IID, sizeof(t_idata));
 	if (ti == NULL){
@@ -246,10 +251,10 @@ t_idata *Get_idata(FILE *bfp, t_header *th){
 
 
 /* 
-インポート情報の読み込み＆ファイル出力関数 
+インポート情報のファイル出力関数 
 成功時は0を、失敗時は-1を返す
 */
-int Read_idata(FILE *itfp, FILE *bfp, t_header *th, t_idata *ti){
+int Print_idata(FILE *itfp, FILE *bfp, t_header *th, t_idata *ti){
 	int i, j, len;
 	char c1;
 	short hint;

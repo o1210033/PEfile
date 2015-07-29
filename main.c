@@ -1,3 +1,8 @@
+/* main.c */
+/* PEファイルの情報取得、逆アセンブル、結果出力 */
+
+
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -22,6 +27,7 @@ int Print_disasm(FILE *dtfp, FILE *bfp, t_disasm *da, t_header *th, t_idata *ti)
 int Print_function(FILE *dtfp, unsigned long rva, FILE *bfp, t_header *th, t_idata *ti);
 int Print_string(FILE *dtfp, unsigned long rva, FILE *bfp, t_header *th);
 int Print_RefDisasm(FILE *dtfp, FILE *bfp, t_disasm *da, t_header *th, t_idata *ti);
+
 
 
 /* main関数 */
@@ -103,8 +109,8 @@ int main(void){
 		fclose(bfp);
 		exit(1);
 	}
-	if (Read_idata(itfp, bfp, &th, ti) != 0){
-		printf("ERROR: Read_idata\n");
+	if (Print_idata(itfp, bfp, &th, ti) != 0){
+		printf("ERROR: Print_idata\n");
 		free(th.sh);
 		free(ti);
 		fclose(itfp);
@@ -241,6 +247,7 @@ int Disasm_LinearSweep(FILE *dtfp, FILE *bfp, t_disasm *da, t_header *th, t_idat
 	return 0;
 }
 
+
 /* Set_regname関数に用いる関数 */
 void change_reg(char reg_name[8][5], char reg[8][5]){
 	int i;
@@ -248,6 +255,7 @@ void change_reg(char reg_name[8][5], char reg[8][5]){
 		strcpy(reg_name[i], reg[i]);
 	}
 }
+
 
 /* 引数reg_name[8][5]にレジスタ名を格納する関数 */
 void Set_regname(char reg_name[8][5], int size_reg){
@@ -286,6 +294,7 @@ void Set_regname(char reg_name[8][5], int size_reg){
 		break;
 	}
 }
+
 
 /* 逆アセンブル結果をファイル出力 */
 int Print_disasm(FILE *dtfp, FILE *bfp, t_disasm *da, t_header *th, t_idata *ti){
@@ -552,6 +561,7 @@ int Print_disasm(FILE *dtfp, FILE *bfp, t_disasm *da, t_header *th, t_idata *ti)
 	return 0;
 }
 
+
 /* 
 引数rvaがIATを指している場合かつ、インポート関数名がわかる場合、
 そのDLL名とインポート関数名をファイル出力する関数
@@ -621,6 +631,7 @@ int Print_function(FILE *dtfp, unsigned long rva, FILE *bfp, t_header *th, t_ida
 	return -1;
 }
 
+
 /* 
 引数rvaがASCIIもしくはUNICODE文字列を指す場合、その文字列をファイル出力する関数 
 成功の場合0を、失敗の場合-1を返す
@@ -678,6 +689,7 @@ int Print_string(FILE *dtfp, unsigned long rva, FILE *bfp, t_header *th){
 	fseek(bfp, offs_log, SEEK_SET);   //初期ファイル位置にシーク
 	return -1;
 }
+
 
 /* referenceアリの逆アセンブル結果をファイル出力する関数 */
 int Print_RefDisasm(FILE *dtfp, FILE *bfp, t_disasm *da, t_header *th, t_idata *ti){

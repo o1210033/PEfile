@@ -1,3 +1,8 @@
+/* disasm.h */
+/* disasm.c, opcode.c用ヘッダファイル */
+
+
+
 //operand
 #define IMM8    1
 #define IMM16   2
@@ -52,7 +57,6 @@ typedef struct Disasm{
 	unsigned char disp8, imm8;
 	unsigned short imm16;
 	unsigned long disp32, imm32;
-
 	struct ModRM{
 		int mod, ro, rm;
 		unsigned long hex;

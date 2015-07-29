@@ -1,7 +1,15 @@
+/* opcode.c */
+/* オペコードに対応した命令・オペランドを設定 */
+
+
+
 #include <stdio.h>
 
 #include "disasm.h"
 
+
+
+/* 1バイトオペコードに対応した命令・オペランドを設定する関数 */
 void Set_opc1(t_disasm *da){
 	switch (da->opc[0])
 	{
@@ -468,6 +476,8 @@ void Set_opc1(t_disasm *da){
 	}
 }
 
+
+/* 2バイトオペコード対応した命令・オペランドを設定する関数 */
 void Set_opc2(t_disasm *da){
 	switch (da->opc[1])
 	{
