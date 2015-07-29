@@ -6,13 +6,13 @@ typedef struct IDD{
 }t_IDD;
 
 /* セクション情報用の構造体 */
-typedef struct Section{
+typedef struct SectionHeader{
 	unsigned long VirtualSize;
 	unsigned long VirtualAddress;
 	unsigned long SizeOfRawData;
 	unsigned long PointerToRawData;
 	unsigned long Characteristics;
-}t_section;
+}t_sheader;
 
 /* Headerを解析して得た情報用の構造体 */
 typedef struct Header{
@@ -25,7 +25,7 @@ typedef struct Header{
 	unsigned long ImageBase;
 	unsigned long SizeOfImage;
 	t_IDD IDD[16];
-	t_section ts[10];
+	t_sheader *sh;
 	int ptr_text;
 }t_header;
 
@@ -43,5 +43,6 @@ typedef struct Idata{
 }t_idata;
 
 
+/* 関数宣言 */
 int Read_header(FILE *bfp, t_header *th);
 int Read_idata(FILE *bfp, t_header *th, t_idata ti[]);

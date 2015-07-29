@@ -21,7 +21,6 @@ int Print_disasm(FILE *dtfp, FILE *bfp, t_disasm *da, t_header *th, t_idata ti[]
 int Print_function(FILE *dtfp, unsigned long rva, t_idata ti[]);
 int Print_string(FILE *dtfp, unsigned long rva, FILE *bfp, t_header *th);
 int Print_RefDisasm(FILE *bfp, t_disasm *da, t_header *th, t_idata ti[]);
-void Free_rtable(t_disasm *da);
 
 
 /* main関数 */
@@ -55,6 +54,7 @@ int main(void){
 	sprintf(th.htname, "%s_Header.txt", szFile);
 	if (Read_header(bfp, &th) != 0){
 		printf("ERROR: Read_header\n");
+		if (th.sh != 0){ free(th.sh); }
 		fclose(bfp);
 		exit(1);
 	}
@@ -66,6 +66,7 @@ int main(void){
 	da.flag_ref = 0;
 	if (Disasm_LinearSweep(bfp, &da, &th, NULL) != 0){
 		printf("ERROR: Disasm_LinearSweep\n");
+		free(th.sh);
 		fclose(bfp);
 		exit(1);
 	}
@@ -75,6 +76,7 @@ int main(void){
 	sprintf(th.itname, "%s_Imports.txt", szFile);
 	if (Read_idata(bfp, &th, ti) != 0){
 		printf("ERROR: Read_idata\n");
+		free(th.sh);
 		fclose(bfp);
 		exit(1);
 	}
@@ -83,6 +85,7 @@ int main(void){
 	sprintf(da.dtname, "%s_RefDisasm.txt", szFile);
 	if (Print_RefDisasm(bfp, &da, &th, ti) != 0){
 		printf("ERROR: Disasm_LinearSweep\n");
+		free(th.sh);
 		fclose(bfp);
 		exit(1);
 	}
@@ -120,8 +123,8 @@ int Disasm_LinearSweep(FILE *bfp, t_disasm *da, t_header *th, t_idata ti[]){
 	FILE *dtfp;
 	unsigned char hex;
 	unsigned long rva;
-	unsigned long AddressOfCode = th->ImageBase + th->ts[th->ptr_text].VirtualAddress;
-	unsigned long EndAddressOfCode = th->ImageBase + th->ts[th->ptr_text].VirtualAddress + th->ts[th->ptr_text].SizeOfRawData;
+	unsigned long AddressOfCode = th->ImageBase + th->sh[th->ptr_text].VirtualAddress;
+	unsigned long EndAddressOfCode = th->ImageBase + th->sh[th->ptr_text].VirtualAddress + th->sh[th->ptr_text].SizeOfRawData;
 
 
 	/* 逆アセンブル結果出力ファイルのオープン処理 */
@@ -137,7 +140,7 @@ int Disasm_LinearSweep(FILE *bfp, t_disasm *da, t_header *th, t_idata ti[]){
 	da->offs = 0;
 
 	/* .textセクションの読み込み＆逆アセンブル処理＆ファイル出力 */
-	fseek(bfp, th->ts[th->ptr_text].PointerToRawData, SEEK_SET);   //.textセクションの先頭へシーク
+	fseek(bfp, th->sh[th->ptr_text].PointerToRawData, SEEK_SET);   //.textセクションの先頭へシーク
 	while (da->addr_code < EndAddressOfCode){   //.textセクションの最後まで読み込み
 		//ネイティブコード以外のデータ(IMAGE_DATA_DIRECTORY)部分は逆アセンブルしない
 		for (i = 0; i < 16; i++){ da->flag_IDD[i] = 0; }
@@ -146,7 +149,7 @@ int Disasm_LinearSweep(FILE *bfp, t_disasm *da, t_header *th, t_idata ti[]){
 			for (i = 0; i < 16; i++){
 				if (th->IDD[i].RVA <= rva && rva < th->IDD[i].RVA + th->IDD[i].Size){
 					da->addr_code += th->IDD[i].Size - (rva - th->IDD[i].RVA);
-					fseek(bfp, th->ts[th->ptr_text].PointerToRawData + (da->addr_code - AddressOfCode), SEEK_SET);
+					fseek(bfp, th->sh[th->ptr_text].PointerToRawData + (da->addr_code - AddressOfCode), SEEK_SET);
 					da->flag_IDD[i] = 1;   //ファイル出力用のフラグセット
 					break;
 				}
@@ -162,30 +165,30 @@ int Disasm_LinearSweep(FILE *bfp, t_disasm *da, t_header *th, t_idata ti[]){
 			Print_disasm(dtfp, bfp, da, th, ti);
 		}
 
-		//jump, call命令のreference table 設定用
+		//jump, call命令用のreference table 設定用
 		if (da->flag_ref){
 			if ((da->instruction[0] == 'J' && strcmp(da->instruction, "JMPF") != 0) || strcmp(da->instruction, "CALL") == 0){
 				if (da->flag_ref == COUNT){   //jump, call命令の総数をカウント
-					da->rtable.num++;
+					da->num_rtable++;
 				}
-				if (da->flag_ref == SET){   //rtable構造体に適切な値をセット
-					da->rtable.src[da->rtable.ptr] = da->addr_code;
+				else if (da->flag_ref == SET){   //rtable構造体にjump, call命令の指定先・元アドレスと命令種類をセット
+					da->rtable[da->ptr_rtable].src = da->addr_code;
 					if (da->operand[0] == REL8){
-						da->rtable.dst[da->rtable.ptr] = da->addr_code + da->offs + (char)da->imm8;
+						da->rtable[da->ptr_rtable].dst = da->addr_code + da->offs + (char)da->imm8;
 					}
 					else if (da->operand[0] == REL32){
-						da->rtable.dst[da->rtable.ptr] = da->addr_code + da->offs + (long)da->imm32;
+						da->rtable[da->ptr_rtable].dst = da->addr_code + da->offs + (long)da->imm32;
 					}
 					if (strcmp(da->instruction, "JMP") == 0){
-						da->rtable.flag[da->rtable.ptr] = UJMP;
+						da->rtable[da->ptr_rtable].flag = UJMP;
 					}
 					else if (da->instruction[0] == 'J'){
-						da->rtable.flag[da->rtable.ptr] = CJMP;
+						da->rtable[da->ptr_rtable].flag = CJMP;
 					}
 					else if (strcmp(da->instruction, "CALL") == 0){
-						da->rtable.flag[da->rtable.ptr] = CALL;
+						da->rtable[da->ptr_rtable].flag = CALL;
 					}
-					da->rtable.ptr++;
+					da->ptr_rtable++;
 				}
 			}
 		}
@@ -270,19 +273,19 @@ int Print_disasm(FILE *dtfp, FILE *bfp, t_disasm *da, t_header *th, t_idata ti[]
 
 	//必要に応じて Reference of JUMP or CALL を出力
 	if (da->flag_ref == PRINT){   //reference出力フラグ
-		for (ptr = 0; ptr < da->rtable.num; ptr++){
-			if (da->addr_code == da->rtable.dst[ptr]){
+		for (ptr = 0; ptr < da->num_rtable; ptr++){
+			if (da->addr_code == da->rtable[ptr].dst){
 				fprintf(dtfp, "\n* Referenced by (U)nconditional or (C)onditional Jump or (c)all at Address:\n");
-				fprintf(dtfp, "| %08X", da->rtable.src[ptr]);
-				if (da->rtable.flag[ptr] == UJMP){ fprintf(dtfp, "(U)"); }
-				if (da->rtable.flag[ptr] == CJMP){ fprintf(dtfp, "(C)"); }
-				if (da->rtable.flag[ptr] == CALL){ fprintf(dtfp, "(c)"); }
-				for (ptr++; ptr < da->rtable.num; ptr++){
-					if (da->addr_code == da->rtable.dst[ptr]){
-						fprintf(dtfp, ", %08X", da->rtable.src[ptr]);
-						if (da->rtable.flag[ptr] == UJMP){ fprintf(dtfp, "(U)"); }
-						if (da->rtable.flag[ptr] == CJMP){ fprintf(dtfp, "(C)"); }
-						if (da->rtable.flag[ptr] == CALL){ fprintf(dtfp, "(c)"); }
+				fprintf(dtfp, "| %08X", da->rtable[ptr].src);
+				if (da->rtable[ptr].flag == UJMP){ fprintf(dtfp, "(U)"); }
+				if (da->rtable[ptr].flag == CJMP){ fprintf(dtfp, "(C)"); }
+				if (da->rtable[ptr].flag == CALL){ fprintf(dtfp, "(c)"); }
+				for (ptr++; ptr < da->num_rtable; ptr++){
+					if (da->addr_code == da->rtable[ptr].dst){
+						fprintf(dtfp, ", %08X", da->rtable[ptr].src);
+						if (da->rtable[ptr].flag == UJMP){ fprintf(dtfp, "(U)"); }
+						if (da->rtable[ptr].flag == CJMP){ fprintf(dtfp, "(C)"); }
+						if (da->rtable[ptr].flag == CALL){ fprintf(dtfp, "(c)"); }
 					}
 				}
 				fprintf(dtfp, "\n|\n");
@@ -544,9 +547,9 @@ int Print_string(FILE *dtfp, unsigned long rva, FILE *bfp, t_header *th){
 
 	/* 引数rvaが初期化されたデータを含むセクション内であれば、ファイル位置を取得 */
 	for (i = 0; i < th->NumberOfSections; i++){
-			if (th->ts[i].VirtualAddress <= rva && rva <= th->ts[i].VirtualAddress + th->ts[i].VirtualSize){
-				if (th->ts[i].Characteristics == 0x40000040){   //初期化されたデータを含むセクションであるかどうか判定
-					offs_string = rva - th->ts[i].VirtualAddress + th->ts[i].PointerToRawData;
+			if (th->sh[i].VirtualAddress <= rva && rva <= th->sh[i].VirtualAddress + th->sh[i].VirtualSize){
+				if (th->sh[i].Characteristics == 0x40000040){   //初期化されたデータを含むセクションであるかどうか判定
+					offs_string = rva - th->sh[i].VirtualAddress + th->sh[i].PointerToRawData;
 					break;
 				}
 			}
@@ -592,26 +595,25 @@ int Print_RefDisasm(FILE *bfp, t_disasm *da, t_header *th, t_idata ti[]){
 	/* jump, call命令の総数をカウント */
 	da->flag_print = 0;
 	da->flag_ref = COUNT;
-	da->rtable.num = 0;
+	da->num_rtable = 0;
 	if (Disasm_LinearSweep(bfp, da, th, ti) != 0){
 		printf("ERROR: Disasm_LinearSweep (da->flag_ref:COUNT)\n");
 		return -1;
 	}
 
-	/* rtable構造体内の配列を動的確保し、適切な値をセット */
-	da->flag_ref = SET;
-	da->rtable.ptr = 0;
-	da->rtable.dst = (unsigned long *)calloc(da->rtable.num, sizeof(unsigned long));
-	da->rtable.src = (unsigned long *)calloc(da->rtable.num, sizeof(unsigned long));
-	da->rtable.flag = (int *)calloc(da->rtable.num, sizeof(int));
-	if (da->rtable.dst == NULL || da->rtable.src == NULL || da->rtable.flag == NULL){
+	/* rtable構造体を動的確保 */
+	da->rtable = (t_rtable *)calloc(da->num_rtable, sizeof(t_rtable));
+	if (da->rtable == NULL){
 		printf("ERROR: calloc rtable");
-		Free_rtable(da);
 		return -1;
 	}
+
+	/* rtable構造体にjump, call命令の指定先・元アドレスと命令種類をセット */
+	da->flag_ref = SET;
+	da->ptr_rtable = 0;
 	if (Disasm_LinearSweep(bfp, da, th, ti) != 0){
 		printf("ERROR: Disasm_LinearSweep (da->flag_ref:SET)\n");
-		Free_rtable(da);
+		free(da->rtable);
 		return -1;
 	}
 
@@ -620,20 +622,13 @@ int Print_RefDisasm(FILE *bfp, t_disasm *da, t_header *th, t_idata ti[]){
 	da->flag_ref = PRINT;
 	if (Disasm_LinearSweep(bfp, da, th, ti) != 0){
 		printf("ERROR: Disasm_LinearSweep (da->flag_ref:PRINT)\n");
-		Free_rtable(da);
+		free(da->rtable);
 		fclose(bfp);
 		return -1;
 	}
 
-	/* rtable構造体内の動的確保したメモリを解放 */
-	Free_rtable(da);
+	/* 構造体da内の動的確保した構造体rtableのメモリを解放 */
+	free(da->rtable);
 
 	return 0;
-}
-
-/* rtable構造体内の動的確保したメモリを解放する関数 */
-void Free_rtable(t_disasm *da){
-	if (da->rtable.dst != NULL){ free(da->rtable.dst); }
-	if (da->rtable.src != NULL){ free(da->rtable.src); }
-	if (da->rtable.flag != NULL){ free(da->rtable.flag); }
 }

@@ -34,6 +34,13 @@
 #define PRINT   3
 
 
+
+/* jump, call命令reference用構造体 */
+typedef struct ReferenceTable{
+	unsigned long dst, src;
+	int flag;
+}t_rtable;
+
 /* 逆アセンブルに必要な情報用の構造体 */
 typedef struct Disasm{
 	char dtname[300];
@@ -60,11 +67,8 @@ typedef struct Disasm{
 	//ファイル出力用
 	int flag_print, flag_ref, flag_IDD[16];
 	unsigned long addr_code, offs;
-	struct ReferenceTable{   //jump, call命令reference用
-		unsigned long ptr, num;
-		unsigned long *dst, *src;
-		int *flag;
-	}rtable;
+	t_rtable *rtable;   //jump, call命令reference用
+	unsigned long ptr_rtable, num_rtable;   //rtable用
 }t_disasm;
 
 /* disasm.c */

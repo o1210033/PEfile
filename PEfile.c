@@ -64,7 +64,9 @@ int Read_header(FILE *bfp, t_header *th){
 	fread(code.b1, 1, 2, bfp);
 	fprintf(htfp, "NumberOfSections:     %04X\n", code.b2);
 	th->NumberOfSections = code.b2;	//セクションの数
-	if (th->NumberOfSections > 10){ return -1; }   //セクション数が想定より多い場合、終了
+	th->sh = (t_sheader *)calloc(th->NumberOfSections, sizeof(t_sheader));   //sh構造体を動的確保
+	if (th->sh == NULL){ return -1; }   //動的確保失敗時、終了
+
 
 	fseek(bfp, fhead + 16, SEEK_SET);
 	fread(code.b1, 1, 2, bfp);
@@ -129,28 +131,28 @@ int Read_header(FILE *bfp, t_header *th){
 		fseek(bfp, shead + 8, SEEK_SET);
 		fread(code.b1, 1, 4, bfp);
 		fprintf(htfp, "VirtualSize:          %08X\n", code.b4);
-		th->ts[ptr].VirtualSize = code.b4;   //メモリにロードされたときのセクションの合計サイズ
+		th->sh[ptr].VirtualSize = code.b4;   //メモリにロードされたときのセクションの合計サイズ
 
 		fseek(bfp, shead + 12, SEEK_SET);
 		fread(code.b1, 1, 4, bfp);
 		fprintf(htfp, "VirtualAddress:       %08X\n", code.b4);
-		th->ts[ptr].VirtualAddress = code.b4;   //メモリにロードされたときのセクションの先頭バイトのRVA
-		if (th->ts[ptr].VirtualAddress > th->SizeOfImage){ return -1; }   //RVAが適切かどうか確認
+		th->sh[ptr].VirtualAddress = code.b4;   //メモリにロードされたときのセクションの先頭バイトのRVA
+		if (th->sh[ptr].VirtualAddress > th->SizeOfImage){ return -1; }   //RVAが適切かどうか確認
 
 		fseek(bfp, shead + 16, SEEK_SET);
 		fread(code.b1, 1, 4, bfp);
 		fprintf(htfp, "SizeOfRawData:        %08X\n", code.b4);
-		th->ts[ptr].SizeOfRawData = code.b4;   //ファイル上におけるセクションのサイズ
+		th->sh[ptr].SizeOfRawData = code.b4;   //ファイル上におけるセクションのサイズ
 
 		fseek(bfp, shead + 20, SEEK_SET);
 		fread(code.b1, 1, 4, bfp);
 		fprintf(htfp, "PointerToRawData:     %08X\n", code.b4);
-		th->ts[ptr].PointerToRawData = code.b4;   //ファイル上におけるセクションの位置
+		th->sh[ptr].PointerToRawData = code.b4;   //ファイル上におけるセクションの位置
 
 		fseek(bfp, shead + 36, SEEK_SET);
 		fread(code.b1, 1, 4, bfp);
 		fprintf(htfp, "Characteristics:      %08X\n", code.b4);
-		th->ts[ptr].Characteristics = code.b4;
+		th->sh[ptr].Characteristics = code.b4;
 		if ((code.b4 & 0x20000000) && (code.b4 & 0x00000020)){   //.textセクションの特定
 			th->ptr_text = ptr;   //.textセクションが何番目のセクションであるかを記憶
 		}
@@ -180,8 +182,8 @@ int Read_idata(FILE *bfp, t_header *th, t_idata ti[]){
 	/* IMAGE_IMPORT_DESCRIPTORのRVAとファイル位置を取得 */
 	VA = th->IDD[1].RVA;   //IMAGE_IMPORT_DESCRIPTORのRVAをIMAGE_DATA_DIRECTORY構造体より取得
 	for (i = 0; i < th->NumberOfSections; i++){   //RVAからどのセクションにあるのかを特定し、ファイル位置を取得
-		if (th->ts[i].VirtualAddress <= VA && VA <= th->ts[i].VirtualAddress + th->ts[i].VirtualSize){
-			PTRD = VA - th->ts[i].VirtualAddress + th->ts[i].PointerToRawData;
+		if (th->sh[i].VirtualAddress <= VA && VA <= th->sh[i].VirtualAddress + th->sh[i].VirtualSize){
+			PTRD = VA - th->sh[i].VirtualAddress + th->sh[i].PointerToRawData;
 			break;
 		}
 	}
