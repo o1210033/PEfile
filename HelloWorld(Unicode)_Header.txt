@@ -1,3 +1,5 @@
+[Header]
+
 e_magic:              5A4D ("MZ")
 e_lfanew:             000000E8
 

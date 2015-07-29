@@ -4,13 +4,13 @@
 #include "PEfile.h"
 
 
+
 /*
 ヘッダ情報を取得し、テキストファイルに出力する関数
 成功時は0を、失敗時は-1を返す
 */
-int Read_header(FILE *bfp, t_header *th){
+int Read_header(FILE *htfp, FILE *bfp, t_header *th){
 	int i, ptr;
-	FILE *htfp;
 	unsigned char c1, name[10];
 	union{
 		unsigned short b2;
@@ -22,19 +22,15 @@ int Read_header(FILE *bfp, t_header *th){
 		"GlobalPtr", "TLS", "Load Config", "Bound Import", "IAT", "Delayed Imports", "COM Runtime", "Reserved"
 	};
 
-
-	/* 結果出力ファイルをオープン */
-	if ((htfp = fopen(th->htname, "w")) == NULL){
-		printf("\aファイルをオープンできません。\n");
-		return -1;
-	}
-
-	/*逆アセンブルに必要な情報を取得*/
+	/* ヘッダ情報を取得 */
 	//IMAGE_DOS_HEADER
 	fseek(bfp, 0, SEEK_SET);
 	fread(code.b1, 1, 2, bfp);
 	fprintf(htfp, "e_magic:              %04X (\"%c%c\")\n", code.b2, code.b1[0], code.b1[1]);
-	if (code.b2 != 0x5a4d){ return -1; }   //MZシグネチャの存在を確認
+	if (code.b2 != 0x5a4d){   //MZシグネチャが存在しない場合、終了
+		printf("ERROR: Not MZ signature\n");
+		return -1; 
+	}
 
 	fseek(bfp, 0x3c, SEEK_SET);
 	fread(code.b1, 1, 4, bfp);
@@ -49,7 +45,10 @@ int Read_header(FILE *bfp, t_header *th){
 	fseek(bfp, e_lfanew, SEEK_SET);
 	fread(code.b1, 1, 4, bfp);
 	fprintf(htfp, "Magic:                %08X (\"%s\")\n", code.b4, code.b1);
-	if (code.b4 != 0x00004550){ return -1; }   //PEシグネチャの存在を確認
+	if (code.b4 != 0x00004550){   //PEシグネチャが存在しない場合、終了 
+		printf("ERROR: Not PE signature\n");
+		return -1; 
+	}
 
 	fputc('\n', htfp);   //改行
 
@@ -57,16 +56,21 @@ int Read_header(FILE *bfp, t_header *th){
 	fseek(bfp, fhead, SEEK_SET);
 	fread(code.b1, 1, 2, bfp);
 	fprintf(htfp, "Machine:              %04X", code.b2);
-	if (code.b2 != 0x014c){ return -1; }   //マシンタイプがI386であることを確認
+	if (code.b2 != 0x014c){   //マシンタイプがI386でない場合、終了
+		printf("ERROR: Not Machine I386\n");
+		return -1; 
+	}   //マシンタイプがI386であることを確認
 	else{ fprintf(htfp, " (Intel 386)\n"); }
 
 	fseek(bfp, fhead + 2, SEEK_SET);
 	fread(code.b1, 1, 2, bfp);
 	fprintf(htfp, "NumberOfSections:     %04X\n", code.b2);
 	th->NumberOfSections = code.b2;	//セクションの数
-	th->sh = (t_sheader *)calloc(th->NumberOfSections, sizeof(t_sheader));   //sh構造体を動的確保
-	if (th->sh == NULL){ return -1; }   //動的確保失敗時、終了
-
+	th->sh = (t_sheader *)calloc(th->NumberOfSections, sizeof(t_sheader));   //sh構造体をセクションの数だけ動的確保
+	if (th->sh == NULL){
+		printf("ERROR: calloc th->sh\n");
+		return -1; 
+	}   
 
 	fseek(bfp, fhead + 16, SEEK_SET);
 	fread(code.b1, 1, 2, bfp);
@@ -76,7 +80,10 @@ int Read_header(FILE *bfp, t_header *th){
 	fseek(bfp, fhead + 18, SEEK_SET);
 	fread(code.b1, 1, 2, bfp);
 	fprintf(htfp, "Characteristics:      %04X\n", code.b2);
-	if (!((code.b2 & 0x0002) && (code.b2 & 0x0100))){ return -1; }   //実行可能かつ32ビットアーキテクチャのマシンであることを確認
+	if (!((code.b2 & 0x0002) && (code.b2 & 0x0100))){   //実行可能かつ32ビットアーキテクチャのマシンでない場合、終了
+		printf("ERROR: Not executable or Not 32bit machine\n");
+		return -1;
+	}
 
 	fputc('\n', htfp);   //改行
 
@@ -137,7 +144,10 @@ int Read_header(FILE *bfp, t_header *th){
 		fread(code.b1, 1, 4, bfp);
 		fprintf(htfp, "VirtualAddress:       %08X\n", code.b4);
 		th->sh[ptr].VirtualAddress = code.b4;   //メモリにロードされたときのセクションの先頭バイトのRVA
-		if (th->sh[ptr].VirtualAddress > th->SizeOfImage){ return -1; }   //RVAが適切かどうか確認
+		if (th->sh[ptr].VirtualAddress > th->SizeOfImage){   //RVAが適切でない場合、終了
+			printf("ERROR: Get VirtualAddress of sheader\n");
+			return -1; 
+		}
 
 		fseek(bfp, shead + 16, SEEK_SET);
 		fread(code.b1, 1, 4, bfp);
@@ -161,21 +171,22 @@ int Read_header(FILE *bfp, t_header *th){
 
 		shead += 40;   //次セクションのファイルオフセットに更新
 	}
-	if (th->ptr_text < 0){ return -1; }   //.textセクションを特定できたかどうか確認
-
-	fclose(htfp);   //結果出力ファイルをクローズ
+	if (th->ptr_text < 0){   //.textセクションを特定できたかどうか確認
+		printf("ERROR: Get ptr_text\n");
+		return -1;
+	}
 
 	return 0;
 }
 
+
 /* 
-インポート情報の読み込み＆ファイル出力関数 
-成功時は0を、失敗時は-1を返す
+初期化して値をセットしたt_idata構造体を返す関数 
+失敗時はNULLを返す
 */
-int Read_idata(FILE *bfp, t_header *th, t_idata ti[]){
-	int i, j, len;
-	FILE *itfp;
-	unsigned long offs, rva;
+t_idata *Get_idata(FILE *bfp, t_header *th){
+	int i, size_IID;
+	unsigned long rva;
 	unsigned long VA, PTRD;   //IMAGE_IMPORT_DESCRIPTORのRVAとファイル位置
 
 
@@ -187,10 +198,36 @@ int Read_idata(FILE *bfp, t_header *th, t_idata ti[]){
 			break;
 		}
 	}
-	if (i == th->NumberOfSections){ return -1; }   //IMAGE_IMPORT_DESCRIPTORのファイル位置を取得できなかった場合、終了
+	if (i == th->NumberOfSections){   //IMAGE_IMPORT_DESCRIPTORのファイル位置を取得できなかった場合、終了 
+		printf("ERROR: Get PTRD\n");
+		return NULL; 
+	}
+
+	/* IMAGE_IMPORT_DESCRIPTORのサイズをカウント */
+	size_IID = 0;
+	for (i = 0; i >= 0; i++){
+		fseek(bfp, PTRD + (i * 20) + 16, SEEK_SET);
+		fread(&rva, 1, 4, bfp);
+		if (rva == 0){   //IMAGE_IMPORT_DESCRIPTORの終端
+			size_IID = i + 1;
+			break;
+		}
+	}
+	if (size_IID <= 0){   //IMAGE_IMPORT_DESCRIPTORのサイズが想定よりも大きい場合、終了
+		printf("ERROR: Get size_IDD\n");
+		return NULL;
+	}
+
+	/* ti構造体をインポートするDLLの総数だけ動的確保 */
+	t_idata *ti;
+	ti = (t_idata *)calloc(size_IID, sizeof(t_idata));
+	if (ti == NULL){
+		printf("ERROR: calloc ti\n");
+		return NULL;
+	}
 
 	/* IMAGE_IMPORT_DESCRIPTORからILT,DLL名,IATのRVAを取得 */
-	for (i = 0; i < 30; i++){
+	for (i = 0; i >= 0; i++){
 		//ILTのRVA取得
 		fseek(bfp, PTRD + (i * 20), SEEK_SET);
 		fread(&ti[i].OriginalFirstThunk, 1, 4, bfp);
@@ -203,20 +240,49 @@ int Read_idata(FILE *bfp, t_header *th, t_idata ti[]){
 		fread(&ti[i].FirstThunk, 1, 4, bfp);
 		if (ti[i].FirstThunk == 0){ break; }   //IMAGE_IMPORT_DESCRIPTORの終端
 	}
-	if (i == 30){ return -1; }   //DLLの数が想定より多い場合、終了
 
-	/* DLL名取得 */
-	for (i = 0; ti[i].FirstThunk != 0; i++){
-		fseek(bfp, PTRD + (ti[i].Name - VA), SEEK_SET);
-		for (len = 0; len < 50; len++){
-			fread(ti[i].dll + len, 1, 1, bfp);
-			if (ti[i].dll[len] == '\0'){ break; }   //DLL名の終端
+	return ti;
+}
+
+
+/* 
+インポート情報の読み込み＆ファイル出力関数 
+成功時は0を、失敗時は-1を返す
+*/
+int Read_idata(FILE *itfp, FILE *bfp, t_header *th, t_idata *ti){
+	int i, j, len;
+	char c1;
+	short hint;
+	long ord;
+	unsigned long offs, b4;
+	unsigned long VA, PTRD;   //IMAGE_IMPORT_DESCRIPTORのRVAとファイル位置
+
+
+	/* IMAGE_IMPORT_DESCRIPTORのRVAとファイル位置を取得 */
+	VA = th->IDD[1].RVA;   //IMAGE_IMPORT_DESCRIPTORのRVAをIMAGE_DATA_DIRECTORY構造体より取得
+	for (i = 0; i < th->NumberOfSections; i++){   //RVAからどのセクションにあるのかを特定し、ファイル位置を取得
+		if (th->sh[i].VirtualAddress <= VA && VA <= th->sh[i].VirtualAddress + th->sh[i].VirtualSize){
+			PTRD = VA - th->sh[i].VirtualAddress + th->sh[i].PointerToRawData;
+			break;
 		}
-		if (len == 50){ return -1; }   //DLL名の長さが想定よりも長かった場合、終了
+	}
+	if (i == th->NumberOfSections){   //IMAGE_IMPORT_DESCRIPTORのファイル位置を取得できなかった場合、終了
+		printf("ERROR: Get PTRD\n");
+		return -1;
 	}
 
-	/* インポート関数の序数もしくはヒントと名前取得 */
+	/* 各DLL名ごとに、IATのRVAに加えてインポート関数の序数もしくはヒントと名前を出力 */
 	for (i = 0; ti[i].FirstThunk != 0; i++){
+		//DLL名出力
+		fprintf(itfp, "DLL: ");
+		fseek(bfp, PTRD + (ti[i].Name - VA), SEEK_SET);
+		for (len = 0; len >= 0; len++){
+			fread(&c1, 1, 1, bfp);
+			fprintf(itfp, "%c", c1);
+			if (c1 == '\0'){ break; }   //DLL名の終端
+		}
+		fputc('\n', itfp);
+
 		//offsにILTもしくはIATのファイル位置をセット
 		if (ti[0].OriginalFirstThunk != 0){   //ILTが存在する場合、ILTをセット
 			offs = PTRD + (ti[i].OriginalFirstThunk - VA);
@@ -225,51 +291,42 @@ int Read_idata(FILE *bfp, t_header *th, t_idata ti[]){
 			offs = PTRD + (ti[i].FirstThunk - VA);
 		}
 
-		//インポート関数の序数もしくはヒントと名前取得
-		for (j = 0; j < 150; j++){
+		//IATのRVAに加え、インポート関数の序数もしくはヒントと名前出力
+		for (j = 0; j >= 0; j++){
 			fseek(bfp, offs + (j * 4), SEEK_SET);
-			fread(&rva, 1, 4, bfp);
-			if (rva == 0){ break; }   //ILTもしくはIATの終端
-
-			if ((rva & 0x80000000) != 0){   //序数の取得
-				ti[i].OrdinalNumber[j] = rva & 0x7FFFFFFF;
-				ti[i].function[j][0] = '\0';   //インポート関数名を取得できなかったことを示す
+			fread(&b4, 1, 4, bfp);
+			if (b4 == 0){   //ILTもしくはIATの終端
+				ti[i].num_function = j;
+				break; 
 			}
-			else{   //ヒントと名前取得
-				if (rva > th->SizeOfImage){ return -1; }   //RVAが適切でない場合、終了
-				fseek(bfp, PTRD + (rva - VA), SEEK_SET);
-				fread(&ti[i].Hint[j], 1, 2, bfp);
-				for (len = 0; len < 50; len++){
-					fread(ti[i].function[j] + len, 1, 1, bfp);
-					if (ti[i].function[j][len] == '\0'){ break; }   //インポート関数名の終端
+			fprintf(itfp, " RVA: % 08X, ", ti[i].FirstThunk + (j * 4));   //IATのRVA出力
+
+			if ((b4 & 0x80000000) != 0){   //序数の出力
+				ord = b4 & 0x7FFFFFFF;
+				fprintf(itfp, "Ord#: %4d(%04X)\n", ord, ord);
+			}
+			else{   //ヒントと名前出力
+				if (b4 > th->SizeOfImage){   //適切なRVAではない場合、終了
+					printf("ERROR: Get function\n");
+					return -1; 
+				}   
+				fseek(bfp, PTRD + (b4 - VA), SEEK_SET);
+				fread(&hint, 1, 2, bfp);
+				fprintf(itfp, "Hint: %4d(%04X), Name: ", hint, hint);
+				for (len = 0; len >= 0; len++){
+					fread(&c1, 1, 1, bfp);
+					fprintf(itfp, "%c", c1);
+					if (c1 == '\0'){ break; }   //インポート関数名の終端
 				}
-				if (len == 50){ return -1; }   //インポート関数名の長さが想定よりも長かった場合、終了
+				fputc('\n', itfp);
 			}
 		}
-		if (j == 150){ return -1; }   //ILTもしくはIATのサイズが想定より大きかった場合、終了
-		ti[i].size_IAT = j;   //IATのサイズを記憶
+		if (j <= 0){   //IATのサイズが想定よりも大きい場合、終了
+			printf("ERROR: over size of IAT\n");
+			return -1;
+		}
+		fputc('\n', itfp);
 	}
 	
-	//ファイル出力
-	if ((itfp = fopen(th->itname, "w")) == NULL){
-		printf("\aファイルをオープンできません。\n");
-		return -1;
-	}
-	fprintf(itfp, "[IMPORTS]\n\n");
-	for (i = 0; ti[i].FirstThunk != 0; i++){
-		fprintf(itfp, "DLL: %s\n", ti[i].dll);   //DLL名出力
-		for (j = 0; j < ti[i].size_IAT; j++){
-			if (ti[i].function[j][0] == '\0'){   //序数出力
-				fprintf(itfp, " RVA: %08X, Ord#: %4d(%04X)\n", ti[i].FirstThunk + (j * 4), ti[i].OrdinalNumber[j], ti[i].OrdinalNumber[j]);
-			}
-			else{   //ヒントとインポート関数名出力
-				fprintf(itfp, " RVA: %08X, Hint: %4d(%04X), Name: %s\n", ti[i].FirstThunk + (j * 4), ti[i].Hint[j], ti[i].Hint[j], ti[i].function[j]);
-			}
-		}
-		fprintf(itfp, "\n");
-	}
-	fclose(itfp);
-
-
 	return 0;
 }

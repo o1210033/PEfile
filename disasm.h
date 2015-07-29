@@ -43,8 +43,6 @@ typedef struct ReferenceTable{
 
 /* 逆アセンブルに必要な情報用の構造体 */
 typedef struct Disasm{
-	char dtname[300];
-
 	int flag_pref, flag_modrm, flag_sib;
 	int size_opc, size_disp, size_imm;
 	int ptr_pref, ptr_opc;
@@ -65,11 +63,12 @@ typedef struct Disasm{
 	} sib;
 
 	//ファイル出力用
-	int flag_print, flag_ref, flag_IDD[16];
+	int flag_ref, flag_IDD[16];
 	unsigned long addr_code, offs;
 	t_rtable *rtable;   //jump, call命令reference用
 	unsigned long ptr_rtable, num_rtable;   //rtable用
 }t_disasm;
+
 
 /* disasm.c */
 int Disasm(FILE *bfp, t_disasm *da);

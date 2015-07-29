@@ -771,19 +771,19 @@
 004113DD|   AB                            | STOSD     
 004113DE|   8B F4                         | MOV       ESI, ESP
 004113E0|   68 58584100                   | PUSH      00415858h   | UNICODE "Hello World 2015!"
-004113E5|   FF 15 14914100                | CALL      [00419114h]   | MSVCR120D.dll wprintf
+004113E5|   FF 15 14914100                | CALL      [00419114h]   | MSVCR120D.dll  wprintf 
 004113EB|   83 C4 04                      | ADD       ESP, 04h
 004113EE|   3B F4                         | CMP       ESI, ESP
 004113F0|   E8 41FDFFFF                   | CALL      00411136h
 004113F5|   8B F4                         | MOV       ESI, ESP
 004113F7|   68 88584100                   | PUSH      00415888h   | UNICODE "azAZ"
-004113FC|   FF 15 14914100                | CALL      [00419114h]   | MSVCR120D.dll wprintf
+004113FC|   FF 15 14914100                | CALL      [00419114h]   | MSVCR120D.dll  wprintf 
 00411402|   83 C4 04                      | ADD       ESP, 04h
 00411405|   3B F4                         | CMP       ESI, ESP
 00411407|   E8 2AFDFFFF                   | CALL      00411136h
 0041140C|   8B F4                         | MOV       ESI, ESP
 0041140E|   68 98584100                   | PUSH      00415898h
-00411413|   FF 15 14914100                | CALL      [00419114h]   | MSVCR120D.dll wprintf
+00411413|   FF 15 14914100                | CALL      [00419114h]   | MSVCR120D.dll  wprintf 
 00411419|   83 C4 04                      | ADD       ESP, 04h
 0041141C|   3B F4                         | CMP       ESI, ESP
 0041141E|   E8 13FDFFFF                   | CALL      00411136h
@@ -802,7 +802,7 @@
 * Referenced by (U)nconditional or (C)onditional Jump or (c)all at Address:
 | 004111DB(U)
 |
-0041143A|   FF 25 18914100                | JMP       [00419118h]   | MSVCR120D.dll printf
+0041143A|   FF 25 18914100                | JMP       [00419118h]   | MSVCR120D.dll  printf 
 00411440|   CC                            | INT3      
 00411441|   CC                            | INT3      
 00411442|   CC                            | INT3      
@@ -831,7 +831,7 @@
 * Referenced by (U)nconditional or (C)onditional Jump or (c)all at Address:
 | 0041114A(U)
 |
-00411458|   FF 25 14914100                | JMP       [00419114h]   | MSVCR120D.dll wprintf
+00411458|   FF 25 14914100                | JMP       [00419114h]   | MSVCR120D.dll  wprintf 
 0041145E|   CC                            | INT3      
 0041145F|   CC                            | INT3      
 
@@ -1267,17 +1267,17 @@
 004116B3|   E8 F8030000                   | CALL      00411AB0h
 004116B8|   A3 3C814100                   | MOV       [0041813Ch], EAX
 004116BD|   6A 01                         | PUSH      01h
-004116BF|   FF 15 FC904100                | CALL      [004190FCh]   | MSVCR120D.dll __set_app_type
+004116BF|   FF 15 FC904100                | CALL      [004190FCh]   | MSVCR120D.dll  __set_app_type 
 004116C5|   83 C4 04                      | ADD       ESP, 04h
 004116C8|   6A FF                         | PUSH      FFh
-004116CA|   FF 15 4C904100                | CALL      [0041904Ch]   | KERNEL32.dll EncodePointer
+004116CA|   FF 15 4C904100                | CALL      [0041904Ch]   | KERNEL32.dll  EncodePointer 
 004116D0|   A3 5C854100                   | MOV       [0041855Ch], EAX
 004116D5|   A1 5C854100                   | MOV       EAX, [0041855Ch]
 004116DA|   A3 6C854100                   | MOV       [0041856Ch], EAX
-004116DF|   8B 0D D0904100                | MOV       ECX, [004190D0h]   | MSVCR120D.dll _fmode
+004116DF|   8B 0D D0904100                | MOV       ECX, [004190D0h]   | MSVCR120D.dll  _fmode 
 004116E5|   8B 15 78814100                | MOV       EDX, [00418178h]
 004116EB|   89 11                         | MOV       [ECX], EDX
-004116ED|   A1 CC904100                   | MOV       EAX, [004190CCh]   | MSVCR120D.dll _commode
+004116ED|   A1 CC904100                   | MOV       EAX, [004190CCh]   | MSVCR120D.dll  _commode 
 004116F2|   8B 0D 6C814100                | MOV       ECX, [0041816Ch]
 004116F8|   89 08                         | MOV       [EAX], ECX
 004116FA|   E8 46FAFFFF                   | CALL      00411145h
@@ -1285,7 +1285,7 @@
 00411704|   83 3D 18804100 00             | CMP       [00418018h], 00h
 0041170B|   75 0E                         | JNZ       0041171Bh
 0041170D|   68 9A114100                   | PUSH      0041119Ah
-00411712|   FF 15 E0904100                | CALL      [004190E0h]   | MSVCR120D.dll __setusermatherr
+00411712|   FF 15 E0904100                | CALL      [004190E0h]   | MSVCR120D.dll  __setusermatherr 
 00411718|   83 C4 04                      | ADD       ESP, 04h
 
 * Referenced by (U)nconditional or (C)onditional Jump or (c)all at Address:
@@ -1295,7 +1295,7 @@
 00411720|   83 3D 1C804100 FF             | CMP       [0041801Ch], FFh
 00411727|   75 0B                         | JNZ       00411734h
 00411729|   6A FF                         | PUSH      FFh
-0041172B|   FF 15 E4904100                | CALL      [004190E4h]   | MSVCR120D.dll _configthreadlocale
+0041172B|   FF 15 E4904100                | CALL      [004190E4h]   | MSVCR120D.dll  _configthreadlocale 
 00411731|   83 C4 04                      | ADD       ESP, 04h
 
 * Referenced by (U)nconditional or (C)onditional Jump or (c)all at Address:
@@ -1357,7 +1357,7 @@
 00411786|   68 48814100                   | PUSH      00418148h
 0041178B|   68 44814100                   | PUSH      00418144h
 00411790|   68 40814100                   | PUSH      00418140h
-00411795|   FF 15 00914100                | CALL      [00419100h]   | MSVCR120D.dll __getmainargs
+00411795|   FF 15 00914100                | CALL      [00419100h]   | MSVCR120D.dll  __getmainargs 
 0041179B|   83 C4 14                      | ADD       ESP, 14h
 0041179E|   A3 4C814100                   | MOV       [0041814Ch], EAX
 004117A3|   83 3D 4C814100 00             | CMP       [0041814Ch], 00h
@@ -1522,7 +1522,7 @@
 004118F7|   68 29020000                   | PUSH      00000229h
 004118FC|   68 10594100                   | PUSH      00415910h   | UNICODE "f:\dd\vctools\crt\crtw32\dllstuff\crtexe.c"
 00411901|   6A 02                         | PUSH      02h
-00411903|   FF 15 F8904100                | CALL      [004190F8h]   | MSVCR120D.dll _CrtDbgReportW
+00411903|   FF 15 F8904100                | CALL      [004190F8h]   | MSVCR120D.dll  _CrtDbgReportW 
 00411909|   83 C4 18                      | ADD       ESP, 18h
 0041190C|   83 F8 01                      | CMP       EAX, 01h
 0041190F|   75 01                         | JNZ       00411912h
@@ -1556,9 +1556,9 @@
 | 00411928(C), 00411939(C)
 |
 00411947|   6A 01                         | PUSH      01h
-00411949|   FF 15 F4904100                | CALL      [004190F4h]   | MSVCR120D.dll _CrtSetCheckCount
+00411949|   FF 15 F4904100                | CALL      [004190F4h]   | MSVCR120D.dll  _CrtSetCheckCount 
 0041194F|   83 C4 04                      | ADD       ESP, 04h
-00411952|   8B 0D D4904100                | MOV       ECX, [004190D4h]   | MSVCR120D.dll __initenv
+00411952|   8B 0D D4904100                | MOV       ECX, [004190D4h]   | MSVCR120D.dll  __initenv 
 00411958|   8B 15 48814100                | MOV       EDX, [00418148h]
 0041195E|   89 11                         | MOV       [ECX], EDX
 00411960|   A1 48814100                   | MOV       EAX, [00418148h]
@@ -1574,14 +1574,14 @@
 00411988|   75 0C                         | JNZ       00411996h
 0041198A|   A1 38814100                   | MOV       EAX, [00418138h]
 0041198F|   50                            | PUSH      EAX
-00411990|   FF 15 F0904100                | CALL      [004190F0h]   | MSVCR120D.dll exit
+00411990|   FF 15 F0904100                | CALL      [004190F0h]   | MSVCR120D.dll  exit 
 
 * Referenced by (U)nconditional or (C)onditional Jump or (c)all at Address:
 | 00411988(C)
 |
 00411996|   83 3D 34814100 00             | CMP       [00418134h], 00h
 0041199D|   75 06                         | JNZ       004119A5h
-0041199F|   FF 15 E8904100                | CALL      [004190E8h]   | MSVCR120D.dll _cexit
+0041199F|   FF 15 E8904100                | CALL      [004190E8h]   | MSVCR120D.dll  _cexit 
 
 * Referenced by (U)nconditional or (C)onditional Jump or (c)all at Address:
 | 0041199D(C)
@@ -1606,14 +1606,14 @@
 004119DB|   75 0D                         | JNZ       004119EAh
 004119DD|   8B 0D 38814100                | MOV       ECX, [00418138h]
 004119E3|   51                            | PUSH      ECX
-004119E4|   FF 15 EC904100                | CALL      [004190ECh]   | MSVCR120D.dll _exit
+004119E4|   FF 15 EC904100                | CALL      [004190ECh]   | MSVCR120D.dll  _exit 
 
 * Referenced by (U)nconditional or (C)onditional Jump or (c)all at Address:
 | 004119DB(C)
 |
 004119EA|   83 3D 34814100 00             | CMP       [00418134h], 00h
 004119F1|   75 06                         | JNZ       004119F9h
-004119F3|   FF 15 E8904100                | CALL      [004190E8h]   | MSVCR120D.dll _cexit
+004119F3|   FF 15 E8904100                | CALL      [004190E8h]   | MSVCR120D.dll  _cexit 
 
 * Referenced by (U)nconditional or (C)onditional Jump or (c)all at Address:
 | 004119F1(C)
@@ -1974,7 +1974,7 @@
 00411BD5|   6A 06                         | PUSH      06h
 00411BD7|   6A 00                         | PUSH      00h
 00411BD9|   68 88136D40                   | PUSH      406D1388h
-00411BDE|   FF 15 44904100                | CALL      [00419044h]   | KERNEL32.dll RaiseException
+00411BDE|   FF 15 44904100                | CALL      [00419044h]   | KERNEL32.dll  RaiseException 
 00411BE4|   EB 16                         | JMP       00411BFCh
 00411BE6|   8B 45 EC                      | MOV       EAX, [EBP+ECh]
 00411BE9|   8B 00                         | MOV       EAX, [EAX]
@@ -2081,7 +2081,7 @@
 00411CA7|   6A 06                         | PUSH      06h
 00411CA9|   6A 00                         | PUSH      00h
 00411CAB|   68 88136D40                   | PUSH      406D1388h
-00411CB0|   FF 15 44904100                | CALL      [00419044h]   | KERNEL32.dll RaiseException
+00411CB0|   FF 15 44904100                | CALL      [00419044h]   | KERNEL32.dll  RaiseException 
 00411CB6|   EB 16                         | JMP       00411CCEh
 00411CB8|   8B 45 EC                      | MOV       EAX, [EBP+ECh]
 00411CBB|   8B 00                         | MOV       EAX, [EAX]
@@ -2179,7 +2179,7 @@
 00411D4C|   83 FF FF                      | CMP       EDI, FFh
 00411D4F|   0F 84 32010000                | JE        00411E87h
 00411D55|   53                            | PUSH      EBX
-00411D56|   8B 1D 38904100                | MOV       EBX, [00419038h]   | KERNEL32.dll LoadLibraryExW
+00411D56|   8B 1D 38904100                | MOV       EBX, [00419038h]   | KERNEL32.dll  LoadLibraryExW 
 00411D5C|   56                            | PUSH      ESI
 00411D5D|   68 00080000                   | PUSH      00000800h
 00411D62|   6A 00                         | PUSH      00h
@@ -2188,7 +2188,7 @@
 00411D6B|   8B F0                         | MOV       ESI, EAX
 00411D6D|   85 F6                         | TEST      ESI, ESI
 00411D6F|   75 22                         | JNZ       00411D93h
-00411D71|   FF 15 40904100                | CALL      [00419040h]   | KERNEL32.dll GetLastError
+00411D71|   FF 15 40904100                | CALL      [00419040h]   | KERNEL32.dll  GetLastError 
 00411D77|   83 F8 57                      | CMP       EAX, 57h
 00411D7A|   0F 85 EF000000                | JNE       00411E6Fh
 00411D80|   56                            | PUSH      ESI
@@ -2204,7 +2204,7 @@
 |
 00411D93|   68 DC5E4100                   | PUSH      00415EDCh   | ASCII "wsprintfA"
 00411D98|   56                            | PUSH      ESI
-00411D99|   FF 15 3C904100                | CALL      [0041903Ch]   | KERNEL32.dll GetProcAddress
+00411D99|   FF 15 3C904100                | CALL      [0041903Ch]   | KERNEL32.dll  GetProcAddress 
 00411D9F|   8B C8                         | MOV       ECX, EAX
 00411DA1|   89 0D 5C814100                | MOV       [0041815Ch], ECX
 00411DA7|   85 F6                         | TEST      ESI, ESI
@@ -2833,7 +2833,7 @@
 004121B5|   6A 00                         | PUSH      00h
 004121B7|   6A FF                         | PUSH      FFh
 004121B9|   53                            | PUSH      EBX
-004121BA|   8B 1D 34904100                | MOV       EBX, [00419034h]   | KERNEL32.dll MultiByteToWideChar
+004121BA|   8B 1D 34904100                | MOV       EBX, [00419034h]   | KERNEL32.dll  MultiByteToWideChar 
 004121C0|   6A 00                         | PUSH      00h
 004121C2|   68 E9FD0000                   | PUSH      0000FDE9h
 004121C7|   FF D3                         | CALL      EBX
@@ -2894,7 +2894,7 @@
 |
 00412240|   84 C0                         | TEST      AL, AL
 00412242|   74 0E                         | JE        00412252h
-00412244|   FF 15 48904100                | CALL      [00419048h]   | KERNEL32.dll IsDebuggerPresent
+00412244|   FF 15 48904100                | CALL      [00419048h]   | KERNEL32.dll  IsDebuggerPresent 
 0041224A|   85 C0                         | TEST      EAX, EAX
 0041224C|   0F 85 EB000000                | JNE       0041233Dh
 
@@ -2930,7 +2930,7 @@
 * Referenced by (U)nconditional or (C)onditional Jump or (c)all at Address:
 | 0041227F(C)
 |
-004122AB|   8B 1D 30904100                | MOV       EBX, [00419030h]   | KERNEL32.dll WideCharToMultiByte
+004122AB|   8B 1D 30904100                | MOV       EBX, [00419030h]   | KERNEL32.dll  WideCharToMultiByte 
 004122B1|   8D 85 E0F8FFFF                | LEA       EAX, [EBP+FFFFF8E0h]
 004122B7|   6A 00                         | PUSH      00h
 004122B9|   6A 00                         | PUSH      00h
@@ -3494,7 +3494,7 @@
 * Referenced by (U)nconditional or (C)onditional Jump or (c)all at Address:
 | 00411172(U)
 |
-004125DC|   FF 25 0C914100                | JMP       [0041910Ch]   | MSVCR120D.dll _CRT_RTC_INITW
+004125DC|   FF 25 0C914100                | JMP       [0041910Ch]   | MSVCR120D.dll  _CRT_RTC_INITW 
 004125E2|   CC                            | INT3      
 004125E3|   CC                            | INT3      
 004125E4|   CC                            | INT3      
@@ -3606,12 +3606,12 @@
 * Referenced by (U)nconditional or (C)onditional Jump or (c)all at Address:
 | 00411186(U)
 |
-0041268A|   FF 25 08914100                | JMP       [00419108h]   | MSVCR120D.dll _XcptFilter
+0041268A|   FF 25 08914100                | JMP       [00419108h]   | MSVCR120D.dll  _XcptFilter 
 
 * Referenced by (U)nconditional or (C)onditional Jump or (c)all at Address:
 | 00411181(U)
 |
-00412690|   FF 25 04914100                | JMP       [00419104h]   | MSVCR120D.dll _amsg_exit
+00412690|   FF 25 04914100                | JMP       [00419104h]   | MSVCR120D.dll  _amsg_exit 
 00412696|   CC                            | INT3      
 00412697|   CC                            | INT3      
 00412698|   CC                            | INT3      
@@ -3636,22 +3636,22 @@
 * Referenced by (U)nconditional or (C)onditional Jump or (c)all at Address:
 | 0041119F(U)
 |
-004126A8|   FF 25 00914100                | JMP       [00419100h]   | MSVCR120D.dll __getmainargs
+004126A8|   FF 25 00914100                | JMP       [00419100h]   | MSVCR120D.dll  __getmainargs 
 
 * Referenced by (U)nconditional or (C)onditional Jump or (c)all at Address:
 | 00411131(U)
 |
-004126AE|   FF 25 FC904100                | JMP       [004190FCh]   | MSVCR120D.dll __set_app_type
+004126AE|   FF 25 FC904100                | JMP       [004190FCh]   | MSVCR120D.dll  __set_app_type 
 
 * Referenced by (U)nconditional or (C)onditional Jump or (c)all at Address:
 | 0041105F(U)
 |
-004126B4|   FF 25 F8904100                | JMP       [004190F8h]   | MSVCR120D.dll _CrtDbgReportW
+004126B4|   FF 25 F8904100                | JMP       [004190F8h]   | MSVCR120D.dll  _CrtDbgReportW 
 
 * Referenced by (U)nconditional or (C)onditional Jump or (c)all at Address:
 | 0041118B(U)
 |
-004126BA|   FF 25 F4904100                | JMP       [004190F4h]   | MSVCR120D.dll _CrtSetCheckCount
+004126BA|   FF 25 F4904100                | JMP       [004190F4h]   | MSVCR120D.dll  _CrtSetCheckCount 
 
 * Referenced by (U)nconditional or (C)onditional Jump or (c)all at Address:
 | 004110C3(U)
@@ -4032,17 +4032,17 @@
 * Referenced by (U)nconditional or (C)onditional Jump or (c)all at Address:
 | 004111B8(U)
 |
-00412944|   FF 25 F0904100                | JMP       [004190F0h]   | MSVCR120D.dll exit
+00412944|   FF 25 F0904100                | JMP       [004190F0h]   | MSVCR120D.dll  exit 
 
 * Referenced by (U)nconditional or (C)onditional Jump or (c)all at Address:
 | 00411096(U)
 |
-0041294A|   FF 25 EC904100                | JMP       [004190ECh]   | MSVCR120D.dll _exit
+0041294A|   FF 25 EC904100                | JMP       [004190ECh]   | MSVCR120D.dll  _exit 
 
 * Referenced by (U)nconditional or (C)onditional Jump or (c)all at Address:
 | 0041105A(U)
 |
-00412950|   FF 25 E8904100                | JMP       [004190E8h]   | MSVCR120D.dll _cexit
+00412950|   FF 25 E8904100                | JMP       [004190E8h]   | MSVCR120D.dll  _cexit 
 00412956|   CC                            | INT3      
 00412957|   CC                            | INT3      
 00412958|   CC                            | INT3      
@@ -4077,21 +4077,21 @@
 |
 0041299F|   8D 55 F4                      | LEA       EDX, [EBP+F4h]
 004129A2|   52                            | PUSH      EDX
-004129A3|   FF 15 20904100                | CALL      [00419020h]   | KERNEL32.dll GetSystemTimeAsFileTime
+004129A3|   FF 15 20904100                | CALL      [00419020h]   | KERNEL32.dll  GetSystemTimeAsFileTime 
 004129A9|   8B 45 F4                      | MOV       EAX, [EBP+F4h]
 004129AC|   89 45 FC                      | MOV       [EBP+FCh], EAX
 004129AF|   8B 4D FC                      | MOV       ECX, [EBP+FCh]
 004129B2|   33 4D F8                      | XOR       ECX, [EBP+F8h]
 004129B5|   89 4D FC                      | MOV       [EBP+FCh], ECX
-004129B8|   FF 15 24904100                | CALL      [00419024h]   | KERNEL32.dll GetCurrentThreadId
+004129B8|   FF 15 24904100                | CALL      [00419024h]   | KERNEL32.dll  GetCurrentThreadId 
 004129BE|   33 45 FC                      | XOR       EAX, [EBP+FCh]
 004129C1|   89 45 FC                      | MOV       [EBP+FCh], EAX
-004129C4|   FF 15 28904100                | CALL      [00419028h]   | KERNEL32.dll GetCurrentProcessId
+004129C4|   FF 15 28904100                | CALL      [00419028h]   | KERNEL32.dll  GetCurrentProcessId 
 004129CA|   33 45 FC                      | XOR       EAX, [EBP+FCh]
 004129CD|   89 45 FC                      | MOV       [EBP+FCh], EAX
 004129D0|   8D 55 EC                      | LEA       EDX, [EBP+ECh]
 004129D3|   52                            | PUSH      EDX
-004129D4|   FF 15 2C904100                | CALL      [0041902Ch]   | KERNEL32.dll QueryPerformanceCounter
+004129D4|   FF 15 2C904100                | CALL      [0041902Ch]   | KERNEL32.dll  QueryPerformanceCounter 
 004129DA|   8B 45 FC                      | MOV       EAX, [EBP+FCh]
 004129DD|   33 45 EC                      | XOR       EAX, [EBP+ECh]
 004129E0|   89 45 FC                      | MOV       [EBP+FCh], EAX
@@ -4248,7 +4248,7 @@
 00412AC4|   6A 45                         | PUSH      45h
 00412AC6|   68 48624100                   | PUSH      00416248h   | UNICODE "f:\dd\vctools\crt\crtw32\dllstuff\atonexit.c"
 00412ACB|   6A 02                         | PUSH      02h
-00412ACD|   FF 15 F8904100                | CALL      [004190F8h]   | MSVCR120D.dll _CrtDbgReportW
+00412ACD|   FF 15 F8904100                | CALL      [004190F8h]   | MSVCR120D.dll  _CrtDbgReportW 
 00412AD3|   83 C4 18                      | ADD       ESP, 18h
 00412AD6|   83 F8 01                      | CMP       EAX, 01h
 00412AD9|   75 01                         | JNZ       00412ADCh
@@ -4270,12 +4270,12 @@
 00412AF0|   6A 02                         | PUSH      02h
 00412AF2|   6A 04                         | PUSH      04h
 00412AF4|   6A 20                         | PUSH      20h
-00412AF6|   FF 15 94904100                | CALL      [00419094h]   | MSVCR120D.dll _calloc_dbg
+00412AF6|   FF 15 94904100                | CALL      [00419094h]   | MSVCR120D.dll  _calloc_dbg 
 00412AFC|   83 C4 14                      | ADD       ESP, 14h
 00412AFF|   89 45 FC                      | MOV       [EBP+FCh], EAX
 00412B02|   8B 4D FC                      | MOV       ECX, [EBP+FCh]
 00412B05|   51                            | PUSH      ECX
-00412B06|   FF 15 4C904100                | CALL      [0041904Ch]   | KERNEL32.dll EncodePointer
+00412B06|   FF 15 4C904100                | CALL      [0041904Ch]   | KERNEL32.dll  EncodePointer 
 00412B0C|   A3 6C854100                   | MOV       [0041856Ch], EAX
 00412B11|   8B 15 6C854100                | MOV       EDX, [0041856Ch]
 00412B17|   89 15 5C854100                | MOV       [0041855Ch], EDX
@@ -4378,13 +4378,13 @@
 00412BA0|   C7 45 DC 00000000             | MOV       [EBP+DCh], 00000000h
 00412BA7|   A1 6C854100                   | MOV       EAX, [0041856Ch]
 00412BAC|   50                            | PUSH      EAX
-00412BAD|   FF 15 1C904100                | CALL      [0041901Ch]   | KERNEL32.dll DecodePointer
+00412BAD|   FF 15 1C904100                | CALL      [0041901Ch]   | KERNEL32.dll  DecodePointer 
 00412BB3|   89 45 E4                      | MOV       [EBP+E4h], EAX
 00412BB6|   83 7D E4 FF                   | CMP       [EBP+E4h], FFh
 00412BBA|   75 12                         | JNZ       00412BCEh
 00412BBC|   8B 4D 08                      | MOV       ECX, [EBP+08h]
 00412BBF|   51                            | PUSH      ECX
-00412BC0|   FF 15 9C904100                | CALL      [0041909Ch]   | MSVCR120D.dll _onexit
+00412BC0|   FF 15 9C904100                | CALL      [0041909Ch]   | MSVCR120D.dll  _onexit 
 00412BC6|   83 C4 04                      | ADD       ESP, 04h
 00412BC9|   E9 88000000                   | JMP       00412C56h
 
@@ -4397,11 +4397,11 @@
 00412BD8|   C7 45 FC 00000000             | MOV       [EBP+FCh], 00000000h
 00412BDF|   8B 15 6C854100                | MOV       EDX, [0041856Ch]
 00412BE5|   52                            | PUSH      EDX
-00412BE6|   FF 15 1C904100                | CALL      [0041901Ch]   | KERNEL32.dll DecodePointer
+00412BE6|   FF 15 1C904100                | CALL      [0041901Ch]   | KERNEL32.dll  DecodePointer 
 00412BEC|   89 45 E4                      | MOV       [EBP+E4h], EAX
 00412BEF|   A1 5C854100                   | MOV       EAX, [0041855Ch]
 00412BF4|   50                            | PUSH      EAX
-00412BF5|   FF 15 1C904100                | CALL      [0041901Ch]   | KERNEL32.dll DecodePointer
+00412BF5|   FF 15 1C904100                | CALL      [0041901Ch]   | KERNEL32.dll  DecodePointer 
 00412BFB|   89 45 E0                      | MOV       [EBP+E0h], EAX
 00412BFE|   8D 4D E0                      | LEA       ECX, [EBP+E0h]
 00412C01|   51                            | PUSH      ECX
@@ -4409,18 +4409,18 @@
 00412C05|   52                            | PUSH      EDX
 00412C06|   8B 45 08                      | MOV       EAX, [EBP+08h]
 00412C09|   50                            | PUSH      EAX
-00412C0A|   FF 15 4C904100                | CALL      [0041904Ch]   | KERNEL32.dll EncodePointer
+00412C0A|   FF 15 4C904100                | CALL      [0041904Ch]   | KERNEL32.dll  EncodePointer 
 00412C10|   50                            | PUSH      EAX
 00412C11|   E8 A7E5FFFF                   | CALL      004111BDh
 00412C16|   83 C4 0C                      | ADD       ESP, 0Ch
 00412C19|   89 45 DC                      | MOV       [EBP+DCh], EAX
 00412C1C|   8B 4D E4                      | MOV       ECX, [EBP+E4h]
 00412C1F|   51                            | PUSH      ECX
-00412C20|   FF 15 4C904100                | CALL      [0041904Ch]   | KERNEL32.dll EncodePointer
+00412C20|   FF 15 4C904100                | CALL      [0041904Ch]   | KERNEL32.dll  EncodePointer 
 00412C26|   A3 6C854100                   | MOV       [0041856Ch], EAX
 00412C2B|   8B 55 E0                      | MOV       EDX, [EBP+E0h]
 00412C2E|   52                            | PUSH      EDX
-00412C2F|   FF 15 4C904100                | CALL      [0041904Ch]   | KERNEL32.dll EncodePointer
+00412C2F|   FF 15 4C904100                | CALL      [0041904Ch]   | KERNEL32.dll  EncodePointer 
 00412C35|   A3 5C854100                   | MOV       [0041855Ch], EAX
 00412C3A|   C7 45 FC FEFFFFFF             | MOV       [EBP+FCh], FFFFFFFEh
 00412C41|   E8 02000000                   | CALL      00412C48h
@@ -4659,7 +4659,7 @@
 * Referenced by (U)nconditional or (C)onditional Jump or (c)all at Address:
 | 004110C8(U)
 |
-00412D4E|   FF 25 E4904100                | JMP       [004190E4h]   | MSVCR120D.dll _configthreadlocale
+00412D4E|   FF 25 E4904100                | JMP       [004190E4h]   | MSVCR120D.dll  _configthreadlocale 
 00412D54|   CC                            | INT3      
 00412D55|   CC                            | INT3      
 00412D56|   CC                            | INT3      
@@ -4750,17 +4750,17 @@
 * Referenced by (U)nconditional or (C)onditional Jump or (c)all at Address:
 | 0041104B(U)
 |
-00412DD2|   FF 25 E0904100                | JMP       [004190E0h]   | MSVCR120D.dll __setusermatherr
+00412DD2|   FF 25 E0904100                | JMP       [004190E0h]   | MSVCR120D.dll  __setusermatherr 
 
 * Referenced by (U)nconditional or (C)onditional Jump or (c)all at Address:
 | 004111C7(U)
 |
-00412DD8|   FF 25 DC904100                | JMP       [004190DCh]   | MSVCR120D.dll _initterm_e
+00412DD8|   FF 25 DC904100                | JMP       [004190DCh]   | MSVCR120D.dll  _initterm_e 
 
 * Referenced by (U)nconditional or (C)onditional Jump or (c)all at Address:
 | 004110A0(U)
 |
-00412DDE|   FF 25 D8904100                | JMP       [004190D8h]   | MSVCR120D.dll _initterm
+00412DDE|   FF 25 D8904100                | JMP       [004190D8h]   | MSVCR120D.dll  _initterm 
 00412DE4|   CC                            | INT3      
 00412DE5|   CC                            | INT3      
 00412DE6|   CC                            | INT3      
@@ -4831,15 +4831,15 @@
 00412E5A|   0F 85 E8000000                | JNE       00412F48h
 00412E60|   56                            | PUSH      ESI
 00412E61|   68 2C644100                   | PUSH      0041642Ch   | UNICODE "MSVCR120D.dll"
-00412E66|   FF 15 00904100                | CALL      [00419000h]   | KERNEL32.dll GetModuleHandleW
-00412E6C|   8B 35 38904100                | MOV       ESI, [00419038h]   | KERNEL32.dll LoadLibraryExW
+00412E66|   FF 15 00904100                | CALL      [00419000h]   | KERNEL32.dll  GetModuleHandleW 
+00412E6C|   8B 35 38904100                | MOV       ESI, [00419038h]   | KERNEL32.dll  LoadLibraryExW 
 00412E72|   85 C0                         | TEST      EAX, EAX
 00412E74|   74 6A                         | JE        00412EE0h
 00412E76|   68 04010000                   | PUSH      00000104h
 00412E7B|   8D 8D ECFBFFFF                | LEA       ECX, [EBP+FFFFFBECh]
 00412E81|   51                            | PUSH      ECX
 00412E82|   50                            | PUSH      EAX
-00412E83|   FF 15 04904100                | CALL      [00419004h]   | KERNEL32.dll GetModuleFileNameW
+00412E83|   FF 15 04904100                | CALL      [00419004h]   | KERNEL32.dll  GetModuleFileNameW 
 00412E89|   85 C0                         | TEST      EAX, EAX
 00412E8B|   74 53                         | JE        00412EE0h
 00412E8D|   68 04010000                   | PUSH      00000104h
@@ -4858,7 +4858,7 @@
 00412EBA|   FF D6                         | CALL      ESI
 00412EBC|   85 C0                         | TEST      EAX, EAX
 00412EBE|   0F 85 83000000                | JNE       00412F47h
-00412EC4|   FF 15 40904100                | CALL      [00419040h]   | KERNEL32.dll GetLastError
+00412EC4|   FF 15 40904100                | CALL      [00419040h]   | KERNEL32.dll  GetLastError 
 00412ECA|   83 F8 57                      | CMP       EAX, 57h
 00412ECD|   75 11                         | JNZ       00412EE0h
 00412ECF|   6A 08                         | PUSH      08h
@@ -4878,14 +4878,14 @@
 00412EEC|   FF D6                         | CALL      ESI
 00412EEE|   85 C0                         | TEST      EAX, EAX
 00412EF0|   75 55                         | JNZ       00412F47h
-00412EF2|   FF 15 40904100                | CALL      [00419040h]   | KERNEL32.dll GetLastError
+00412EF2|   FF 15 40904100                | CALL      [00419040h]   | KERNEL32.dll  GetLastError 
 00412EF8|   83 F8 57                      | CMP       EAX, 57h
 00412EFB|   75 48                         | JNZ       00412F45h
 00412EFD|   68 04010000                   | PUSH      00000104h
 00412F02|   8D 85 ECFBFFFF                | LEA       EAX, [EBP+FFFFFBECh]
 00412F08|   50                            | PUSH      EAX
 00412F09|   6A 00                         | PUSH      00h
-00412F0B|   FF 15 04904100                | CALL      [00419004h]   | KERNEL32.dll GetModuleFileNameW
+00412F0B|   FF 15 04904100                | CALL      [00419004h]   | KERNEL32.dll  GetModuleFileNameW 
 00412F11|   85 C0                         | TEST      EAX, EAX
 00412F13|   74 30                         | JE        00412F45h
 00412F15|   68 04010000                   | PUSH      00000104h
@@ -5025,7 +5025,7 @@
 00412FBE|   33 C5                         | XOR       EAX, EBP
 00412FC0|   89 45 FC                      | MOV       [EBP+FCh], EAX
 00412FC3|   53                            | PUSH      EBX
-00412FC4|   8B 1D 38904100                | MOV       EBX, [00419038h]   | KERNEL32.dll LoadLibraryExW
+00412FC4|   8B 1D 38904100                | MOV       EBX, [00419038h]   | KERNEL32.dll  LoadLibraryExW 
 00412FCA|   57                            | PUSH      EDI
 00412FCB|   68 00080000                   | PUSH      00000800h
 00412FD0|   6A 00                         | PUSH      00h
@@ -5034,7 +5034,7 @@
 00412FD9|   8B F8                         | MOV       EDI, EAX
 00412FDB|   85 FF                         | TEST      EDI, EDI
 00412FDD|   75 2C                         | JNZ       0041300Bh
-00412FDF|   FF 15 40904100                | CALL      [00419040h]   | KERNEL32.dll GetLastError
+00412FDF|   FF 15 40904100                | CALL      [00419040h]   | KERNEL32.dll  GetLastError 
 00412FE5|   83 F8 57                      | CMP       EAX, 57h
 00412FE8|   75 0F                         | JNZ       00412FF9h
 00412FEA|   57                            | PUSH      EDI
@@ -5062,7 +5062,7 @@
 | 00412FDD(C), 00412FF7(C)
 |
 0041300B|   56                            | PUSH      ESI
-0041300C|   8B 35 3C904100                | MOV       ESI, [0041903Ch]   | KERNEL32.dll GetProcAddress
+0041300C|   8B 35 3C904100                | MOV       ESI, [0041903Ch]   | KERNEL32.dll  GetProcAddress 
 00413012|   68 90644100                   | PUSH      00416490h   | ASCII "RegOpenKeyExW"
 00413017|   57                            | PUSH      EDI
 00413018|   FF D6                         | CALL      ESI
@@ -5091,7 +5091,7 @@
 00413063|   85 C0                         | TEST      EAX, EAX
 00413065|   74 1A                         | JE        00413081h
 00413067|   57                            | PUSH      EDI
-00413068|   FF 15 08904100                | CALL      [00419008h]   | KERNEL32.dll FreeLibrary
+00413068|   FF 15 08904100                | CALL      [00419008h]   | KERNEL32.dll  FreeLibrary 
 
 * Referenced by (U)nconditional or (C)onditional Jump or (c)all at Address:
 | 00413022(C), 00413034(C), 00413046(C), 004130CA(C), 004130D3(C), 004130DE(C), 004130E5(C), 004130F0(C), 00413117(C), 00413125(C)
@@ -5125,7 +5125,7 @@
 004130B9|   8B F0                         | MOV       ESI, EAX
 004130BB|   FF 95 E0FDFFFF                | CALL      [EBP+FFFFFDE0h]
 004130C1|   57                            | PUSH      EDI
-004130C2|   FF 15 08904100                | CALL      [00419008h]   | KERNEL32.dll FreeLibrary
+004130C2|   FF 15 08904100                | CALL      [00419008h]   | KERNEL32.dll  FreeLibrary 
 004130C8|   85 F6                         | TEST      ESI, ESI
 004130CA|   75 A2                         | JNZ       0041306Eh
 004130CC|   83 BD E4FDFFFF 01             | CMP       [EBP+FFFFFDE4h], 01h
@@ -5186,7 +5186,7 @@
 004131A9|   8B F0                         | MOV       ESI, EAX
 004131AB|   85 F6                         | TEST      ESI, ESI
 004131AD|   75 19                         | JNZ       004131C8h
-004131AF|   FF 15 40904100                | CALL      [00419040h]   | KERNEL32.dll GetLastError
+004131AF|   FF 15 40904100                | CALL      [00419040h]   | KERNEL32.dll  GetLastError 
 004131B5|   83 F8 57                      | CMP       EAX, 57h
 004131B8|   75 0E                         | JNZ       004131C8h
 004131BA|   6A 08                         | PUSH      08h
@@ -5527,7 +5527,7 @@
 0041339E|   8D 45 BC                      | LEA       EAX, [EBP+BCh]
 004133A1|   50                            | PUSH      EAX
 004133A2|   53                            | PUSH      EBX
-004133A3|   FF 15 0C904100                | CALL      [0041900Ch]   | KERNEL32.dll VirtualQuery
+004133A3|   FF 15 0C904100                | CALL      [0041900Ch]   | KERNEL32.dll  VirtualQuery 
 004133A9|   85 C0                         | TEST      EAX, EAX
 004133AB|   75 07                         | JNZ       004133B4h
 
@@ -5546,7 +5546,7 @@
 004133B4|   FF 75 1C                      | PUSH      [EBP+1Ch]
 004133B7|   FF 75 18                      | PUSH      [EBP+18h]
 004133BA|   FF 75 C0                      | PUSH      [EBP+C0h]
-004133BD|   FF 15 04904100                | CALL      [00419004h]   | KERNEL32.dll GetModuleFileNameW
+004133BD|   FF 15 04904100                | CALL      [00419004h]   | KERNEL32.dll  GetModuleFileNameW 
 004133C3|   85 C0                         | TEST      EAX, EAX
 004133C5|   74 E6                         | JE        004133ADh
 004133C7|   8B 4D C0                      | MOV       ECX, [EBP+C0h]
@@ -5628,7 +5628,7 @@
 |
 00413452|   68 90654100                   | PUSH      00416590h   | ASCII "PDBOpenValidate5"
 00413457|   50                            | PUSH      EAX
-00413458|   FF 15 3C904100                | CALL      [0041903Ch]   | KERNEL32.dll GetProcAddress
+00413458|   FF 15 3C904100                | CALL      [0041903Ch]   | KERNEL32.dll  GetProcAddress 
 0041345E|   85 C0                         | TEST      EAX, EAX
 00413460|   74 1E                         | JE        00413480h
 00413462|   8D 4D F0                      | LEA       ECX, [EBP+F0h]
@@ -5756,9 +5756,9 @@
 00413569|   C1 E0 03                      | SHL       EAX, 03h
 0041356C|   50                            | PUSH      EAX
 0041356D|   6A 00                         | PUSH      00h
-0041356F|   FF 15 10904100                | CALL      [00419010h]   | KERNEL32.dll GetProcessHeap
+0041356F|   FF 15 10904100                | CALL      [00419010h]   | KERNEL32.dll  GetProcessHeap 
 00413575|   50                            | PUSH      EAX
-00413576|   FF 15 18904100                | CALL      [00419018h]   | KERNEL32.dll HeapAlloc
+00413576|   FF 15 18904100                | CALL      [00419018h]   | KERNEL32.dll  HeapAlloc 
 0041357C|   8B D8                         | MOV       EBX, EAX
 0041357E|   85 DB                         | TEST      EBX, EBX
 00413580|   0F 84 7D000000                | JE        00413603h
@@ -5820,9 +5820,9 @@
 |
 004135F3|   53                            | PUSH      EBX
 004135F4|   6A 00                         | PUSH      00h
-004135F6|   FF 15 10904100                | CALL      [00419010h]   | KERNEL32.dll GetProcessHeap
+004135F6|   FF 15 10904100                | CALL      [00419010h]   | KERNEL32.dll  GetProcessHeap 
 004135FC|   50                            | PUSH      EAX
-004135FD|   FF 15 14904100                | CALL      [00419014h]   | KERNEL32.dll HeapFree
+004135FD|   FF 15 14904100                | CALL      [00419014h]   | KERNEL32.dll  HeapFree 
 
 * Referenced by (U)nconditional or (C)onditional Jump or (c)all at Address:
 | 00413524(C), 00413558(C), 00413563(C), 00413580(C)
@@ -6057,62 +6057,62 @@
 * Referenced by (U)nconditional or (C)onditional Jump or (c)all at Address:
 | 00411091(U)
 |
-004136F2|   FF 25 C8904100                | JMP       [004190C8h]   | MSVCR120D.dll ?terminate@@YAXXZ
+004136F2|   FF 25 C8904100                | JMP       [004190C8h]   | MSVCR120D.dll  ?terminate@@YAXXZ 
 
 * Referenced by (U)nconditional or (C)onditional Jump or (c)all at Address:
 | 00411014(U)
 |
-004136F8|   FF 25 C4904100                | JMP       [004190C4h]   | MSVCR120D.dll __crtSetUnhandledExceptionFilter
+004136F8|   FF 25 C4904100                | JMP       [004190C4h]   | MSVCR120D.dll  __crtSetUnhandledExceptionFilter 
 
 * Referenced by (U)nconditional or (C)onditional Jump or (c)all at Address:
 | 0041107D(U)
 |
-004136FE|   FF 25 A8904100                | JMP       [004190A8h]   | MSVCR120D.dll _lock
+004136FE|   FF 25 A8904100                | JMP       [004190A8h]   | MSVCR120D.dll  _lock 
 
 * Referenced by (U)nconditional or (C)onditional Jump or (c)all at Address:
 | 00411122(U)
 |
-00413704|   FF 25 90904100                | JMP       [00419090h]   | MSVCR120D.dll _unlock
+00413704|   FF 25 90904100                | JMP       [00419090h]   | MSVCR120D.dll  _unlock 
 
 * Referenced by (U)nconditional or (C)onditional Jump or (c)all at Address:
 | 004111AE(U)
 |
-0041370A|   FF 25 94904100                | JMP       [00419094h]   | MSVCR120D.dll _calloc_dbg
+0041370A|   FF 25 94904100                | JMP       [00419094h]   | MSVCR120D.dll  _calloc_dbg 
 
 * Referenced by (U)nconditional or (C)onditional Jump or (c)all at Address:
 | 004111BD(U)
 |
-00413710|   FF 25 98904100                | JMP       [00419098h]   | MSVCR120D.dll __dllonexit
+00413710|   FF 25 98904100                | JMP       [00419098h]   | MSVCR120D.dll  __dllonexit 
 
 * Referenced by (U)nconditional or (C)onditional Jump or (c)all at Address:
 | 0041115E(U)
 |
-00413716|   FF 25 A0904100                | JMP       [004190A0h]   | MSVCR120D.dll _invoke_watson
+00413716|   FF 25 A0904100                | JMP       [004190A0h]   | MSVCR120D.dll  _invoke_watson 
 
 * Referenced by (U)nconditional or (C)onditional Jump or (c)all at Address:
 | 0041114F(U)
 |
-0041371C|   FF 25 A4904100                | JMP       [004190A4h]   | MSVCR120D.dll _controlfp_s
+0041371C|   FF 25 A4904100                | JMP       [004190A4h]   | MSVCR120D.dll  _controlfp_s 
 
 * Referenced by (U)nconditional or (C)onditional Jump or (c)all at Address:
 | 00411190(U)
 |
-00413722|   FF 25 10914100                | JMP       [00419110h]   | MSVCR120D.dll _except_handler4_common
+00413722|   FF 25 10914100                | JMP       [00419110h]   | MSVCR120D.dll  _except_handler4_common 
 
 * Referenced by (U)nconditional or (C)onditional Jump or (c)all at Address:
 | 004111D6(U)
 |
-00413728|   FF 25 AC904100                | JMP       [004190ACh]   | MSVCR120D.dll wcscpy_s
+00413728|   FF 25 AC904100                | JMP       [004190ACh]   | MSVCR120D.dll  wcscpy_s 
 
 * Referenced by (U)nconditional or (C)onditional Jump or (c)all at Address:
 | 0041116D(U)
 |
-0041372E|   FF 25 B0904100                | JMP       [004190B0h]   | MSVCR120D.dll _wmakepath_s
+0041372E|   FF 25 B0904100                | JMP       [004190B0h]   | MSVCR120D.dll  _wmakepath_s 
 
 * Referenced by (U)nconditional or (C)onditional Jump or (c)all at Address:
 | 00411041(U)
 |
-00413734|   FF 25 B4904100                | JMP       [004190B4h]   | MSVCR120D.dll _wsplitpath_s
+00413734|   FF 25 B4904100                | JMP       [004190B4h]   | MSVCR120D.dll  _wsplitpath_s 
 0041373A|   CC                            | INT3      
 0041373B|   CC                            | INT3      
 0041373C|   CC                            | INT3      
@@ -6125,7 +6125,7 @@
 |
 00413740|   55                            | PUSH      EBP
 00413741|   8B EC                         | MOV       EBP, ESP
-00413743|   FF 15 48904100                | CALL      [00419048h]   | KERNEL32.dll IsDebuggerPresent
+00413743|   FF 15 48904100                | CALL      [00419048h]   | KERNEL32.dll  IsDebuggerPresent 
 00413749|   A3 A4844100                   | MOV       [004184A4h], EAX
 0041374E|   6A 01                         | PUSH      01h
 00413750|   E8 87D9FFFF                   | CALL      004110DCh
@@ -6632,122 +6632,122 @@
 * Referenced by (U)nconditional or (C)onditional Jump or (c)all at Address:
 | 004110DC(U)
 |
-00413B7E|   FF 25 B8904100                | JMP       [004190B8h]   | MSVCR120D.dll _crt_debugger_hook
+00413B7E|   FF 25 B8904100                | JMP       [004190B8h]   | MSVCR120D.dll  _crt_debugger_hook 
 
 * Referenced by (U)nconditional or (C)onditional Jump or (c)all at Address:
 | 0041110E(U)
 |
-00413B84|   FF 25 BC904100                | JMP       [004190BCh]   | MSVCR120D.dll __crtUnhandledException
+00413B84|   FF 25 BC904100                | JMP       [004190BCh]   | MSVCR120D.dll  __crtUnhandledException 
 
 * Referenced by (U)nconditional or (C)onditional Jump or (c)all at Address:
 | 004110A5(U)
 |
-00413B8A|   FF 25 C0904100                | JMP       [004190C0h]   | MSVCR120D.dll __crtTerminateProcess
+00413B8A|   FF 25 C0904100                | JMP       [004190C0h]   | MSVCR120D.dll  __crtTerminateProcess 
 
 * Referenced by (U)nconditional or (C)onditional Jump or (c)all at Address:
 | 00411140(U)
 |
-00413B90|   FF 25 4C904100                | JMP       [0041904Ch]   | KERNEL32.dll EncodePointer
+00413B90|   FF 25 4C904100                | JMP       [0041904Ch]   | KERNEL32.dll  EncodePointer 
 
 * Referenced by (U)nconditional or (C)onditional Jump or (c)all at Address:
 | 00411023(U)
 |
-00413B96|   FF 25 48904100                | JMP       [00419048h]   | KERNEL32.dll IsDebuggerPresent
+00413B96|   FF 25 48904100                | JMP       [00419048h]   | KERNEL32.dll  IsDebuggerPresent 
 
 * Referenced by (U)nconditional or (C)onditional Jump or (c)all at Address:
 | 004110D7(U)
 |
-00413B9C|   FF 25 44904100                | JMP       [00419044h]   | KERNEL32.dll RaiseException
+00413B9C|   FF 25 44904100                | JMP       [00419044h]   | KERNEL32.dll  RaiseException 
 
 * Referenced by (U)nconditional or (C)onditional Jump or (c)all at Address:
 | 004111CC(U)
 |
-00413BA2|   FF 25 40904100                | JMP       [00419040h]   | KERNEL32.dll GetLastError
+00413BA2|   FF 25 40904100                | JMP       [00419040h]   | KERNEL32.dll  GetLastError 
 
 * Referenced by (U)nconditional or (C)onditional Jump or (c)all at Address:
 | 00411082(U)
 |
-00413BA8|   FF 25 3C904100                | JMP       [0041903Ch]   | KERNEL32.dll GetProcAddress
+00413BA8|   FF 25 3C904100                | JMP       [0041903Ch]   | KERNEL32.dll  GetProcAddress 
 
 * Referenced by (U)nconditional or (C)onditional Jump or (c)all at Address:
 | 00411046(U)
 |
-00413BAE|   FF 25 38904100                | JMP       [00419038h]   | KERNEL32.dll LoadLibraryExW
+00413BAE|   FF 25 38904100                | JMP       [00419038h]   | KERNEL32.dll  LoadLibraryExW 
 
 * Referenced by (U)nconditional or (C)onditional Jump or (c)all at Address:
 | 0041106E(U)
 |
-00413BB4|   FF 25 34904100                | JMP       [00419034h]   | KERNEL32.dll MultiByteToWideChar
+00413BB4|   FF 25 34904100                | JMP       [00419034h]   | KERNEL32.dll  MultiByteToWideChar 
 
 * Referenced by (U)nconditional or (C)onditional Jump or (c)all at Address:
 | 0041102D(U)
 |
-00413BBA|   FF 25 30904100                | JMP       [00419030h]   | KERNEL32.dll WideCharToMultiByte
+00413BBA|   FF 25 30904100                | JMP       [00419030h]   | KERNEL32.dll  WideCharToMultiByte 
 
 * Referenced by (U)nconditional or (C)onditional Jump or (c)all at Address:
 | 0041111D(U)
 |
-00413BC0|   FF 25 2C904100                | JMP       [0041902Ch]   | KERNEL32.dll QueryPerformanceCounter
+00413BC0|   FF 25 2C904100                | JMP       [0041902Ch]   | KERNEL32.dll  QueryPerformanceCounter 
 
 * Referenced by (U)nconditional or (C)onditional Jump or (c)all at Address:
 | 00411127(U)
 |
-00413BC6|   FF 25 28904100                | JMP       [00419028h]   | KERNEL32.dll GetCurrentProcessId
+00413BC6|   FF 25 28904100                | JMP       [00419028h]   | KERNEL32.dll  GetCurrentProcessId 
 
 * Referenced by (U)nconditional or (C)onditional Jump or (c)all at Address:
 | 0041109B(U)
 |
-00413BCC|   FF 25 24904100                | JMP       [00419024h]   | KERNEL32.dll GetCurrentThreadId
+00413BCC|   FF 25 24904100                | JMP       [00419024h]   | KERNEL32.dll  GetCurrentThreadId 
 
 * Referenced by (U)nconditional or (C)onditional Jump or (c)all at Address:
 | 00411154(U)
 |
-00413BD2|   FF 25 20904100                | JMP       [00419020h]   | KERNEL32.dll GetSystemTimeAsFileTime
+00413BD2|   FF 25 20904100                | JMP       [00419020h]   | KERNEL32.dll  GetSystemTimeAsFileTime 
 
 * Referenced by (U)nconditional or (C)onditional Jump or (c)all at Address:
 | 00411159(U)
 |
-00413BD8|   FF 25 1C904100                | JMP       [0041901Ch]   | KERNEL32.dll DecodePointer
+00413BD8|   FF 25 1C904100                | JMP       [0041901Ch]   | KERNEL32.dll  DecodePointer 
 
 * Referenced by (U)nconditional or (C)onditional Jump or (c)all at Address:
 | 0041117C(U)
 |
-00413BDE|   FF 25 18904100                | JMP       [00419018h]   | KERNEL32.dll HeapAlloc
+00413BDE|   FF 25 18904100                | JMP       [00419018h]   | KERNEL32.dll  HeapAlloc 
 
 * Referenced by (U)nconditional or (C)onditional Jump or (c)all at Address:
 | 004110FA(U)
 |
-00413BE4|   FF 25 14904100                | JMP       [00419014h]   | KERNEL32.dll HeapFree
+00413BE4|   FF 25 14904100                | JMP       [00419014h]   | KERNEL32.dll  HeapFree 
 
 * Referenced by (U)nconditional or (C)onditional Jump or (c)all at Address:
 | 004110E6(U)
 |
-00413BEA|   FF 25 10904100                | JMP       [00419010h]   | KERNEL32.dll GetProcessHeap
+00413BEA|   FF 25 10904100                | JMP       [00419010h]   | KERNEL32.dll  GetProcessHeap 
 
 * Referenced by (U)nconditional or (C)onditional Jump or (c)all at Address:
 | 00411064(U)
 |
-00413BF0|   FF 25 0C904100                | JMP       [0041900Ch]   | KERNEL32.dll VirtualQuery
+00413BF0|   FF 25 0C904100                | JMP       [0041900Ch]   | KERNEL32.dll  VirtualQuery 
 
 * Referenced by (U)nconditional or (C)onditional Jump or (c)all at Address:
 | 004111C2(U)
 |
-00413BF6|   FF 25 08904100                | JMP       [00419008h]   | KERNEL32.dll FreeLibrary
+00413BF6|   FF 25 08904100                | JMP       [00419008h]   | KERNEL32.dll  FreeLibrary 
 
 * Referenced by (U)nconditional or (C)onditional Jump or (c)all at Address:
 | 00411050(U)
 |
-00413BFC|   FF 25 04904100                | JMP       [00419004h]   | KERNEL32.dll GetModuleFileNameW
+00413BFC|   FF 25 04904100                | JMP       [00419004h]   | KERNEL32.dll  GetModuleFileNameW 
 
 * Referenced by (U)nconditional or (C)onditional Jump or (c)all at Address:
 | 00411195(U)
 |
-00413C02|   FF 25 00904100                | JMP       [00419000h]   | KERNEL32.dll GetModuleHandleW
+00413C02|   FF 25 00904100                | JMP       [00419000h]   | KERNEL32.dll  GetModuleHandleW 
 
 * Referenced by (U)nconditional or (C)onditional Jump or (c)all at Address:
 | 004111A9(U)
 |
-00413C08|   FF 25 50904100                | JMP       [00419050h]   | KERNEL32.dll IsProcessorFeaturePresent
+00413C08|   FF 25 50904100                | JMP       [00419050h]   | KERNEL32.dll  IsProcessorFeaturePresent 
 00413C0E|   CC                            | INT3      
 00413C0F|   CC                            | INT3      
 00413C10|   CC                            | INT3      

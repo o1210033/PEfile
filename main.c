@@ -11,31 +11,27 @@
 #include "PEfile.h"
 
 
+//ファイルパス名取得用
 char *Get_filename(void);
 
 //逆アセンブル結果出力関連の関数
-int Disasm_LinearSweep(FILE *bfp, t_disasm *da, t_header *th, t_idata ti[]);
+int Disasm_LinearSweep(FILE *dtfp, FILE *bfp, t_disasm *da, t_header *th, t_idata *ti);
 void change_reg(char reg_name[8][5], char reg[8][5]);
 void Set_regname(char reg_name[8][5], int size_reg);
-int Print_disasm(FILE *dtfp, FILE *bfp, t_disasm *da, t_header *th, t_idata ti[]);
-int Print_function(FILE *dtfp, unsigned long rva, t_idata ti[]);
+int Print_disasm(FILE *dtfp, FILE *bfp, t_disasm *da, t_header *th, t_idata *ti);
+int Print_function(FILE *dtfp, unsigned long rva, FILE *bfp, t_header *th, t_idata *ti);
 int Print_string(FILE *dtfp, unsigned long rva, FILE *bfp, t_header *th);
-int Print_RefDisasm(FILE *bfp, t_disasm *da, t_header *th, t_idata ti[]);
+int Print_RefDisasm(FILE *dtfp, FILE *bfp, t_disasm *da, t_header *th, t_idata *ti);
 
 
 /* main関数 */
 int main(void){
 	int i;
+	FILE *bfp, *htfp, *dtfp, *itfp;
 
-	/* 必要なファイル名を取得、設定 */
-	char szFile[300], fname[300];
+	/* PEファイル名を取得＆拡張子以前のパス名を設定 */
+	char szFile[320], fname[320], htname[320], dtname[320], itname[320];
 	strcpy(szFile, Get_filename(szFile));
-	//strcpy(szFile, "wsample01a.exe");
-	//strcpy(szFile, "HelloWorld(MBCS).exe");
-	//strcpy(szFile, "HelloWorld(Unicode).exe");
-	//strcpy(szFile, "ls.exe");
-	//strcpy(szFile, "memo(32bit).exe");
-	//strcpy(szFile, "calculator(32bit).exe");
 	strcpy(fname, szFile);
 	for (i = 0; i < 300; i++){
 		if (szFile[i] == '.')
@@ -43,54 +39,104 @@ int main(void){
 	}
 	
 	/* PEファイルのオープン処理 */
-	FILE *bfp;
 	if ((bfp = fopen(fname, "rb")) == NULL){
-		printf("\aファイルをオープンできません。\n");
+		printf("ERROR: fopen PEfile\n");
 		exit(1);
 	}
 
 	/* ヘッダ情報を取得＆ファイル出力 */
-	t_header th = { 0 };
-	sprintf(th.htname, "%s_Header.txt", szFile);
-	if (Read_header(bfp, &th) != 0){
-		printf("ERROR: Read_header\n");
-		if (th.sh != 0){ free(th.sh); }
+	//ヘッダ情報出力ファイルをオープン
+	sprintf(htname, "%s_Header.txt", szFile);
+	if ((htfp = fopen(htname, "w")) == NULL){
+		printf("ERROR: fopen *_Header.txt\n");
 		fclose(bfp);
 		exit(1);
 	}
+	fprintf(htfp, "[Header]\n\n");
+	//ヘッダ情報を取得＆ファイル出力
+	t_header th = { 0 };
+	if (Read_header(htfp, bfp, &th) != 0){
+		printf("ERROR: Read_header\n");
+		if (th.sh != NULL){ free(th.sh); }
+		fclose(bfp);
+		fclose(htfp);
+		exit(1);
+	}
+	fclose(htfp);   //ヘッダ情報出力ファイルをクローズ
 
 	/* referenceナシの逆アセンブル結果をファイル出力 */
-	t_disasm da = { 0 };
-	sprintf(da.dtname, "%s_Disasm.txt", szFile);
-	da.flag_print = 1;
-	da.flag_ref = 0;
-	if (Disasm_LinearSweep(bfp, &da, &th, NULL) != 0){
-		printf("ERROR: Disasm_LinearSweep\n");
+	// 逆アセンブル結果出力ファイルをオープン
+	sprintf(dtname, "%s_Disasm.txt", szFile);
+	if ((dtfp = fopen(dtname, "w")) == NULL){
+		printf("ERROR: fopen *_Disasm.txt\n");
 		free(th.sh);
 		fclose(bfp);
 		exit(1);
 	}
+	//referenceナシの逆アセンブル結果をファイル出力
+	t_disasm da = { 0 };
+	if (Disasm_LinearSweep(dtfp, bfp, &da, &th, NULL) != 0){
+		printf("ERROR: Disasm_LinearSweep (not reference)\n");
+		free(th.sh);
+		fclose(bfp);
+		fclose(dtfp);
+		exit(1);
+	}
+	fclose(dtfp);   //逆アセンブル結果出力ファイルをクローズ
 
 	/* インポート情報を取得＆ファイル出力 */
-	t_idata ti[30] = { 0 };
-	sprintf(th.itname, "%s_Imports.txt", szFile);
-	if (Read_idata(bfp, &th, ti) != 0){
+	//インポート情報出力ファイルをオープン
+	sprintf(itname, "%s_Imports.txt", szFile);
+	if ((itfp = fopen(itname, "w")) == NULL){
+		printf("ERROR: fopen *_Imports.txt\n");
+		free(th.sh);
+		fclose(bfp);
+		exit(1);
+	}
+	fprintf(itfp, "[IMPORTS]\n\n");
+	//インポート情報を取得＆ファイル出力
+	t_idata *ti = Get_idata(bfp, &th);
+	if (ti == NULL){   //ti構造体の取得に失敗した場合
+		printf("ERROR: Get_idata\n");
+		free(th.sh);
+		fclose(itfp);
+		fclose(bfp);
+		exit(1);
+	}
+	if (Read_idata(itfp, bfp, &th, ti) != 0){
 		printf("ERROR: Read_idata\n");
 		free(th.sh);
+		free(ti);
+		fclose(itfp);
 		fclose(bfp);
 		exit(1);
 	}
+	fclose(itfp);   //インポート情報出力ファイルをクローズ
 
 	/* referenceアリの逆アセンブル結果をファイル出力 */
-	sprintf(da.dtname, "%s_RefDisasm.txt", szFile);
-	if (Print_RefDisasm(bfp, &da, &th, ti) != 0){
-		printf("ERROR: Disasm_LinearSweep\n");
+	// 逆アセンブル結果出力ファイルをオープン
+	sprintf(dtname, "%s_RefDisasm.txt", szFile);
+	if ((dtfp = fopen(dtname, "w")) == NULL){
+		printf("ERROR: fopen *_RefDisasm.txt\n");
 		free(th.sh);
+		free(ti);
 		fclose(bfp);
 		exit(1);
 	}
+	//referenceアリの逆アセンブル結果をファイル出力
+	if (Print_RefDisasm(dtfp, bfp, &da, &th, ti) != 0){
+		printf("ERROR: Print RefDisasm\n");
+		free(th.sh);
+		free(ti);
+		fclose(bfp);
+		fclose(dtfp);
+		exit(1);
+	}
+	fclose(dtfp);   //逆アセンブル結果出力ファイルをクローズ
 
-	/* PEファイルのクローズ処理 */
+	/* 動的確保したメモリ解放＆PEファイルのクローズ処理 */
+	free(th.sh);
+	free(ti);
 	fclose(bfp);
 
 	return 0;
@@ -99,7 +145,7 @@ int main(void){
 
 /* オープンファイルダイアログを用いて得たファイル名を返す関数 */
 char *Get_filename(void){
-	char szFile[250] = {0};
+	char szFile[300] = {0};
 	OPENFILENAME ofn = {0};
 
 	ofn.lStructSize = sizeof(OPENFILENAME);
@@ -118,22 +164,13 @@ char *Get_filename(void){
 
 
 /* .textセクションの読み込み＆逆アセンブル処理＆ファイル出力関数 */
-int Disasm_LinearSweep(FILE *bfp, t_disasm *da, t_header *th, t_idata ti[]){
+int Disasm_LinearSweep(FILE *dtfp, FILE *bfp, t_disasm *da, t_header *th, t_idata *ti){
 	int i, j;
-	FILE *dtfp;
 	unsigned char hex;
 	unsigned long rva;
 	unsigned long AddressOfCode = th->ImageBase + th->sh[th->ptr_text].VirtualAddress;
 	unsigned long EndAddressOfCode = th->ImageBase + th->sh[th->ptr_text].VirtualAddress + th->sh[th->ptr_text].SizeOfRawData;
 
-
-	/* 逆アセンブル結果出力ファイルのオープン処理 */
-	if (da->flag_print){
-		if ((dtfp = fopen(da->dtname, "w")) == NULL){
-			printf("\aファイルをオープンできません。\n");
-			return -1;
-		}
-	}
 	
 	/* da構造体のaddr_code, offsの初期化 */
 	da->addr_code = AddressOfCode;
@@ -158,15 +195,18 @@ int Disasm_LinearSweep(FILE *bfp, t_disasm *da, t_header *th, t_idata ti[]){
 		}
 
 		//逆アセンブル処理
-		if (Disasm(bfp, da) != 0){ return -1; }
+		if (Disasm(bfp, da) != 0){   //逆アセンブル失敗時、終了
+			printf("ERROR: Disasm\n");
+			return -1; 
+		}
 
 		//逆アセンブル結果をファイル出力
-		if (da->flag_print){
+		if (dtfp != NULL){   //引数dtfpがNULLでない場合のみファイル出力
 			Print_disasm(dtfp, bfp, da, th, ti);
 		}
 
 		//jump, call命令用のreference table 設定用
-		if (da->flag_ref){
+		if (ti != NULL){   //引数tiがNULLでない場合のみ実行
 			if ((da->instruction[0] == 'J' && strcmp(da->instruction, "JMPF") != 0) || strcmp(da->instruction, "CALL") == 0){
 				if (da->flag_ref == COUNT){   //jump, call命令の総数をカウント
 					da->num_rtable++;
@@ -198,7 +238,6 @@ int Disasm_LinearSweep(FILE *bfp, t_disasm *da, t_header *th, t_idata ti[]){
 		da->offs = 0;
 	}
 
-	if (da->flag_print){ fclose(dtfp); }
 	return 0;
 }
 
@@ -249,7 +288,7 @@ void Set_regname(char reg_name[8][5], int size_reg){
 }
 
 /* 逆アセンブル結果をファイル出力 */
-int Print_disasm(FILE *dtfp, FILE *bfp, t_disasm *da, t_header *th, t_idata ti[]){
+int Print_disasm(FILE *dtfp, FILE *bfp, t_disasm *da, t_header *th, t_idata *ti){
 	int i, j;
 	int size_code;
 	int scale[4] = { 1, 2, 4, 8 };
@@ -502,8 +541,8 @@ int Print_disasm(FILE *dtfp, FILE *bfp, t_disasm *da, t_header *th, t_idata ti[]
 		}
 
 		if (rva <= th->SizeOfImage){   //rvaの値がRVAの範囲内であるかどうか判定
-			if (Print_function(dtfp, rva, ti) != 0){   //rvaがIATを指していない場合、Print_string関数をコール
-				Print_string(dtfp, rva, bfp, th);
+			if (Print_function(dtfp, rva, bfp, th, ti) != 0){   //インポート関数の注釈
+				Print_string(dtfp, rva, bfp, th);   //文字列の注釈
 			}
 		}
 	}
@@ -514,21 +553,71 @@ int Print_disasm(FILE *dtfp, FILE *bfp, t_disasm *da, t_header *th, t_idata ti[]
 }
 
 /* 
-引数rvaがIATを指している場合のみ、そのDLL名とインポート関数名をファイル出力する関数
-引数rvaがIATを指している場合は0を、そうでない場合は-1を返す
+引数rvaがIATを指している場合かつ、インポート関数名がわかる場合、
+そのDLL名とインポート関数名をファイル出力する関数
+成功の場合は0を、失敗の場合は-1を返す
 */
-int Print_function(FILE *dtfp, unsigned long rva, t_idata ti[]){
-	int i, j;
+int Print_function(FILE *dtfp, unsigned long rva, FILE *bfp, t_header *th, t_idata *ti){
+	int i, j, k, len;
+	char c1;
+	long ord;
+	unsigned long offs_log, offs, b4;
+	unsigned long VA, PTRD;   //IMAGE_IMPORT_DESCRIPTORのRVAとファイル位置
+
 
 	for (i = 0; ti[i].FirstThunk != 0; i++){
-		for (j = 0; j < ti[i].size_IAT; j++){
-			if (ti[i].function[j][0] == '\0'){ break; }
-			else if (rva == ti[i].FirstThunk + (j * 4)){   //引数rvaがIATを指している場合
-				fprintf(dtfp, "   | %s %s", ti[i].dll, ti[i].function[j]);
+		for (j = 0; j < ti[i].num_function; j++){
+			if (rva == ti[i].FirstThunk + (j * 4)){   //引数rvaがIATを指している場合
+				//IMAGE_IMPORT_DESCRIPTORのRVAとファイル位置を取得
+				VA = th->IDD[1].RVA;   //IMAGE_IMPORT_DESCRIPTORのRVAをIMAGE_DATA_DIRECTORY構造体より取得
+				for (k = 0; k < th->NumberOfSections; k++){   //RVAからどのセクションにあるのかを特定し、ファイル位置を取得
+					if (th->sh[k].VirtualAddress <= VA && VA <= th->sh[k].VirtualAddress + th->sh[k].VirtualSize){
+						PTRD = VA - th->sh[k].VirtualAddress + th->sh[k].PointerToRawData;
+						break;
+					}
+				}
+
+				offs_log = ftell(bfp);   //初期ファイル位置を記憶
+
+				//offsにILTもしくはIATのファイル位置をセット
+				if (ti[0].OriginalFirstThunk != 0){   //ILTが存在する場合、ILTをセット
+					offs = PTRD + (ti[i].OriginalFirstThunk - VA);
+				}
+				else{   //ILTが存在しない場合、IATをセット
+					offs = PTRD + (ti[i].FirstThunk - VA);
+				}
+				fseek(bfp, offs + (j * 4), SEEK_SET);
+				fread(&b4, 1, 4, bfp);
+
+				//インポート関数名がわかる場合のみ、DLL名とインポート関数名出力
+				if ((b4 & 0x80000000) != 0){   //序数指定の場合、終了
+					return -1;
+				}
+				else{   //名前出力
+					//DLL名出力
+					fprintf(dtfp, "   | ");
+					fseek(bfp, PTRD + (ti[i].Name - VA), SEEK_SET);
+					for (len = 0; len >= 0; len++){
+						fread(&c1, 1, 1, bfp);
+						fprintf(dtfp, "%c", c1);
+						if (c1 == '\0'){ break; }   //DLL名の終端
+					}
+					fputc(' ', dtfp);
+					//インポート関数名出力
+					fseek(bfp, PTRD + (b4 - VA) + 2, SEEK_SET);
+					for (len = 0; len >= 0; len++){
+						fread(&c1, 1, 1, bfp);
+						fprintf(dtfp, "%c", c1);
+						if (c1 == '\0'){ break; }   //インポート関数名の終端
+					}
+				}
+
+				fseek(bfp, offs_log, SEEK_SET);   //初期ファイル位置にシーク
 				return 0;
 			}
 		}
 	}
+
 	return -1;
 }
 
@@ -586,48 +675,46 @@ int Print_string(FILE *dtfp, unsigned long rva, FILE *bfp, t_header *th){
 		return 0;
 	}
 
-	fseek(bfp, offs_log, SEEK_SET);
+	fseek(bfp, offs_log, SEEK_SET);   //初期ファイル位置にシーク
 	return -1;
 }
 
 /* referenceアリの逆アセンブル結果をファイル出力する関数 */
-int Print_RefDisasm(FILE *bfp, t_disasm *da, t_header *th, t_idata ti[]){
+int Print_RefDisasm(FILE *dtfp, FILE *bfp, t_disasm *da, t_header *th, t_idata *ti){
 	/* jump, call命令の総数をカウント */
-	da->flag_print = 0;
 	da->flag_ref = COUNT;
 	da->num_rtable = 0;
-	if (Disasm_LinearSweep(bfp, da, th, ti) != 0){
+	if (Disasm_LinearSweep(NULL, bfp, da, th, ti) != 0){
 		printf("ERROR: Disasm_LinearSweep (da->flag_ref:COUNT)\n");
 		return -1;
 	}
 
-	/* rtable構造体を動的確保 */
+	/* rtable構造体をjump, call命令の総数だけ動的確保 */
 	da->rtable = (t_rtable *)calloc(da->num_rtable, sizeof(t_rtable));
 	if (da->rtable == NULL){
-		printf("ERROR: calloc rtable");
+		printf("ERROR: calloc rtable\n");
 		return -1;
 	}
 
 	/* rtable構造体にjump, call命令の指定先・元アドレスと命令種類をセット */
 	da->flag_ref = SET;
 	da->ptr_rtable = 0;
-	if (Disasm_LinearSweep(bfp, da, th, ti) != 0){
+	if (Disasm_LinearSweep(NULL, bfp, da, th, ti) != 0){
 		printf("ERROR: Disasm_LinearSweep (da->flag_ref:SET)\n");
 		free(da->rtable);
 		return -1;
 	}
 
 	/* referenceアリの逆アセンブル結果をファイル出力 */
-	da->flag_print = 1;
 	da->flag_ref = PRINT;
-	if (Disasm_LinearSweep(bfp, da, th, ti) != 0){
+	if (Disasm_LinearSweep(dtfp, bfp, da, th, ti) != 0){
 		printf("ERROR: Disasm_LinearSweep (da->flag_ref:PRINT)\n");
 		free(da->rtable);
 		fclose(bfp);
 		return -1;
 	}
 
-	/* 構造体da内の動的確保した構造体rtableのメモリを解放 */
+	/* 動的確保したrtable構造体のメモリを解放 */
 	free(da->rtable);
 
 	return 0;

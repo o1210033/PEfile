@@ -16,8 +16,6 @@ typedef struct SectionHeader{
 
 /* Headerを解析して得た情報用の構造体 */
 typedef struct Header{
-	char htname[300];
-	char itname[300];
 	unsigned short NumberOfSections;
 	unsigned long SizeOfCode;
 	unsigned long AddressOfEntryPoint;
@@ -34,15 +32,10 @@ typedef struct Idata{
 	unsigned long OriginalFirstThunk;   //ILTのRVA
 	unsigned long Name;   //DLL名のRVA
 	unsigned long FirstThunk;   //IATのRVA
-
-	int size_IAT;   //IATのサイズ
-	char dll[50];   //DLL名
-	long OrdinalNumber[150];   //序数
-	short Hint[150];   //ヒント
-	char function[150][50];   //インポート関数名
+	int num_function;   ////インポート関数の数
 }t_idata;
 
 
-/* 関数宣言 */
-int Read_header(FILE *bfp, t_header *th);
-int Read_idata(FILE *bfp, t_header *th, t_idata ti[]);
+int Read_header(FILE *htfp, FILE *bfp, t_header *th);
+t_idata *Get_idata(FILE *bfp, t_header *th);
+int Read_idata(FILE *itfp, FILE *bfp, t_header *th, t_idata *ti);
